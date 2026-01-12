@@ -63,3 +63,40 @@
   text-decoration: underline;
   color: #bfdbfe;
 }
+
+.status.active {
+  color: #16a34a;
+  font-weight: bold;
+}
+
+.status.inactive {
+  color: #dc2626;
+  font-weight: bold;
+}
+
+.status.alumni {
+  color: #2563eb;
+  font-weight: bold;
+}
+
+.status.transferred {
+  color: #d97706;
+  font-weight: bold;
+}
+
+.student-actions {
+  margin: 16px 0;
+}
+
+.danger-btn {
+  background-color: #dc2626;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.danger-btn:hover {
+  background-color: #b91c1c;
+}

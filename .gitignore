@@ -1,0 +1,9 @@
+# Ignore reference / junk files
+Icons/
+eSkooly - Free School Management System.html
+eSkooly - Free School Management System_files/
+
+# Ignore frontend junk
+frontend/**/node_modules
+frontend/**/dist
+.env

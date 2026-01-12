@@ -1,0 +1,1499 @@
+<!DOCTYPE html>
+<!-- saved from url=(0036)https://eskooly.com/bb/printinfo.php -->
+<html lang="en" class=" js flexbox flexboxlegacy canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers no-applicationcache svg inlinesvg smil svgclippaths cssscrollbar" style="height: 100%;"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- Global site tag (gtag.js) - Google Analytics -->
+	        <!-- Google tag (gtag.js) -->
+        <script async="" src="./List_files/js"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+        
+          gtag('config', 'UA-132063111-1');
+        </script>
+    <!--end analytics here--->
+        <title>eSkooly - Free School Management System</title>
+          
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="description" content="">
+      <meta name="keywords" content="">
+      <meta name="author" content="eSkooly Inc.">
+      <!-- Favicon icon -->
+            <link rel="icon" href="https://eskooly.com/bb/assets/images/favicon.png" type="image/x-png">
+      <!------fa--------->
+        <link rel="stylesheet" href="./List_files/all.css">
+    	<link rel="stylesheet" href="./List_files/sharp-solid.css">
+    	<link rel="stylesheet" href="./List_files/sharp-regular.css">
+    	<link rel="stylesheet" href="./List_files/sharp-light.css">
+            
+          <!-- Google font-->
+    <link href="./List_files/css" rel="stylesheet">
+    <!-- Required Fremwork -->
+    <link rel="stylesheet" type="text/css" href="./List_files/bootstrap.min.css">
+    <!-- themify-icons line icon -->
+    <link rel="stylesheet" type="text/css" href="./List_files/themify-icons.css">
+    <link rel="stylesheet" type="text/css" href="./List_files/font-awesome.min.css">
+    <!-- ico font -->
+    <link rel="stylesheet" type="text/css" href="./List_files/icofont.css">
+    <!-- Style.css -->
+    <link rel="stylesheet" type="text/css" href="./List_files/style.css">
+    <link rel="stylesheet" type="text/css" href="./List_files/jquery.mCustomScrollbar.css">
+	<link rel="stylesheet" type="text/css" href="./List_files/mycss.css">
+	<!--- datatables & plugins ----->
+    <link rel="stylesheet" type="text/css" href="./List_files/datatables.min.css">
+    <link rel="stylesheet" type="text/css" href="./List_files/dtbuttons.min.css">
+	<link rel="stylesheet" type="text/css" href="./List_files/bs4.min.css">
+	<link rel="stylesheet" type="text/css" href="./List_files/selectlistsearch.css">
+<!--- datatables & plugins END ----->
+	<style>
+        .m-div{
+            padding:5px;
+            border-radius:25px !important;
+            margin-top:20px;
+        }
+        .m-field{
+            border-radius:25px !important;
+        }
+        .m-label{
+            margin-top:-14px;
+            border:1px solid #999;
+            border-radius:12px;
+            font-size:10px;
+            padding-left:10px;
+            padding-right:10px;
+            margin-left:10px;
+        }
+        .selectize-input, .selectize-input:focus{
+            border-radius:25px !important;
+            margin-top:4px;
+            border:none !important;
+            box-shadow:none !important;
+            outline: none !important;
+        }
+        thead th:first-child {
+          border-radius: 100px 0 0 100px;
+        }
+        thead th:last-child {
+          border-radius: 0 100px 100px 0;
+        }
+        tbody td{
+            padding-top:20px !important;
+            padding-bottom:15px !important;
+        }
+        .dataTables_wrapper .dataTables_info {
+        	clear: both;
+        	float: left;
+        	padding-top: 20px;
+        }
+        .dataTables_wrapper .dataTables_paginate {
+        	text-align: center;
+        	padding-top: 20px;
+        }
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+        	box-sizing: border-box;
+        	display: inline-block;
+        	min-width: 1.5em;
+        	padding: 0.3em 1em;
+        	margin: 0px 5px;
+        	text-align: center;
+        	text-decoration: none !important;
+        	cursor: pointer;
+        	*cursor: hand;
+        	color: #828bb2 !important;
+        	border: 0px;
+        	border-radius: 5px;
+        	background: #ffffff;
+        }
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current,
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+        	color: #ffffff !important;
+        	border: 0px;
+        	background-color: #7c32ff;
+        	background: -webkit-linear-gradient(90deg, #3131de 0%, #3144de 100%);
+        	background: -moz-linear-gradient(90deg, #3131de 0%, #3144de 100%);
+        	background: -o-linear-gradient(90deg, #3131de 0%, #3144de 100%);
+        	background: linear-gradient(90deg, #3131de 0%, #3144de 100%);
+        	
+        }
+        .dataTables_wrapper .dataTables_paginate .paginate_button.disabled,
+        .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover,
+        .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
+        	cursor: not-allowed;
+        	box-shadow: none;
+        	color: #828bb2 !important;
+        	border: 0px;
+        	border-radius: 5px;
+        	background: #ffffff;
+        }
+        .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+        	color: #ffffff !important;
+        	border: 0px;
+        	background-color: #7c32ff;
+        	background: -webkit-linear-gradient(90deg, #3131de 0%, #3144de 100%);
+        	background: -moz-linear-gradient(90deg, #3131de 0%, #3144de 100%);
+        	background: -o-linear-gradient(90deg, #3131de 0%, #3144de 100%);
+        	background: linear-gradient(90deg, #3131de 0%, #3144de 100%);
+        	
+        }
+        .dataTables_wrapper .dataTables_paginate .paginate_button:active {
+        	color: #ffffff !important;
+        	border: 0px;
+        	background-color: #7c32ff;
+        	background: -webkit-linear-gradient(90deg, #3131de 0%, #3144de 100%);
+        	background: -moz-linear-gradient(90deg, #3131de 0%, #3144de 100%);
+        	background: -o-linear-gradient(90deg, #3131de 0%, #3144de 100%);
+        	background: linear-gradient(90deg, #3131de 0%, #3144de 100%);
+        	
+        }
+        .dataTables_wrapper .dataTables_filter input {
+        	border-radius: 20px;
+        	background: transparent;
+        	color: #415094;
+        	font-size: 14px;
+        	padding-left:15px;
+        }
+        .btn-gray{
+            background:none; border:1px solid gray;color:gray;border-radius:20px;
+            padding-top:4px;
+            padding-bottom:4px;
+        }
+        .btn-gray:hover{
+            color:#fff;
+            background:#000;
+        }
+        #p20{
+            padding:20px;
+            padding-right:0px;
+        }
+        #area{
+            padding-left:0px;
+        }
+        @media screen and (max-width: 767px) {
+        	#p20{
+                padding:10px;
+            }
+            #area{
+                padding:0px;
+            }
+        }
+        .dt-button {
+            background-color: #666 !important; /* Change background color */
+            color: #fff !important; /* Change text color */
+            border-radius: 20px !important; /* Change border color (if needed) */
+            /* Add more styles as necessary */
+        }
+        .dt-button:hover {
+            background-color: #3144de !important; /* Change background color */
+            color: #fff !important; /* Change text color */
+            border-radius: 20px !important; /* Change border color (if needed) */
+            /* Add more styles as necessary */
+        }
+    </style>
+<link type="text/css" rel="stylesheet" charset="UTF-8" href="./List_files/m=el_main_css"><script type="text/javascript" charset="UTF-8" src="./List_files/m=el_main"></script></head>
+
+<body themebg-pattern="pattern6" style="position: relative; min-height: 100%; top: 0px;">
+	 
+        <!-- Pre-loader start -->
+    
+    <!-- Pre-loader end -->
+
+    <div id="pcoded" class="pcoded iscollapsed" theme-layout="vertical" vertical-placement="left" vertical-layout="wide" pcoded-device-type="desktop" vertical-nav-type="expanded" vertical-effect="shrink" vnavigation-view="view1" nav-type="st2" fream-type="theme1" layout-type="light">
+        <div class="pcoded-overlay-box"></div>
+        <div class="pcoded-container navbar-wrapper">
+
+            <nav class="navbar header-navbar pcoded-header iscollapsed" header-theme="theme6" pcoded-header-position="fixed">
+               <div class="navbar-wrapper">
+                   <div class="navbar-logo" logo-theme="theme1">
+                       <a class="mobile-menu" id="mobile-collapse" href="https://eskooly.com/bb/printinfo.php#!">
+                           <i class="fa-duotone fa-solid fa-bars"></i>
+                       </a>
+                       <div class="mobile-search">
+                           <div class="header-search">
+                               <div class="main-search morphsearch-search">
+                                   <div class="input-group">
+                                       <span class="input-group-addon search-close"><i class="fa-duotone fa-solid fa-xmark"></i></span>
+                                       <input type="text" class="form-control" placeholder="Enter Keyword">
+                                       <span class="input-group-addon search-btn"><i class="fa-duotone fa-solid fa-magnifying-glass"></i></span>
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+                                              <a href="https://eskooly.com/">
+                           <img class="img-fluid m-l-30" id="headerimg" style="max-height:45px;" src="./List_files/logo1.png" alt="eSkooly-Logo">
+                       </a>
+                                              <a class="mobile-options">
+                           <i class="fa-duotone fa-solid fa-ellipsis"></i>
+                       </a>
+                       
+                   </div>
+
+                   <div class="navbar-container container-fluid">
+                       <ul class="nav-left">
+                           <li>
+                               <div class="sidebar_toggle"><a href="javascript:void(0)"><i class="fa-duotone fa-solid fa-ellipsis"></i></a></div>
+                           </li>
+						   
+                           <li class="header-search">
+                               <div class="main-search morphsearch-search">
+                                   <div class="input-group">
+								       
+                                       <span class="input-group-addon search-close"><i class="fa-duotone fa-solid fa-xmark"></i></span>
+                                       <input type="text" class="form-control ui-autocomplete-input" id="tags" placeholder="Search Student" autocomplete="off"><form action="https://eskooly.com/bb/requestmanager.php" method="post">
+									   <input type="text" id="tags_code" style="display:none;" name="id">
+                                       <span class="input-group-addon search-btn"><i class="fa-duotone fa-solid fa-magnifying-glass"></i></span>
+									   <button type="submit" name="dashboard" class="input-group-addon search-btn1"><i class="fa-duotone fa-solid fa-magnifying-glass"></i></button>
+									   </form>
+									   
+                                   </div>
+                               </div>
+                           </li>
+						   
+                           <li>
+                               <a href="https://eskooly.com/bb/printinfo.php#!" onclick="javascript:toggleFullScreen()">
+                                   <i class="fa-duotone fa-solid fa-expand"></i>
+                               </a>
+                           </li>
+                       </ul>
+                       <ul class="nav-right">
+                                                       <li class="header-notification">
+                               <a href="https://apps.apple.com/pk/app/eskooly/id6448073356">
+                                   <img src="./List_files/apple.png" style="width:120px;">
+                               </a>
+                               
+                           </li>
+                           <li class="header-notification">
+                               <a href="https://play.google.com/store/apps/details?id=com.eskooly.app">
+                                   <img src="./List_files/google.png" style="width:120px;">
+                               </a>
+                               
+                           </li>
+                           <li class="header-notification">
+                               <a href="https://eskooly.com/bb/marketplace.php" data-toggle="tooltip" title="" data-original-title="Marketplace">
+                                   <img src="./List_files/marketplace1.png" style="width:35px;">
+                               </a>
+                               
+                           </li>
+                                                      <li class="header-notification">
+                               <a href="https://eskooly.com/bb/MessageBox.php">
+                                   <i class="fa-duotone fa-solid fa-messages"></i>
+                                   <span id="msgaya" class="badge bg-c-green f-10"></span>
+                               </a>
+                               
+                           </li>
+                           <li class="header-notification">
+                               <a href="https://eskooly.com/bb/printinfo.php#!">
+                                   <i class="fa-sharp-duotone fa-solid fa-bell"></i>
+                                   <span class="badge bg-m-orange f-10">
+                                       
+                                   </span>
+                               </a>
+                               <ul class="show-notification profile-notification">
+                                  
+                               </ul>
+                               
+                           </li>
+                                                      <li class="header-notification">
+                               <a href="https://eskooly.com/bb/printinfo.php#!">
+                                   <i class="fa-duotone fa-solid fa-cart-shopping"></i>
+                                   <span class="badge bg-c-yellow f-10" style="color:#000;"></span>
+                               </a>
+                               <ul class="show-notification profile-notification">
+                                                                   </ul>
+                           </li>
+                           
+                           <li class="user-profile header-notification" style="float:right;">
+                               <a href="https://eskooly.com/bb/printinfo.php#!">
+							    								<img src="./List_files/unnamed.png" class="img-radius">
+								<span title="Institute Name">Institute Name</span>
+								<i class="ti-angle-down"></i>
+															   
+							   <!---
+                                   <img src="assets/images/avatar-4.jpg" class="img-radius" alt="User-Profile-Image">
+                                   <span>John Doe</span>
+                                   <i class="ti-angle-down"></i>
+								   
+								----->
+                               </a>
+                               <ul class="show-notification profile-notification">
+                                   <li>
+                                       <a href="https://eskooly.com/bb/account.php">
+                                           <i class="ti-settings"></i> Account Settings
+                                       </a>
+                                   </li>
+                                   <li>
+                                       <a href="https://eskooly.com/bb/schoolinfo.php">
+                                           <i class="fa fa-bank"></i> Profile
+                                       </a>
+                                   </li>
+                                   
+                                   
+                                   <li>
+                                       <a href="https://eskooly.com/bb/logout.php">
+                                       <i class="ti-lock"></i> Logout
+                                   </a>
+                                   </li>
+                               </ul>
+                           </li>
+                       </ul>
+                   </div>
+               </div>
+           </nav>
+		  <script type="text/javascript">var theme = ["0","0","0","0","left","left","theme6","theme6","themelight1","themelight1","theme7","theme7","en","en"];</script>
+		  <!---language starting--->
+		  
+	<div id="google_translate_element" style="display: none !important;"><div class="skiptranslate goog-te-gadget" dir="ltr" style=""><div id=":0.targetLanguage" class="goog-te-gadget-simple" style="white-space: nowrap;"><img src="./List_files/cleardot.gif" class="goog-te-gadget-icon" alt="" style="background-image: url(&quot;https://translate.googleapis.com/translate_static/img/te_ctrl3.gif&quot;); background-position: -65px 0px;"><span style="vertical-align: middle;"><a aria-haspopup="true" class="VIpgJd-ZVi9od-xl07Ob-lTBxed" href="https://eskooly.com/bb/printinfo.php#"><span>Select Language</span><img src="./List_files/cleardot.gif" alt="" width="1" height="1"><span style="border-left: 1px solid rgb(187, 187, 187);">​</span><img src="./List_files/cleardot.gif" alt="" width="1" height="1"><span aria-hidden="true" style="color: rgb(118, 118, 118);">▼</span></a></span></div></div></div>
+	<script type="text/javascript">
+            function googleTranslateElementInit() {
+            new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
+            }
+    </script>
+    <script type="text/javascript" src="./List_files/element.js.download"></script>
+	<!---language ends here--->
+	            <div class="pcoded-main-container" style="margin-top: 72px;">
+                <div class="pcoded-wrapper">
+                    <!--- sidebar nav here ---->
+					<nav class="pcoded-navbar" style="background:#f6f7fb;" navbar-theme="themelight1" active-item-theme="theme7" sub-item-theme="theme2" active-item-style="style0" pcoded-navbar-position="fixed">
+                        <div class="sidebar_toggle"><a href="https://eskooly.com/bb/printinfo.php#"><i class="icon-close icons"></i></a></div>
+                        <div class="pcoded-inner-navbar main-menu mCustomScrollbar _mCS_1" style="height: calc(100% - 90px);"><div id="mCSB_1" class="mCustomScrollBox mCS-light mCSB_vertical mCSB_inside" style="max-height: none;" tabindex="0"><div id="mCSB_1_container" class="mCSB_container" style="position: relative; top: 0px; left: 0px;" dir="ltr">
+                            
+                            <div class="pcoded-navigatio-lavel" data-i18n="nav.category.navigation" menu-title-theme="theme1">menu</div>
+                            <ul class="pcoded-item pcoded-left-item" item-border="true" item-border-style="none" subitem-border="true">
+                                <li class="" id="dashboard">
+                                    <a href="https://eskooly.com/bb/dashboard.php">
+                                        <span class="pcoded-micon"><i class="ti-home"></i><b>D</b></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.dash.main">Dashboard</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                </li>
+                                <li class="pcoded-hasmenu" id="generalsettings" dropdown-icon="style3" subitem-icon="style7">
+                                    <a href="javascript:void(0)">
+                                        <span class="pcoded-micon"><i class="ti-settings"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.basic-components.main">General Settings</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                    <ul class="pcoded-submenu">
+                                        <li class=" " id="schoolinfo">
+                                            <a href="https://eskooly.com/bb/schoolinfo.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Institute Profile</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="feeparticulars">
+                                            <a href="https://eskooly.com/bb/feeparticulars.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Fees Particulars</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="discounttype">
+                                            <a href="https://eskooly.com/bb/printinfo.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Fees Structure <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="discounttype">
+                                            <a href="https://eskooly.com/bb/printinfo.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Discount Type <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										<li class=" " id="challan">
+                                            <a href="https://eskooly.com/bb/bankdetails.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Accounts For Fees Invoice</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="rules">
+                                            <a href="https://eskooly.com/bb/rules.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Rules &amp; Regulations</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="grading">
+                                            <a href="https://eskooly.com/bb/grading.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Marks Grading</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="themesettings">
+                                            <a href="https://eskooly.com/bb/themesettings.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Theme &amp; Language</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        
+                                        <li class=" " id="account">
+                                            <a href="https://eskooly.com/bb/account.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Account Settings</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" ">
+                                            <a href="https://eskooly.com/bb/logout.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Log out</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        
+
+                                    </ul>
+                                </li>
+								
+                            </ul>
+                            
+                            <ul class="pcoded-item pcoded-left-item" item-border="true" item-border-style="none" subitem-border="true">
+                               <li class="pcoded-hasmenu" id="classes" dropdown-icon="style3" subitem-icon="style7">
+                                    <a href="javascript:void(0)">
+                                        <span class="pcoded-micon"><i class="ti-ruler-pencil"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.basic-components.main">Classes</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                    <ul class="pcoded-submenu">
+                                        <li class=" " id="allclasses">
+                                            <a href="https://eskooly.com/bb/classes.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">All Classes</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="newclass">
+                                            <a href="https://eskooly.com/bb/addnewclass.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">New Class</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        
+                                    </ul>
+                                </li>
+                                <li class="pcoded-hasmenu" id="subjects" dropdown-icon="style3" subitem-icon="style7">
+                                    <a href="javascript:void(0)">
+                                        <span class="pcoded-micon"><i class="ti-book"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.basic-components.main">Subjects</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                    <ul class="pcoded-submenu">
+                                        <li class=" " id="showsubjects">
+                                            <a href="https://eskooly.com/bb/showsubjects.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Classes With Subjects</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="assignsubjects">
+                                            <a href="https://eskooly.com/bb/subjects.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Assign Subjects</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                            </ul>
+
+                            
+                            <ul class="pcoded-item pcoded-left-item" item-border="true" item-border-style="none" subitem-border="true">
+                                <li class="pcoded-hasmenu active pcoded-trigger" id="students" dropdown-icon="style3" subitem-icon="style7">
+                                    <a href="javascript:void(0)">
+                                        <span class="pcoded-micon"><i class="ti-user"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.basic-components.main">Students</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                    <ul class="pcoded-submenu">
+                                        <li class=" " id="allstudents">
+                                            <a href="https://eskooly.com/bb/allstudents.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">All Students</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="addnewstudent">
+                                            <a href="https://eskooly.com/bb/admission.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Add New</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="families">
+                                            <a href="https://eskooly.com/bb/printinfo.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Manage Families <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="aina">
+                                            <a href="https://eskooly.com/bb/printinfo.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Active / Inactive <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										<li class=" " id="searchadmissionletter">
+                                            <a href="https://eskooly.com/bb/stdregal.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Admission Letter</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										<li class=" " id="idcard">
+                                            <a href="https://eskooly.com/bb/studentcards.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Student ID Cards</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										<li class="active" id="printinfo">
+                                            <a href="https://eskooly.com/bb/printinfo.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Print Basic List</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="slogin">
+                                            <a href="https://eskooly.com/bb/studentLogin.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Manage Login</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										<li class=" " id="promotions">
+                                            <a href="https://eskooly.com/bb/promotions.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Promote Students</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+								<li class="pcoded-hasmenu" id="employees" dropdown-icon="style3" subitem-icon="style7">
+                                    <a href="javascript:void(0)">
+                                        <span class="pcoded-micon"><i class="ti-briefcase"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.basic-components.main">Employees</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                    <ul class="pcoded-submenu">
+                                        <li class=" " id="allemployees">
+                                            <a href="https://eskooly.com/bb/allemployees.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">All Employees</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="addnewteacher">
+                                            <a href="https://eskooly.com/bb/addnewteacher.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Add New</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="eidcard">
+                                            <a href="https://eskooly.com/bb/printinfo.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Staff ID Cards <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										<li class=" " id="jobletter">
+                                            <a href="https://eskooly.com/bb/empregal.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Job Letter</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="elogin">
+                                            <a href="https://eskooly.com/bb/staffLogin.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Manage Login</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                
+                                
+
+                            </ul>
+							
+                            <ul class="pcoded-item pcoded-left-item" item-border="true" item-border-style="none" subitem-border="true">
+                                <li class="pcoded-hasmenu" id="accounts" dropdown-icon="style3" subitem-icon="style7">
+                                    <a href="javascript:void(0)">
+                                        <span class="pcoded-micon"><i class="ti-wallet"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.basic-components.main">Accounts</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                    <ul class="pcoded-submenu">
+                                        <li class=" " id="heads">
+                                            <a href="https://eskooly.com/bb/chartofaccounts.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Chart Of Account</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="addincome">
+                                            <a href="https://eskooly.com/bb/income.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Add Income</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										<li class=" " id="addexpense">
+                                            <a href="https://eskooly.com/bb/expense.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Add Expense</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="statement">
+                                            <a href="https://eskooly.com/bb/balance.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Account Statement</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+								<li class="pcoded-hasmenu" id="fees" dropdown-icon="style3" subitem-icon="style7">
+                                    <a href="javascript:void(0)">
+                                        <span class="pcoded-micon"><i class="fa fa-money"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.basic-components.main">Fees</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                    <ul class="pcoded-submenu">
+									    <li class=" " id="getchallan">
+                                            <a href="https://eskooly.com/bb/getchallan.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Generate Fees Invoice</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="submitfee">
+                                            <a href="https://eskooly.com/bb/submitfees.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Collect Fees</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="feeslip">
+                                            <a href="https://eskooly.com/bb/stdregfs.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Fees Paid Slip</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										<li class=" " id="defualter">
+                                            <a href="https://eskooly.com/bb/defualter.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Fees Defaulters</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="feereport">
+                                            <a href="https://eskooly.com/bb/printinfo.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Fees Report <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="deletefee">
+                                            <a href="https://eskooly.com/bb/printinfo.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Delete Fees <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+								<li class="pcoded-hasmenu" id="salary" dropdown-icon="style3" subitem-icon="style7">
+                                    <a href="javascript:void(0)">
+                                        <span class="pcoded-micon"><i class="ti-credit-card"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.basic-components.main">Salary</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                    <ul class="pcoded-submenu">
+                                        <li class=" " id="submitsalary">
+                                            <a href="https://eskooly.com/bb/submitsalary.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Pay Salary</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="salaryslip">
+                                            <a href="https://eskooly.com/bb/empregfs.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Salary Paid Slip</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="salarysheet">
+                                            <a href="https://eskooly.com/bb/printinfo.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Salary Sheet <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        
+                                        <li class=" " id="salaryrecord">
+                                            <a href="https://eskooly.com/bb/printinfo.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Salary Report <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										
+                                    </ul>
+                                </li>
+                                
+                                
+
+                            </ul>
+							
+                            <ul class="pcoded-item pcoded-left-item" item-border="true" item-border-style="none" subitem-border="true">
+                                <li class="pcoded-hasmenu" id="attandance" dropdown-icon="style3" subitem-icon="style7">
+                                    <a href="javascript:void(0)">
+                                        <span class="pcoded-micon"><i class="ti-hand-open"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.basic-components.main">Attendance</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                    <ul class="pcoded-submenu">
+                                        <li class=" " id="studentsattandance">
+                                            <a href="https://eskooly.com/bb/markatt.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Students Attendance</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="employeesattandance">
+                                            <a href="https://eskooly.com/bb/chooseeattend.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Employees Attendance</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										<li class=" " id="classwise">
+                                            <a href="https://eskooly.com/bb/attreport.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Class wise Report</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										<li class=" " id="studentattendancereport">
+                                            <a href="https://eskooly.com/bb/allatt.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Students Attendance Report</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										<li class=" " id="employeeattendancereport">
+                                            <a href="https://eskooly.com/bb/alleatt.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Employees Attendance Report</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										
+                                    </ul>
+                                </li>
+                                <li class="pcoded-hasmenu" id="timetable" dropdown-icon="style3" subitem-icon="style7">
+                                    <a href="javascript:void(0)">
+                                        <span class="pcoded-micon"><i class="ti-calendar"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.basic-components.main">Timetable</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                    <ul class="pcoded-submenu">
+                                        <li class=" " id="weekdays">
+                                            <a href="https://eskooly.com/bb/printinfo.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Weekdays <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="periods">
+                                            <a href="https://eskooly.com/bb/printinfo.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Time Periods <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										<li class=" " id="classrooms">
+                                            <a href="https://eskooly.com/bb/printinfo.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Class Rooms <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="createtimetable">
+                                            <a href="https://eskooly.com/bb/printinfo.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Create Timetable <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										<li class=" " id="classview">
+                                            <a href="https://eskooly.com/bb/printinfo.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Generate For Class <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										<li class=" " id="teacherview">
+                                            <a href="https://eskooly.com/bb/printinfo.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Generate For Teacher <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class=" " id="homeworklink">
+                                    <a href="https://eskooly.com/bb/homework.php">
+                                        <span class="pcoded-micon"><i class="ti-slice"></i><b>D</b></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.dash.main">Homework</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                </li>
+                                <li class="pcoded-hasmenu" id="behaviour" dropdown-icon="style3" subitem-icon="style7">
+                                    <a href="javascript:void(0)">
+                                        <span class="pcoded-micon"><i class="ti-eye"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.basic-components.main">Behaviour &amp; Skills</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                    <ul class="pcoded-submenu">
+                                        <li class=" " id="ratebehaviours">
+                                            <a href="https://eskooly.com/bb/printinfo.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Rate Behaviours <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="rateskills">
+                                            <a href="https://eskooly.com/bb/printinfo.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Rate Skills <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										<li class=" " id="observations">
+                                            <a href="https://eskooly.com/bb/printinfo.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Observations <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="behaviourreport">
+                                            <a href="https://eskooly.com/bb/printinfo.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Affective Domain Rating Report <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="skillreport">
+                                            <a href="https://eskooly.com/bb/printinfo.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Psycomotor Domain Rating Report <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+
+										
+										
+                                    </ul>
+                                </li>
+                                <li class="pcoded-hasmenu" id="pos" dropdown-icon="style3" subitem-icon="style7">
+                                    <a href="javascript:void(0)">
+                                        <span class="pcoded-micon"><i class="ti-shopping-cart"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.basic-components.main">Online Store &amp; POS</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                    <ul class="pcoded-submenu">
+                                        <li class=" " id="analytics">
+                                            <a href="https://eskooly.com/bb/printinfo.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Store Analytics <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="catagories">
+                                            <a href="https://eskooly.com/bb/printinfo.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Product Catagories <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										<li class=" " id="tax">
+                                            <a href="https://eskooly.com/bb/printinfo.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Product Tax <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="products">
+                                            <a href="https://eskooly.com/bb/printinfo.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Products <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="addorder">
+                                            <a href="https://eskooly.com/bb/printinfo.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">New Order <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="orders">
+                                            <a href="https://eskooly.com/bb/printinfo.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">All Orders <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+
+										
+										
+                                    </ul>
+                                </li>
+                                <li class=" " id="whatsapp">
+                                    <a href="https://eskooly.com/bb/printinfo.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                        <span class="pcoded-micon"><i class="fa fa-whatsapp"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.form-components.main" style="opacity:0.6;"> WhatsApp</span>
+                                        <i class="fa fa-lock m-orange f-right m-t-10" style="opacity:0.6;"></i>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                </li>
+								<li class=" " id="messages">
+                                    <a href="https://eskooly.com/bb/MessageBox.php">
+                                        <span class="pcoded-micon"><i class="ti-comment-alt"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.form-components.main">Messaging</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                </li>
+                                <li class="pcoded-hasmenu" id="sms" dropdown-icon="style3" subitem-icon="style7">
+                                    <a href="javascript:void(0)">
+                                        <span class="pcoded-micon"><i class="ti-email"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.basic-components.main">SMS Services</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                    <ul class="pcoded-submenu">
+                                        <li class=" " id="smsgateway">
+                                            <a href="https://eskooly.com/bb/smsSettings.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Free SMS Gateway</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="brandedsms">
+                                            <a href="https://eskooly.com/bb/printinfo.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Branded SMS <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										<li class=" " id="smstemplates">
+                                            <a href="https://eskooly.com/bb/printinfo.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">SMS Templates <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+
+										
+										
+                                    </ul>
+                                </li>
+                                
+								<li class=" " id="liveclass">
+                                    <a href="https://eskooly.com/bb/liveclass.php">
+                                        <span class="pcoded-micon"><i class="ti-video-camera"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.form-components.main">Live Class</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                </li>
+								
+                            </ul>
+							
+                            <ul class="pcoded-item pcoded-left-item" item-border="true" item-border-style="none" subitem-border="true">
+                                <li class="pcoded-hasmenu" id="questionpaper" dropdown-icon="style3" subitem-icon="style7">
+                                    <a href="javascript:void(0)">
+                                        <span class="pcoded-micon"><i class="ti-files"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.basic-components.main">Question Paper</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                    <ul class="pcoded-submenu">
+                                        <li class=" " id="addchapters">
+                                            <a href="https://eskooly.com/bb/printinfo.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Subject Chapters <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="questionbank">
+                                            <a href="https://eskooly.com/bb/printinfo.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Question Bank <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										<li class=" " id="createpaper">
+                                            <a href="https://eskooly.com/bb/printinfo.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Create Question Paper <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+
+										
+										
+                                    </ul>
+                                </li>
+                                <li class="pcoded-hasmenu" id="exams" dropdown-icon="style3" subitem-icon="style7">
+                                    <a href="javascript:void(0)">
+                                        <span class="pcoded-micon"><i class="ti-write"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.basic-components.main">Exams</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                    <ul class="pcoded-submenu">
+                                        <li class=" " id="createexam">
+                                            <a href="https://eskooly.com/bb/addexam.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Create New Exam</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        
+                                        <li class=" " id="addexammarks">
+                                            <a href="https://eskooly.com/bb/examMarks.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Add / update Exam Marks</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										
+										<li class=" " id="resultcard">
+                                            <a href="https://eskooly.com/bb/searchexamresult.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Result Card</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="resultsheet">
+                                            <a href="https://eskooly.com/bb/printinfo.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Result Sheet <i class="fa-solid fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="examschedule">
+                                            <a href="https://eskooly.com/bb/printinfo.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Exam Schedule <i class="fa-solid fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="datesheet">
+                                            <a href="https://eskooly.com/bb/printinfo.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Date Sheet <i class="fa-solid fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="awardlist">
+                                            <a href="https://eskooly.com/bb/printinfo.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Blank Award List <i class="fa-solid fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										
+										
+                                    </ul>
+                                </li>
+								<li class="pcoded-hasmenu" id="tests" dropdown-icon="style3" subitem-icon="style7">
+                                    <a href="javascript:void(0)">
+                                        <span class="pcoded-micon"><i class="ti-files"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.basic-components.main">Class Tests</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                    <ul class="pcoded-submenu">
+                                        <li class=" " id="createtest">
+                                            <a href="https://eskooly.com/bb/testMarks.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Manage Test Marks</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="testreport">
+                                            <a href="https://eskooly.com/bb/alltest.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Test Result</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										
+
+										
+										
+                                    </ul>
+                                </li>
+                                <li class="pcoded-hasmenu" id="reports" dropdown-icon="style3" subitem-icon="style7">
+                                    <a href="javascript:void(0)">
+                                        <span class="pcoded-micon"><i class="ti-files"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.basic-components.main">Reports</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                    <ul class="pcoded-submenu">
+                                        <li class=" " id="reportcard">
+                                            <a href="https://eskooly.com/bb/reportcardfor.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Students report Card</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="report1">
+                                            <a href="https://eskooly.com/bb/report1.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Students info report</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="report2">
+                                            <a href="https://eskooly.com/bb/report2.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Parents info report</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="report3">
+                                            <a href="https://eskooly.com/bb/printinfo.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Students Monthly Attendance Report <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										<li class=" " id="report4">
+                                            <a href="https://eskooly.com/bb/printinfo.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Staff Monthly Attendance Report <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="report5">
+                                            <a href="https://eskooly.com/bb/printinfo.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Fee Collection Report <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="report6">
+                                            <a href="https://eskooly.com/bb/printinfo.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Student Progress Report <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="report7">
+                                            <a href="https://eskooly.com/bb/printinfo.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Accounts Report <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="report8">
+                                            <a href="https://eskooly.com/bb/printinfo.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Customised Reports <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+
+										
+										
+                                    </ul>
+                                </li>
+								<li class="pcoded-hasmenu" id="certificates" dropdown-icon="style3" subitem-icon="style7">
+                                    <a href="javascript:void(0)">
+                                        <span class="pcoded-micon"><i class="ti-medall"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.basic-components.main">Certificates</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                    <ul class="pcoded-submenu">
+                                        <li class=" " id="createCertificate">
+                                            <a href="https://eskooly.com/bb/certificates.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Generate Certificate</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										<li class=" " id="cltemplates">
+                                            <a href="https://eskooly.com/bb/printinfo.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Certificate Templates <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+
+										
+										
+                                    </ul>
+                                </li>
+								
+								
+								
+                                
+
+                            </ul>
+							
+                            <div class="pcoded-navigatio-lavel" data-i18n="nav.category.other" menu-title-theme="theme1"></div>
+                            
+							<div style="margin:0 auto;width:90%;text-align:center;background:white;" class="m-round p-10">
+							<i class="ti-search f-20 bold"></i><br style="margin:2px;padding:0px;">
+							<strong>Need More Advance ?</strong><br>
+							<span style="font-size:12px;">Check our PRO version. An ultimate education management ERP with all advance features.</span><br>
+							<a href="https://pro.eskooly.com/" target="_blank"><button class="btn btn-sm m-t-10 bg-m-orange m-white m-round">Try Demo</button></a>
+							
+							</div>
+                            
+                        </div><div id="mCSB_1_scrollbar_vertical" class="mCSB_scrollTools mCSB_1_scrollbar mCS-light mCSB_scrollTools_vertical" style="display: block;"><div class="mCSB_draggerContainer"><div id="mCSB_1_dragger_vertical" class="mCSB_dragger" style="position: absolute; min-height: 30px; height: 248px; top: 0px; display: block; max-height: 601.6px;"><div class="mCSB_dragger_bar" style="line-height: 30px;"></div></div><div class="mCSB_draggerRail"></div></div></div></div></div>
+                    </nav>
+
+                    <div class="pcoded-content">
+                        <div class="pcoded-inner-content">
+                            <div class="main-body">
+                                <div class="page-wrapper">
+								
+                                    
+                                    <!-- Page-body start -->
+                                    <div class="page-body">
+                                        <!-- Row start -->
+                                        <div class="row">
+                                            <div class="col-12 p-10 f-14" style="border-radius:10px;background:#fff;box-shadow:0px 0px 1px 0px gray;"><strong style="border-right:1px solid #777;padding-right:10px;margin-right:10px;">Students</strong> <i class="ti-user"></i> - Print Basic List 
+                                            </div>
+                                        </div>
+                                        <div class="row" style="">
+										    
+											<div class="col-md-6 col-lg-6 col-xl-4 p-r-0">
+											    <form action="https://eskooly.com/bb/printinfo.php" method="post" id="myform">
+											        <div class="m-div" style="padding:1px;">
+    											        <label style="margin-top:-8px;z-index:2;" class="m-label bg-gradient-blue m-white">Select Class*</label>
+    											        <select class="m-field form-control selectized" id="searchlist" name="searchby" tabindex="-1" style="display: none;"><option value="" selected="selected"></option></select><div class="selectize-control m-field form-control single"><div class="selectize-input items required invalid not-full has-options"><input type="select-one" autocomplete="off" tabindex="" id="searchlist-selectized" placeholder="Select*" required="" style="width: 53.425px;"></div><div class="selectize-dropdown single m-field form-control" style="display: none;"><div class="selectize-dropdown-content"></div></div></div>
+    											    </div>
+    											    <input type="hidden" name="searchclass" value="1">
+											    </form>
+											</div>
+											<div class="col-md-6 col-lg-6 col-xl-8 f-right" style="margin-top:10px;">
+											
+											</div>
+										</div>
+                                        
+                                        
+										<div class="row m-t-20">
+										    
+											
+											   
+											<div id="area" class="col-12">
+										    <div class="row p-t-0 p-r-0" id="p20">
+    										<div class="col-12 m-round p-20" style="background:#fff;box-shadow:0px 0px 1px 0px gray;">
+											
+											 <div id="example_wrapper" class="dataTables_wrapper no-footer"><div class="dt-buttons">               <button class="dt-button buttons-copy buttons-html5" tabindex="0" aria-controls="example" type="button"><span>Copy</span></button> <button class="dt-button buttons-csv buttons-html5" tabindex="0" aria-controls="example" type="button"><span>CSV</span></button> <button class="dt-button buttons-excel buttons-html5" tabindex="0" aria-controls="example" type="button"><span>Excel</span></button> <button class="dt-button buttons-pdf buttons-html5" tabindex="0" aria-controls="example" type="button"><span>PDF</span></button> <button class="dt-button buttons-print" tabindex="0" aria-controls="example" type="button"><span>Print</span></button> <button class="dt-button buttons-collection buttons-colvis" tabindex="0" aria-controls="example" type="button" aria-haspopup="dialog"><span>Column visibility</span><span class="dt-down-arrow">▼</span></button> </div><div id="example_filter" class="dataTables_filter"><label>Search:<input type="search" class="" placeholder="" aria-controls="example"></label></div><div class="dataTables_scroll"><div class="dataTables_scrollHead" style="overflow: hidden; position: relative; border: 0px; width: 100%;"><div class="dataTables_scrollHeadInner" style="box-sizing: content-box; width: 1128.2px; padding-right: 0px;"><table class="table dataTable no-footer" style="width: 1128.2px; margin-left: 0px;"><thead>
+											   <tr class="bg-gradient-blue m-white" style="font-weight:bold;"><th class="sorting sorting_asc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 50.75px;" aria-sort="ascending" aria-label="Sr: activate to sort column descending">Sr</th><th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 50.75px;" aria-label="ID: activate to sort column ascending">ID</th><th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 190.4px;" aria-label="Student Name: activate to sort column ascending">Student Name</th><th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 101.625px;" aria-label="Father: activate to sort column ascending">Father</th><th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 90.65px;" aria-label="Class: activate to sort column ascending">Class</th><th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 207.363px;" aria-label="Fee Remainings: activate to sort column ascending">Fee Remainings</th><th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 100.662px;" aria-label="phone: activate to sort column ascending">phone</th></tr>
+											   </thead></table></div></div><div class="dataTables_scrollBody" style="position: relative; overflow: auto; width: 100%;"><table id="example" class="table dataTable no-footer" style="width: 100%;" aria-describedby="example_info"><thead>
+											   <tr class="bg-gradient-blue m-white" style="font-weight: bold; height: 0px;"><th class="sorting" aria-controls="example" rowspan="1" colspan="1" style="width: 50.75px; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; height: 0px;"><div class="dataTables_sizing" style="height: 0px; overflow: hidden;">Sr</div></th><th class="sorting" aria-controls="example" rowspan="1" colspan="1" style="width: 50.75px; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; height: 0px;"><div class="dataTables_sizing" style="height: 0px; overflow: hidden;">ID</div></th><th class="sorting" aria-controls="example" rowspan="1" colspan="1" style="width: 190.4px; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; height: 0px;"><div class="dataTables_sizing" style="height: 0px; overflow: hidden;">Student Name</div></th><th class="sorting" aria-controls="example" rowspan="1" colspan="1" style="width: 101.625px; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; height: 0px;"><div class="dataTables_sizing" style="height: 0px; overflow: hidden;">Father</div></th><th class="sorting" aria-controls="example" rowspan="1" colspan="1" style="width: 90.65px; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; height: 0px;"><div class="dataTables_sizing" style="height: 0px; overflow: hidden;">Class</div></th><th class="sorting" aria-controls="example" rowspan="1" colspan="1" style="width: 207.363px; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; height: 0px;"><div class="dataTables_sizing" style="height: 0px; overflow: hidden;">Fee Remainings</div></th><th class="sorting" aria-controls="example" rowspan="1" colspan="1" style="width: 100.662px; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; height: 0px;"><div class="dataTables_sizing" style="height: 0px; overflow: hidden;">phone</div></th></tr>
+											   </thead>
+											     
+											   
+											   <tbody class="text-dark">
+											   											   
+											   											   <tr class="odd"><td class="sorting_1">1</td><td>52728</td><td>Ridansh Lodha</td><td></td><td>Seventh</td><td><b class="m-orange"><span>$</span> 0</b></td><td></td></tr></tbody>
+											   
+											   </table></div></div><div class="dataTables_info" id="example_info" role="status" aria-live="polite">Showing 1 to 1 of 1 entries</div><div class="dataTables_paginate paging_simple_numbers" id="example_paginate"><a class="paginate_button previous disabled" aria-controls="example" data-dt-idx="0" tabindex="-1" id="example_previous">Previous</a><span><a class="paginate_button current" aria-controls="example" data-dt-idx="1" tabindex="0">1</a></span><a class="paginate_button next disabled" aria-controls="example" data-dt-idx="2" tabindex="-1" id="example_next">Next</a></div></div>
+											   </div>
+											   </div>
+										    </div>
+																						
+										</div>
+                                        
+										<!-- Row end -->
+										<!-- Row start -->
+										
+												<!-- Row end -->
+									</div>
+                                    <!-- Page-body end -->
+                                </div>
+                            </div>
+       
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<!-- Main-body end -->
+
+<!-- Required Jquery -->
+<script type="text/javascript" src="./List_files/jquery.min.js.download"></script>
+<script type="text/javascript" src="./List_files/jquery-ui.min.js.download"></script>
+<script type="text/javascript" src="./List_files/popper.min.js.download"></script>
+<script type="text/javascript" src="./List_files/bootstrap.min.js.download"></script>
+<!-- jquery slimscroll js -->
+<script type="text/javascript" src="./List_files/jquery.slimscroll.js.download"></script>
+<!-- modernizr js -->
+<script type="text/javascript" src="./List_files/modernizr.js.download"></script>
+<script type="text/javascript" src="./List_files/css-scrollbars.js.download"></script>
+<script src="./List_files/jspdf.min.js.download"></script>
+<script src="./List_files/html2canvas.js.download"></script>
+<!-- Accordion js -->
+<script type="text/javascript" src="./List_files/accordion.js.download"></script>
+<!-- Custom js -->
+<script type="text/javascript" src="./List_files/script.js.download"></script>
+<script src="./List_files/pcoded.min.js.download"></script>
+<script src="./List_files/vartical-demo.js.download"></script>
+<script src="./List_files/jquery.mCustomScrollbar.concat.min.js.download"></script>
+<!--- datatables & plugins ----->
+<script type="text/javascript" src="./List_files/datatables.min.js.download"></script>
+<script type="text/javascript" src="./List_files/dtbuttons.min.js.download"></script>
+<script type="text/javascript" src="./List_files/jszip.min.js.download"></script>
+<script type="text/javascript" src="./List_files/pdfmaker.min.js.download"></script>
+<script type="text/javascript" src="./List_files/vfsfonts.js.download"></script>
+<script type="text/javascript" src="./List_files/html5.min.js.download"></script>
+<script type="text/javascript" src="./List_files/print.min.js.download"></script>
+<script type="text/javascript" src="./List_files/colvis.min.js.download"></script>
+<script src="./List_files/selectlistsearch.js.download"></script>
+
+<!--- datatables & plugins END ----->
+<script>
+
+// navigator activator
+document.getElementById("dashboard").classList.remove('active');
+document.getElementById("printinfo").classList.add('active');
+document.getElementById("students").classList.add('active');
+document.getElementById("students").classList.add('pcoded-trigger');
+//----------end----------------- 
+
+// search students api
+var availableTags = ["52728 - Ridansh Lodha - Seventh"];
+var availableTagsCode = ["52728"]; 
+$( "#tags" ).autocomplete({ 
+	source: availableTags,
+	select: function (event, ui) {
+		var index = availableTags.indexOf(ui.item.value);
+		$("#tags_code").val(availableTagsCode[index]);  
+	}
+});
+
+//---------end------------------
+function printDiv() 
+{
+
+  var divToPrint=document.getElementById('area');
+
+  var newWin=window.open('','Print-Window');
+
+  newWin.document.open();
+
+  newWin.document.write('<html><body onload="window.print()"><head><link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600" rel="stylesheet"><link rel="stylesheet" type="text/css" href="assets/css/bootstrap/css/bootstrap.min.css"><link rel="stylesheet" type="text/css" href="assets/icon/themify-icons/themify-icons.css"><link rel="stylesheet" type="text/css" href="assets/icon/font-awesome/css/font-awesome.min.css"><link rel="stylesheet" type="text/css" href="assets/icon/icofont/css/icofont.css"><link rel="stylesheet" type="text/css" href="assets/css/style.css"><link rel="stylesheet" type="text/css" href="assets/css/jquery.mCustomScrollbar.css"><style>tr{border-bottom:0.1px solid gray;margin:5px;font-size:10px;}body{background:#fff;font-size:11px;}</style></head>'+area.innerHTML+'</body></html>');
+
+  newWin.document.close();
+
+  setTimeout(function(){newWin.close();},4000);
+
+}
+//Create PDf from HTML...
+	function getPDF(){
+
+		var HTML_Width = $(".canvas_div_pdf").width();
+		var HTML_Height = $(".canvas_div_pdf").height();
+		var top_left_margin = 15;
+		var PDF_Width = HTML_Width+(top_left_margin*2);
+		var PDF_Height = (PDF_Width*1.5)+(top_left_margin*2);
+		var canvas_image_width = HTML_Width;
+		var canvas_image_height = HTML_Height;
+		
+		var totalPDFPages = Math.ceil(HTML_Height/PDF_Height)-1;
+		
+
+		html2canvas($(".canvas_div_pdf")[0],{allowTaint:true}).then(function(canvas) {
+			canvas.getContext('2d');
+			
+			console.log(canvas.height+"  "+canvas.width);
+			
+			
+			var imgData = canvas.toDataURL("image/jpeg", 1.0);
+			var pdf = new jsPDF('p', 'pt',  [PDF_Width, PDF_Height]);
+		    pdf.addImage(imgData, 'JPG', top_left_margin, top_left_margin,canvas_image_width,canvas_image_height);
+			
+			
+			for (var i = 1; i <= totalPDFPages; i++) { 
+				pdf.addPage(PDF_Width, PDF_Height);
+				pdf.addImage(imgData, 'JPG', top_left_margin, -(PDF_Height*i)+(top_left_margin*4),canvas_image_width,canvas_image_height);
+			}
+			
+		    pdf.save("basic-list.pdf");
+        });
+	};
+$(document).ready(function () {
+    $('#example').DataTable( {
+		scrollX: true,
+        "pageLength": 20,
+        dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'copyHtml5',
+                title: '',
+                exportOptions: {
+                    columns: [ 0, ':visible' ]
+                }
+            },
+            {
+                extend: 'csvHtml5',
+                title: '',
+                exportOptions: {
+                    columns: [ 0, ':visible' ]
+                }
+            },
+            {
+                extend: 'excelHtml5',
+                title: '',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+            {
+                extend: 'pdfHtml5',
+                title: '',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+            {
+                extend: 'print',
+                title: '',
+                exportOptions: {
+                    columns: [ 0, ':visible' ]
+                }
+            },
+            'colvis'
+        ]
+    } );
+      $('#searchlist').selectize({
+          sortField: 'text'
+      });
+      $('#searchlist').on('change',function(){
+          $("#myform").submit();
+      });
+  });
+</script><ul id="ui-id-1" tabindex="0" class="ui-menu ui-widget ui-widget-content ui-autocomplete ui-front" style="display: none;"></ul><div role="status" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div>
+
+
+<div id="goog-gt-tt" class="VIpgJd-yAWNEb-L7lbkb skiptranslate" style="border-radius: 12px; margin: 0 0 0 -23px; padding: 0; font-family: &#39;Google Sans&#39;, Arial, sans-serif;" data-id=""><div id="goog-gt-vt" class="VIpgJd-yAWNEb-hvhgNd"><div class="VIpgJd-yAWNEb-hvhgNd-Ud7fr"><img src="./List_files/24px.svg" width="24" height="24" alt=""><div class=" VIpgJd-yAWNEb-hvhgNd-IuizWc-i3jM8c " dir="ltr">Original text</div></div><div class="VIpgJd-yAWNEb-hvhgNd-k77Iif"><div id="goog-gt-original-text" class="VIpgJd-yAWNEb-nVMfcd-fmcmS VIpgJd-yAWNEb-hvhgNd-axAV1"></div></div><div class="VIpgJd-yAWNEb-hvhgNd-N7Eqid ltr"><div class="VIpgJd-yAWNEb-hvhgNd-N7Eqid-B7I4Od ltr" dir="ltr"><div class="VIpgJd-yAWNEb-hvhgNd-UTujCb">Rate this translation</div><div class="VIpgJd-yAWNEb-hvhgNd-eO9mKe">Your feedback will be used to help improve Google Translate</div></div><div class="VIpgJd-yAWNEb-hvhgNd-xgov5 ltr"><button id="goog-gt-thumbUpButton" type="button" class="VIpgJd-yAWNEb-hvhgNd-bgm6sf" title="Good translation" aria-label="Good translation" aria-pressed="false"><span id="goog-gt-thumbUpIcon"><svg width="24" height="24" viewBox="0 0 24 24" focusable="false" class="VIpgJd-yAWNEb-hvhgNd-THI6Vb NMm5M"><path d="M21 7h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 0S7.08 6.85 7 7H2v13h16c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73V9c0-1.1-.9-2-2-2zM7 18H4V9h3v9zm14-7l-3 7H9V8l4.34-4.34L12 9h9v2z"></path></svg></span><span id="goog-gt-thumbUpIconFilled"><svg width="24" height="24" viewBox="0 0 24 24" focusable="false" class="VIpgJd-yAWNEb-hvhgNd-THI6Vb NMm5M"><path d="M21 7h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 0S7.08 6.85 7 7v13h11c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73V9c0-1.1-.9-2-2-2zM5 7H1v13h4V7z"></path></svg></span></button><button id="goog-gt-thumbDownButton" type="button" class="VIpgJd-yAWNEb-hvhgNd-bgm6sf" title="Poor translation" aria-label="Poor translation" aria-pressed="false"><span id="goog-gt-thumbDownIcon"><svg width="24" height="24" viewBox="0 0 24 24" focusable="false" class="VIpgJd-yAWNEb-hvhgNd-THI6Vb NMm5M"><path d="M3 17h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 24s7.09-6.85 7.17-7h5V4H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2zM17 6h3v9h-3V6zM3 13l3-7h9v10l-4.34 4.34L12 15H3v-2z"></path></svg></span><span id="goog-gt-thumbDownIconFilled"><svg width="24" height="24" viewBox="0 0 24 24" focusable="false" class="VIpgJd-yAWNEb-hvhgNd-THI6Vb NMm5M"><path d="M3 17h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 24s7.09-6.85 7.17-7V4H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2zm16 0h4V4h-4v13z"></path></svg></span></button></div></div><div id="goog-gt-votingHiddenPane" class="VIpgJd-yAWNEb-hvhgNd-aXYTce"><form id="goog-gt-votingForm" action="https://translate.googleapis.com/translate_voting?client=te" method="post" target="votingFrame" class="VIpgJd-yAWNEb-hvhgNd-aXYTce"><input type="text" name="sl" id="goog-gt-votingInputSrcLang"><input type="text" name="tl" id="goog-gt-votingInputTrgLang"><input type="text" name="query" id="goog-gt-votingInputSrcText"><input type="text" name="gtrans" id="goog-gt-votingInputTrgText"><input type="text" name="vote" id="goog-gt-votingInputVote"></form><iframe name="votingFrame" frameborder="0" src="./List_files/saved_resource.html"></iframe></div></div></div><span style="position: absolute; top: -99999px; left: -99999px; width: auto; padding: 0px; white-space: pre; letter-spacing: 0px; font-size: 14px; font-family: Poppins, sans-serif; font-weight: 400; text-transform: none;">Select*</span><div class="VIpgJd-ZVi9od-aZ2wEe-wOHMyf"><div class="VIpgJd-ZVi9od-aZ2wEe-OiiCO"><svg xmlns="http://www.w3.org/2000/svg" class="VIpgJd-ZVi9od-aZ2wEe" width="96px" height="96px" viewBox="0 0 66 66"><circle class="VIpgJd-ZVi9od-aZ2wEe-Jt5cK" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle></svg></div></div><iframe frameborder="0" class="VIpgJd-ZVi9od-xl07Ob-OEVmcd skiptranslate" title="Language Translate Widget" style="visibility: visible; box-sizing: content-box; width: 2622px; height: 274px; display: none;" src="./List_files/saved_resource(1).html"></iframe></body></html>

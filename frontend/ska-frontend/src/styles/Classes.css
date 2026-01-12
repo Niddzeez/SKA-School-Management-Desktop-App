@@ -1,0 +1,66 @@
+.page-container {
+  padding: 20px;
+}
+
+.add-class {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.add-class input {
+  padding: 8px;
+  width: 220px;
+}
+
+.class-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.class-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  background: #fff;
+  color:  grey;
+}
+
+
+
+.section-list {
+  margin: 12px 0;
+  padding-left: 18px;
+}
+
+.section-list .empty {
+  color: #777;
+  font-style: italic;
+}
+
+.add-section {
+  display: flex;
+  gap: 8px;
+}
+
+.add-section input {
+  flex: 1;
+  padding: 6px;
+}
+
+.section-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.teacher-name {
+  font-size: 13px;
+  color: #555;
+}
+
+.section-item select {
+  padding: 4px;
+}

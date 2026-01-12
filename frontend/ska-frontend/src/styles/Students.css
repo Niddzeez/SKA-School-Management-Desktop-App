@@ -1,0 +1,72 @@
+.students-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.students-header h1 {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.search-input {
+  width: 260px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #1f2937;
+  background-color: #020617;
+  color: #e5e7eb;
+  font-size: 14px;
+}
+
+.search-input::placeholder {
+  color: #6b7280;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+.search-wrapper {
+  position: relative;
+}
+
+.clear-search {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.clear-search:hover {
+  color: red;
+}
+
+.no-results {
+  margin-top: 32px;
+  padding: 32px;
+  text-align: center;
+  border: 1px dashed #1f2937;
+  border-radius: 8px;
+  color: #9ca3af;
+}
+
+.no-results p {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: #e5e7eb;
+}
+
+.no-results span {
+  font-size: 13px;
+}
+

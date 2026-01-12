@@ -1,0 +1,1729 @@
+<!DOCTYPE html>
+<!-- saved from url=(0036)https://eskooly.com/bb/admission.php -->
+<html lang="en" class=" js flexbox flexboxlegacy canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers no-applicationcache svg inlinesvg smil svgclippaths cssscrollbar" style="height: 100%;"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- Global site tag (gtag.js) - Google Analytics -->
+	        <!-- Google tag (gtag.js) -->
+        <script async="" src="./admission form_files/js"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+        
+          gtag('config', 'UA-132063111-1');
+        </script>
+    <!--end analytics here--->
+        <title>eSkooly - Free School Management System</title>
+          
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="description" content="">
+      <meta name="keywords" content="">
+      <meta name="author" content="eSkooly Inc.">
+      <!-- Favicon icon -->
+            <link rel="icon" href="https://eskooly.com/bb/assets/images/favicon.png" type="image/x-png">
+      <!------fa--------->
+        <link rel="stylesheet" href="./admission form_files/all.css">
+    	<link rel="stylesheet" href="./admission form_files/sharp-solid.css">
+    	<link rel="stylesheet" href="./admission form_files/sharp-regular.css">
+    	<link rel="stylesheet" href="./admission form_files/sharp-light.css">
+            
+          <!-- Google font-->
+    <link href="./admission form_files/css" rel="stylesheet">
+    <!-- Required Fremwork -->
+    <link rel="stylesheet" type="text/css" href="./admission form_files/bootstrap.min.css">
+    <!-- themify-icons line icon -->
+    <link rel="stylesheet" type="text/css" href="./admission form_files/themify-icons.css">
+    <link rel="stylesheet" type="text/css" href="./admission form_files/font-awesome.min.css">
+    <!-- ico font -->
+    <link rel="stylesheet" type="text/css" href="./admission form_files/icofont.css">
+    <!-- Style.css -->
+    <link rel="stylesheet" type="text/css" href="./admission form_files/style.css">
+    <link rel="stylesheet" type="text/css" href="./admission form_files/jquery.mCustomScrollbar.css">
+    <link rel="stylesheet" type="text/css" href="./admission form_files/selectlistsearch.css">
+	<style>
+	    .m-div{
+            padding:5px;
+            border-radius:25px !important;
+            margin-top:20px;
+        }
+        .m-field{
+            border-radius:25px !important;
+        }
+        .selectize-input, .selectize-input:focus{
+            border-radius:25px !important;
+            margin-top:4px;
+            border:none !important;
+            box-shadow:none !important;
+            outline: none !important;
+        }
+        .m-label{
+            margin-top:-14px;
+            border:1px solid #999;
+            border-radius:12px;
+            font-size:10px;
+            padding-left:10px;
+            padding-right:10px;
+            margin-left:10px;
+        }
+        #checkReg{
+            display:none;
+        }
+        .hide_field{
+            display:none;
+        }
+	</style>
+<link type="text/css" rel="stylesheet" charset="UTF-8" href="./admission form_files/m=el_main_css"><script type="text/javascript" charset="UTF-8" src="./admission form_files/m=el_main"></script></head>
+
+<body themebg-pattern="pattern6" style="position: relative; min-height: 100%; top: 0px;">
+	 
+        <!-- Pre-loader start -->
+    
+    <!-- Pre-loader end -->
+
+    <div id="pcoded" class="pcoded iscollapsed" theme-layout="vertical" vertical-placement="left" vertical-layout="wide" pcoded-device-type="desktop" vertical-nav-type="expanded" vertical-effect="shrink" vnavigation-view="view1" nav-type="st2" fream-type="theme1" layout-type="light">
+        <div class="pcoded-overlay-box"></div>
+        <div class="pcoded-container navbar-wrapper">
+
+            <nav class="navbar header-navbar pcoded-header iscollapsed" header-theme="theme6" pcoded-header-position="fixed">
+               <div class="navbar-wrapper">
+                   <div class="navbar-logo" logo-theme="theme1">
+                       <a class="mobile-menu" id="mobile-collapse" href="https://eskooly.com/bb/admission.php#!">
+                           <i class="fa-duotone fa-solid fa-bars"></i>
+                       </a>
+                       <div class="mobile-search">
+                           <div class="header-search">
+                               <div class="main-search morphsearch-search">
+                                   <div class="input-group">
+                                       <span class="input-group-addon search-close"><i class="fa-duotone fa-solid fa-xmark"></i></span>
+                                       <input type="text" class="form-control" placeholder="Enter Keyword">
+                                       <span class="input-group-addon search-btn"><i class="fa-duotone fa-solid fa-magnifying-glass"></i></span>
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+                                              <a href="https://eskooly.com/">
+                           <img class="img-fluid m-l-30" id="headerimg" style="max-height:45px;" src="./admission form_files/logo1.png" alt="eSkooly-Logo">
+                       </a>
+                                              <a class="mobile-options">
+                           <i class="fa-duotone fa-solid fa-ellipsis"></i>
+                       </a>
+                       
+                   </div>
+
+                   <div class="navbar-container container-fluid">
+                       <ul class="nav-left">
+                           <li>
+                               <div class="sidebar_toggle"><a href="javascript:void(0)"><i class="fa-duotone fa-solid fa-ellipsis"></i></a></div>
+                           </li>
+						   
+                           <li class="header-search">
+                               <div class="main-search morphsearch-search">
+                                   <div class="input-group">
+								       
+                                       <span class="input-group-addon search-close"><i class="fa-duotone fa-solid fa-xmark"></i></span>
+                                       <input type="text" class="form-control ui-autocomplete-input" id="tags" placeholder="Search Student" autocomplete="off"><form action="https://eskooly.com/bb/requestmanager.php" method="post">
+									   <input type="text" id="tags_code" style="display:none;" name="id">
+                                       <span class="input-group-addon search-btn"><i class="fa-duotone fa-solid fa-magnifying-glass"></i></span>
+									   <button type="submit" name="dashboard" class="input-group-addon search-btn1"><i class="fa-duotone fa-solid fa-magnifying-glass"></i></button>
+									   </form>
+									   
+                                   </div>
+                               </div>
+                           </li>
+						   
+                           <li>
+                               <a href="https://eskooly.com/bb/admission.php#!" onclick="javascript:toggleFullScreen()">
+                                   <i class="fa-duotone fa-solid fa-expand"></i>
+                               </a>
+                           </li>
+                       </ul>
+                       <ul class="nav-right">
+                                                       <li class="header-notification">
+                               <a href="https://apps.apple.com/pk/app/eskooly/id6448073356">
+                                   <img src="./admission form_files/apple.png" style="width:120px;">
+                               </a>
+                               
+                           </li>
+                           <li class="header-notification">
+                               <a href="https://play.google.com/store/apps/details?id=com.eskooly.app">
+                                   <img src="./admission form_files/google.png" style="width:120px;">
+                               </a>
+                               
+                           </li>
+                           <li class="header-notification">
+                               <a href="https://eskooly.com/bb/marketplace.php" data-toggle="tooltip" title="" data-original-title="Marketplace">
+                                   <img src="./admission form_files/marketplace1.png" style="width:35px;">
+                               </a>
+                               
+                           </li>
+                                                      <li class="header-notification">
+                               <a href="https://eskooly.com/bb/MessageBox.php">
+                                   <i class="fa-duotone fa-solid fa-messages"></i>
+                                   <span id="msgaya" class="badge bg-c-green f-10"></span>
+                               </a>
+                               
+                           </li>
+                           <li class="header-notification">
+                               <a href="https://eskooly.com/bb/admission.php#!">
+                                   <i class="fa-sharp-duotone fa-solid fa-bell"></i>
+                                   <span class="badge bg-m-orange f-10">
+                                       
+                                   </span>
+                               </a>
+                               <ul class="show-notification profile-notification">
+                                  
+                               </ul>
+                               
+                           </li>
+                                                      <li class="header-notification">
+                               <a href="https://eskooly.com/bb/admission.php#!">
+                                   <i class="fa-duotone fa-solid fa-cart-shopping"></i>
+                                   <span class="badge bg-c-yellow f-10" style="color:#000;"></span>
+                               </a>
+                               <ul class="show-notification profile-notification">
+                                                                   </ul>
+                           </li>
+                           
+                           <li class="user-profile header-notification" style="float:right;">
+                               <a href="https://eskooly.com/bb/admission.php#!">
+							    								<img src="./admission form_files/unnamed.png" class="img-radius">
+								<span title="Institute Name">Institute Name</span>
+								<i class="ti-angle-down"></i>
+															   
+							   <!---
+                                   <img src="assets/images/avatar-4.jpg" class="img-radius" alt="User-Profile-Image">
+                                   <span>John Doe</span>
+                                   <i class="ti-angle-down"></i>
+								   
+								----->
+                               </a>
+                               <ul class="show-notification profile-notification">
+                                   <li>
+                                       <a href="https://eskooly.com/bb/account.php">
+                                           <i class="ti-settings"></i> Account Settings
+                                       </a>
+                                   </li>
+                                   <li>
+                                       <a href="https://eskooly.com/bb/schoolinfo.php">
+                                           <i class="fa fa-bank"></i> Profile
+                                       </a>
+                                   </li>
+                                   
+                                   
+                                   <li>
+                                       <a href="https://eskooly.com/bb/logout.php">
+                                       <i class="ti-lock"></i> Logout
+                                   </a>
+                                   </li>
+                               </ul>
+                           </li>
+                       </ul>
+                   </div>
+               </div>
+           </nav>
+		  <script type="text/javascript">var theme = ["0","0","0","0","left","left","theme6","theme6","themelight1","themelight1","theme7","theme7","en","en"];</script>
+		  <!---language starting--->
+		  
+	<div id="google_translate_element" style="display: none !important;"><div class="skiptranslate goog-te-gadget" dir="ltr" style=""><div id=":0.targetLanguage" class="goog-te-gadget-simple" style="white-space: nowrap;"><img src="https://www.google.com/images/cleardot.gif" class="goog-te-gadget-icon" alt="" style="background-image: url(&quot;https://translate.googleapis.com/translate_static/img/te_ctrl3.gif&quot;); background-position: -65px 0px;"><span style="vertical-align: middle;"><a aria-haspopup="true" class="VIpgJd-ZVi9od-xl07Ob-lTBxed" href="https://eskooly.com/bb/admission.php#"><span>Select Language</span><img src="https://www.google.com/images/cleardot.gif" alt="" width="1" height="1"><span style="border-left: 1px solid rgb(187, 187, 187);">​</span><img src="https://www.google.com/images/cleardot.gif" alt="" width="1" height="1"><span aria-hidden="true" style="color: rgb(118, 118, 118);">▼</span></a></span></div></div></div>
+	<script type="text/javascript">
+            function googleTranslateElementInit() {
+            new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
+            }
+    </script>
+    <script type="text/javascript" src="./admission form_files/element.js.download"></script>
+	<!---language ends here--->
+	            <div class="pcoded-main-container" style="margin-top: 72px;">
+                <div class="pcoded-wrapper">
+                    <!--- sidebar nav here ---->
+					<nav class="pcoded-navbar" style="background:#f6f7fb;" navbar-theme="themelight1" active-item-theme="theme7" sub-item-theme="theme2" active-item-style="style0" pcoded-navbar-position="fixed">
+                        <div class="sidebar_toggle"><a href="https://eskooly.com/bb/admission.php#"><i class="icon-close icons"></i></a></div>
+                        <div class="pcoded-inner-navbar main-menu mCustomScrollbar _mCS_1" style="height: calc(100% - 90px);"><div id="mCSB_1" class="mCustomScrollBox mCS-light mCSB_vertical mCSB_inside" style="max-height: none;" tabindex="0"><div id="mCSB_1_container" class="mCSB_container" style="position: relative; top: 0px; left: 0px;" dir="ltr">
+                            
+                            <div class="pcoded-navigatio-lavel" data-i18n="nav.category.navigation" menu-title-theme="theme1">menu</div>
+                            <ul class="pcoded-item pcoded-left-item" item-border="true" item-border-style="none" subitem-border="true">
+                                <li class="" id="dashboard">
+                                    <a href="https://eskooly.com/bb/dashboard.php">
+                                        <span class="pcoded-micon"><i class="ti-home"></i><b>D</b></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.dash.main">Dashboard</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                </li>
+                                <li class="pcoded-hasmenu" id="generalsettings" dropdown-icon="style3" subitem-icon="style7">
+                                    <a href="javascript:void(0)">
+                                        <span class="pcoded-micon"><i class="ti-settings"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.basic-components.main">General Settings</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                    <ul class="pcoded-submenu">
+                                        <li class=" " id="schoolinfo">
+                                            <a href="https://eskooly.com/bb/schoolinfo.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Institute Profile</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="feeparticulars">
+                                            <a href="https://eskooly.com/bb/feeparticulars.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Fees Particulars</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="discounttype">
+                                            <a href="https://eskooly.com/bb/admission.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Fees Structure <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="discounttype">
+                                            <a href="https://eskooly.com/bb/admission.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Discount Type <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										<li class=" " id="challan">
+                                            <a href="https://eskooly.com/bb/bankdetails.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Accounts For Fees Invoice</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="rules">
+                                            <a href="https://eskooly.com/bb/rules.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Rules &amp; Regulations</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="grading">
+                                            <a href="https://eskooly.com/bb/grading.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Marks Grading</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="themesettings">
+                                            <a href="https://eskooly.com/bb/themesettings.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Theme &amp; Language</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        
+                                        <li class=" " id="account">
+                                            <a href="https://eskooly.com/bb/account.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Account Settings</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" ">
+                                            <a href="https://eskooly.com/bb/logout.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">Log out</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        
+
+                                    </ul>
+                                </li>
+								
+                            </ul>
+                            
+                            <ul class="pcoded-item pcoded-left-item" item-border="true" item-border-style="none" subitem-border="true">
+                               <li class="pcoded-hasmenu" id="classes" dropdown-icon="style3" subitem-icon="style7">
+                                    <a href="javascript:void(0)">
+                                        <span class="pcoded-micon"><i class="ti-ruler-pencil"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.basic-components.main">Classes</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                    <ul class="pcoded-submenu">
+                                        <li class=" " id="allclasses">
+                                            <a href="https://eskooly.com/bb/classes.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">All Classes</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="newclass">
+                                            <a href="https://eskooly.com/bb/addnewclass.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">New Class</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        
+                                    </ul>
+                                </li>
+                                <li class="pcoded-hasmenu" id="subjects" dropdown-icon="style3" subitem-icon="style7">
+                                    <a href="javascript:void(0)">
+                                        <span class="pcoded-micon"><i class="ti-book"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.basic-components.main">Subjects</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                    <ul class="pcoded-submenu">
+                                        <li class=" " id="showsubjects">
+                                            <a href="https://eskooly.com/bb/showsubjects.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Classes With Subjects</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="assignsubjects">
+                                            <a href="https://eskooly.com/bb/subjects.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Assign Subjects</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                            </ul>
+
+                            
+                            <ul class="pcoded-item pcoded-left-item" item-border="true" item-border-style="none" subitem-border="true">
+                                <li class="pcoded-hasmenu active pcoded-trigger" id="students" dropdown-icon="style3" subitem-icon="style7">
+                                    <a href="javascript:void(0)">
+                                        <span class="pcoded-micon"><i class="ti-user"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.basic-components.main">Students</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                    <ul class="pcoded-submenu">
+                                        <li class=" " id="allstudents">
+                                            <a href="https://eskooly.com/bb/allstudents.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">All Students</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class="active" id="addnewstudent">
+                                            <a href="https://eskooly.com/bb/admission.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Add New</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="families">
+                                            <a href="https://eskooly.com/bb/admission.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Manage Families <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="aina">
+                                            <a href="https://eskooly.com/bb/admission.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Active / Inactive <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										<li class=" " id="searchadmissionletter">
+                                            <a href="https://eskooly.com/bb/stdregal.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Admission Letter</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										<li class=" " id="idcard">
+                                            <a href="https://eskooly.com/bb/studentcards.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Student ID Cards</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										<li class=" " id="printinfo">
+                                            <a href="https://eskooly.com/bb/printinfo.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Print Basic List</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="slogin">
+                                            <a href="https://eskooly.com/bb/studentLogin.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Manage Login</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										<li class=" " id="promotions">
+                                            <a href="https://eskooly.com/bb/promotions.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Promote Students</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+								<li class="pcoded-hasmenu" id="employees" dropdown-icon="style3" subitem-icon="style7">
+                                    <a href="javascript:void(0)">
+                                        <span class="pcoded-micon"><i class="ti-briefcase"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.basic-components.main">Employees</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                    <ul class="pcoded-submenu">
+                                        <li class=" " id="allemployees">
+                                            <a href="https://eskooly.com/bb/allemployees.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">All Employees</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="addnewteacher">
+                                            <a href="https://eskooly.com/bb/addnewteacher.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Add New</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="eidcard">
+                                            <a href="https://eskooly.com/bb/admission.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Staff ID Cards <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										<li class=" " id="jobletter">
+                                            <a href="https://eskooly.com/bb/empregal.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Job Letter</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="elogin">
+                                            <a href="https://eskooly.com/bb/staffLogin.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Manage Login</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                
+                                
+
+                            </ul>
+							
+                            <ul class="pcoded-item pcoded-left-item" item-border="true" item-border-style="none" subitem-border="true">
+                                <li class="pcoded-hasmenu" id="accounts" dropdown-icon="style3" subitem-icon="style7">
+                                    <a href="javascript:void(0)">
+                                        <span class="pcoded-micon"><i class="ti-wallet"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.basic-components.main">Accounts</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                    <ul class="pcoded-submenu">
+                                        <li class=" " id="heads">
+                                            <a href="https://eskooly.com/bb/chartofaccounts.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Chart Of Account</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="addincome">
+                                            <a href="https://eskooly.com/bb/income.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Add Income</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										<li class=" " id="addexpense">
+                                            <a href="https://eskooly.com/bb/expense.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Add Expense</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="statement">
+                                            <a href="https://eskooly.com/bb/balance.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Account Statement</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+								<li class="pcoded-hasmenu" id="fees" dropdown-icon="style3" subitem-icon="style7">
+                                    <a href="javascript:void(0)">
+                                        <span class="pcoded-micon"><i class="fa fa-money"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.basic-components.main">Fees</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                    <ul class="pcoded-submenu">
+									    <li class=" " id="getchallan">
+                                            <a href="https://eskooly.com/bb/getchallan.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Generate Fees Invoice</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="submitfee">
+                                            <a href="https://eskooly.com/bb/submitfees.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Collect Fees</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="feeslip">
+                                            <a href="https://eskooly.com/bb/stdregfs.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Fees Paid Slip</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										<li class=" " id="defualter">
+                                            <a href="https://eskooly.com/bb/defualter.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Fees Defaulters</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="feereport">
+                                            <a href="https://eskooly.com/bb/admission.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Fees Report <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="deletefee">
+                                            <a href="https://eskooly.com/bb/admission.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Delete Fees <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+								<li class="pcoded-hasmenu" id="salary" dropdown-icon="style3" subitem-icon="style7">
+                                    <a href="javascript:void(0)">
+                                        <span class="pcoded-micon"><i class="ti-credit-card"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.basic-components.main">Salary</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                    <ul class="pcoded-submenu">
+                                        <li class=" " id="submitsalary">
+                                            <a href="https://eskooly.com/bb/submitsalary.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Pay Salary</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="salaryslip">
+                                            <a href="https://eskooly.com/bb/empregfs.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Salary Paid Slip</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="salarysheet">
+                                            <a href="https://eskooly.com/bb/admission.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Salary Sheet <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        
+                                        <li class=" " id="salaryrecord">
+                                            <a href="https://eskooly.com/bb/admission.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Salary Report <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										
+                                    </ul>
+                                </li>
+                                
+                                
+
+                            </ul>
+							
+                            <ul class="pcoded-item pcoded-left-item" item-border="true" item-border-style="none" subitem-border="true">
+                                <li class="pcoded-hasmenu" id="attandance" dropdown-icon="style3" subitem-icon="style7">
+                                    <a href="javascript:void(0)">
+                                        <span class="pcoded-micon"><i class="ti-hand-open"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.basic-components.main">Attendance</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                    <ul class="pcoded-submenu">
+                                        <li class=" " id="studentsattandance">
+                                            <a href="https://eskooly.com/bb/markatt.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Students Attendance</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="employeesattandance">
+                                            <a href="https://eskooly.com/bb/chooseeattend.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Employees Attendance</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										<li class=" " id="classwise">
+                                            <a href="https://eskooly.com/bb/attreport.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Class wise Report</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										<li class=" " id="studentattendancereport">
+                                            <a href="https://eskooly.com/bb/allatt.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Students Attendance Report</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										<li class=" " id="employeeattendancereport">
+                                            <a href="https://eskooly.com/bb/alleatt.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Employees Attendance Report</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										
+                                    </ul>
+                                </li>
+                                <li class="pcoded-hasmenu" id="timetable" dropdown-icon="style3" subitem-icon="style7">
+                                    <a href="javascript:void(0)">
+                                        <span class="pcoded-micon"><i class="ti-calendar"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.basic-components.main">Timetable</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                    <ul class="pcoded-submenu">
+                                        <li class=" " id="weekdays">
+                                            <a href="https://eskooly.com/bb/admission.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Weekdays <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="periods">
+                                            <a href="https://eskooly.com/bb/admission.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Time Periods <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										<li class=" " id="classrooms">
+                                            <a href="https://eskooly.com/bb/admission.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Class Rooms <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="createtimetable">
+                                            <a href="https://eskooly.com/bb/admission.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Create Timetable <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										<li class=" " id="classview">
+                                            <a href="https://eskooly.com/bb/admission.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Generate For Class <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										<li class=" " id="teacherview">
+                                            <a href="https://eskooly.com/bb/admission.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Generate For Teacher <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class=" " id="homeworklink">
+                                    <a href="https://eskooly.com/bb/homework.php">
+                                        <span class="pcoded-micon"><i class="ti-slice"></i><b>D</b></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.dash.main">Homework</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                </li>
+                                <li class="pcoded-hasmenu" id="behaviour" dropdown-icon="style3" subitem-icon="style7">
+                                    <a href="javascript:void(0)">
+                                        <span class="pcoded-micon"><i class="ti-eye"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.basic-components.main">Behaviour &amp; Skills</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                    <ul class="pcoded-submenu">
+                                        <li class=" " id="ratebehaviours">
+                                            <a href="https://eskooly.com/bb/admission.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Rate Behaviours <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="rateskills">
+                                            <a href="https://eskooly.com/bb/admission.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Rate Skills <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										<li class=" " id="observations">
+                                            <a href="https://eskooly.com/bb/admission.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Observations <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="behaviourreport">
+                                            <a href="https://eskooly.com/bb/admission.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Affective Domain Rating Report <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="skillreport">
+                                            <a href="https://eskooly.com/bb/admission.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Psycomotor Domain Rating Report <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+
+										
+										
+                                    </ul>
+                                </li>
+                                <li class="pcoded-hasmenu" id="pos" dropdown-icon="style3" subitem-icon="style7">
+                                    <a href="javascript:void(0)">
+                                        <span class="pcoded-micon"><i class="ti-shopping-cart"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.basic-components.main">Online Store &amp; POS</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                    <ul class="pcoded-submenu">
+                                        <li class=" " id="analytics">
+                                            <a href="https://eskooly.com/bb/admission.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Store Analytics <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="catagories">
+                                            <a href="https://eskooly.com/bb/admission.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Product Catagories <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										<li class=" " id="tax">
+                                            <a href="https://eskooly.com/bb/admission.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Product Tax <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="products">
+                                            <a href="https://eskooly.com/bb/admission.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Products <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="addorder">
+                                            <a href="https://eskooly.com/bb/admission.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">New Order <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="orders">
+                                            <a href="https://eskooly.com/bb/admission.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">All Orders <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+
+										
+										
+                                    </ul>
+                                </li>
+                                <li class=" " id="whatsapp">
+                                    <a href="https://eskooly.com/bb/admission.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                        <span class="pcoded-micon"><i class="fa fa-whatsapp"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.form-components.main" style="opacity:0.6;"> WhatsApp</span>
+                                        <i class="fa fa-lock m-orange f-right m-t-10" style="opacity:0.6;"></i>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                </li>
+								<li class=" " id="messages">
+                                    <a href="https://eskooly.com/bb/MessageBox.php">
+                                        <span class="pcoded-micon"><i class="ti-comment-alt"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.form-components.main">Messaging</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                </li>
+                                <li class="pcoded-hasmenu" id="sms" dropdown-icon="style3" subitem-icon="style7">
+                                    <a href="javascript:void(0)">
+                                        <span class="pcoded-micon"><i class="ti-email"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.basic-components.main">SMS Services</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                    <ul class="pcoded-submenu">
+                                        <li class=" " id="smsgateway">
+                                            <a href="https://eskooly.com/bb/smsSettings.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Free SMS Gateway</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="brandedsms">
+                                            <a href="https://eskooly.com/bb/admission.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Branded SMS <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										<li class=" " id="smstemplates">
+                                            <a href="https://eskooly.com/bb/admission.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">SMS Templates <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+
+										
+										
+                                    </ul>
+                                </li>
+                                
+								<li class=" " id="liveclass">
+                                    <a href="https://eskooly.com/bb/liveclass.php">
+                                        <span class="pcoded-micon"><i class="ti-video-camera"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.form-components.main">Live Class</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                </li>
+								
+                            </ul>
+							
+                            <ul class="pcoded-item pcoded-left-item" item-border="true" item-border-style="none" subitem-border="true">
+                                <li class="pcoded-hasmenu" id="questionpaper" dropdown-icon="style3" subitem-icon="style7">
+                                    <a href="javascript:void(0)">
+                                        <span class="pcoded-micon"><i class="ti-files"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.basic-components.main">Question Paper</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                    <ul class="pcoded-submenu">
+                                        <li class=" " id="addchapters">
+                                            <a href="https://eskooly.com/bb/admission.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Subject Chapters <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="questionbank">
+                                            <a href="https://eskooly.com/bb/admission.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Question Bank <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										<li class=" " id="createpaper">
+                                            <a href="https://eskooly.com/bb/admission.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Create Question Paper <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+
+										
+										
+                                    </ul>
+                                </li>
+                                <li class="pcoded-hasmenu" id="exams" dropdown-icon="style3" subitem-icon="style7">
+                                    <a href="javascript:void(0)">
+                                        <span class="pcoded-micon"><i class="ti-write"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.basic-components.main">Exams</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                    <ul class="pcoded-submenu">
+                                        <li class=" " id="createexam">
+                                            <a href="https://eskooly.com/bb/addexam.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Create New Exam</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        
+                                        <li class=" " id="addexammarks">
+                                            <a href="https://eskooly.com/bb/examMarks.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Add / update Exam Marks</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										
+										<li class=" " id="resultcard">
+                                            <a href="https://eskooly.com/bb/searchexamresult.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Result Card</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="resultsheet">
+                                            <a href="https://eskooly.com/bb/admission.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Result Sheet <i class="fa-solid fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="examschedule">
+                                            <a href="https://eskooly.com/bb/admission.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Exam Schedule <i class="fa-solid fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="datesheet">
+                                            <a href="https://eskooly.com/bb/admission.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Date Sheet <i class="fa-solid fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="awardlist">
+                                            <a href="https://eskooly.com/bb/admission.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Blank Award List <i class="fa-solid fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										
+										
+                                    </ul>
+                                </li>
+								<li class="pcoded-hasmenu" id="tests" dropdown-icon="style3" subitem-icon="style7">
+                                    <a href="javascript:void(0)">
+                                        <span class="pcoded-micon"><i class="ti-files"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.basic-components.main">Class Tests</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                    <ul class="pcoded-submenu">
+                                        <li class=" " id="createtest">
+                                            <a href="https://eskooly.com/bb/testMarks.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Manage Test Marks</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="testreport">
+                                            <a href="https://eskooly.com/bb/alltest.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Test Result</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										
+
+										
+										
+                                    </ul>
+                                </li>
+                                <li class="pcoded-hasmenu" id="reports" dropdown-icon="style3" subitem-icon="style7">
+                                    <a href="javascript:void(0)">
+                                        <span class="pcoded-micon"><i class="ti-files"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.basic-components.main">Reports</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                    <ul class="pcoded-submenu">
+                                        <li class=" " id="reportcard">
+                                            <a href="https://eskooly.com/bb/reportcardfor.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Students report Card</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="report1">
+                                            <a href="https://eskooly.com/bb/report1.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Students info report</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="report2">
+                                            <a href="https://eskooly.com/bb/report2.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Parents info report</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="report3">
+                                            <a href="https://eskooly.com/bb/admission.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Students Monthly Attendance Report <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										<li class=" " id="report4">
+                                            <a href="https://eskooly.com/bb/admission.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Staff Monthly Attendance Report <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="report5">
+                                            <a href="https://eskooly.com/bb/admission.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Fee Collection Report <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="report6">
+                                            <a href="https://eskooly.com/bb/admission.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Student Progress Report <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="report7">
+                                            <a href="https://eskooly.com/bb/admission.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Accounts Report <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" " id="report8">
+                                            <a href="https://eskooly.com/bb/admission.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Customised Reports <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+
+										
+										
+                                    </ul>
+                                </li>
+								<li class="pcoded-hasmenu" id="certificates" dropdown-icon="style3" subitem-icon="style7">
+                                    <a href="javascript:void(0)">
+                                        <span class="pcoded-micon"><i class="ti-medall"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.basic-components.main">Certificates</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                    <ul class="pcoded-submenu">
+                                        <li class=" " id="createCertificate">
+                                            <a href="https://eskooly.com/bb/certificates.php">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Generate Certificate</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+										<li class=" " id="cltemplates">
+                                            <a href="https://eskooly.com/bb/admission.php#" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs" style="opacity:0.6;">Certificate Templates <i class="fa fa-lock m-orange f-right"></i></span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+
+										
+										
+                                    </ul>
+                                </li>
+								
+								
+								
+                                
+
+                            </ul>
+							
+                            <div class="pcoded-navigatio-lavel" data-i18n="nav.category.other" menu-title-theme="theme1"></div>
+                            
+							<div style="margin:0 auto;width:90%;text-align:center;background:white;" class="m-round p-10">
+							<i class="ti-search f-20 bold"></i><br style="margin:2px;padding:0px;">
+							<strong>Need More Advance ?</strong><br>
+							<span style="font-size:12px;">Check our PRO version. An ultimate education management ERP with all advance features.</span><br>
+							<a href="https://pro.eskooly.com/" target="_blank"><button class="btn btn-sm m-t-10 bg-m-orange m-white m-round">Try Demo</button></a>
+							
+							</div>
+                            
+                        </div><div id="mCSB_1_scrollbar_vertical" class="mCSB_scrollTools mCSB_1_scrollbar mCS-light mCSB_scrollTools_vertical" style="display: block;"><div class="mCSB_draggerContainer"><div id="mCSB_1_dragger_vertical" class="mCSB_dragger" style="position: absolute; min-height: 30px; height: 248px; top: 0px; display: block; max-height: 601.6px;"><div class="mCSB_dragger_bar" style="line-height: 30px;"></div></div><div class="mCSB_draggerRail"></div></div></div></div></div>
+                    </nav>
+
+                    <div class="pcoded-content">
+                        <div class="pcoded-inner-content">
+                            <div class="main-body">
+                                <div class="page-wrapper">
+								
+                                    
+                                    <!-- Page-body start -->
+                                    <div class="page-body">
+                                        <!-- Row start -->
+										<div class="row">
+										    
+										    <div class="col-12 p-10 f-16" style="border-radius:10px;background:#fff;"><strong style="border-right:1px solid #777;padding-right:10px;margin-right:10px;">Students</strong> 
+										    <i class="ti-home"></i> - Admission Form 
+										    											<a href="https://eskooly.com/bb/admission.php#" class="f-right" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+											<button class="btn btn-sm bg-m-purple m-white m-round" style="opacity:0.8;">
+											    <i class="ti-import"></i> Import Students
+											</button>
+											</a>
+																																	<a href="https://eskooly.com/bb/admission.php#" class="f-right m-r-10" data-toggle="tooltip" title="" data-original-title="This option is available in Desktop Version only.">
+											<button class="btn btn-sm bg-gradient-red m-white m-round" style="opacity:0.8;">
+											    <i class="ti-ruler-pencil"></i> Customize
+											</button>
+											</a>
+																					    </div>
+										    
+										<h3 class="text-center m-t-20 w-100" style="line-height:20px;">Admission Form
+										<br><div class="bg-gradient-blue" style="width:20px;height:7px;border-radius:10px;display:inline-block;"></div> <span class="f-12 m-dblue" style="display:inline-block;font-weight:100;">Required*</span>
+										<div class="bg-gradient-gray m-l-10" style="width:20px;height:7px;border-radius:10px;display:inline-block;"></div> <span class="f-12 gradient-gray" style="display:inline-block;font-weight:100;">Optional</span>
+										</h3>
+										
+										<form action="https://eskooly.com/bb/newstudent.php" method="post" enctype="multipart/form-data" id="myform">
+										</form></div>
+										<div class="row" style="border:0px solid #9698d6;padding:5px 5px 5px 15px;">
+										<h6 class="w-100" style="border-bottom:1px solid #999;"><div class="bg-gradient-dark m-white" style="width:20px;height:20px;border-radius:10px;display:inline-block;padding-top:3px;padding-left:7px;">1</div> Student Information <span style="font-size:12px;" class="f-right"></span></h6>
+										    <div class="col-lg-4">
+										    <div class="m-div">
+									        <label class="m-label bg-gradient-blue m-white">Student Name*</label>
+											<input type="text" class="form-control m-field" placeholder="Name of Student" id="studentname" name="studentname" required="">
+											</div>
+											<div class="m-div">
+									        <label class="m-label bg-gradient-gray m-white">Picture - Optional</label>
+											<input type="file" class="form-control m-field" name="fileToUpload" id="fileToUpload">
+											</div>
+											<span class="bg-c-yellow m-round m-t-0 m-l-10" style="font-size:10px;padding-left:5px; padding-right:5px;">Max size 100KB</span>
+											</div>
+											<div class="col-lg-4">
+											<div class="m-div">
+										    <label class="m-label bg-gradient-blue m-white">Last Registration: <strong>52728</strong></label>
+											<input style="" type="text" class="form-control m-field" placeholder="Registration No" onblur="checkMailStatus()" id="reg" name="reg" required="">
+											</div>
+											<span id="checkReg" class="bg-gradient-red m-round m-t-0 m-l-10 m-white" style="font-size:10px;"></span>
+											<div class="m-div">
+									        <label class="m-label bg-gradient-blue m-white">Date of Admission*</label>
+											<input type="date" class="form-control m-field" name="doa" value="2025-12-26" required="">
+											</div>
+											</div>
+											<div class="col-lg-4">
+											<div class="m-div p-t-0 p-b-0">
+									        <label class="m-label bg-gradient-blue m-white" style="margin-top:-9px;z-index:1001;">Select Class*</label>
+											<select name="class" id="searchlist" class="form-control m-field selectized" required="" tabindex="-1" style="display: none;"><option value="274762" selected="selected">Seventh</option></select><div class="selectize-control form-control m-field single"><div class="selectize-input items required full has-options has-items"><div class="item" data-value="274762">Seventh</div><input type="select-one" autocomplete="off" tabindex="" id="searchlist-selectized" style="width: 4px;"></div><div class="selectize-dropdown single form-control m-field" style="display: none;"><div class="selectize-dropdown-content"></div></div></div>
+											</div>
+											<div class="m-div">
+									        <label class="m-label bg-gradient-blue m-white">Discount In Fee*</label>
+											<input type="number" class="form-control m-field" placeholder="In %" name="discount" required="">
+											</div>
+											<div class="m-div">
+									        <label class="m-label bg-gradient-gray m-white">Mobile No. for SMS/WhatsApp</label>
+											<input class="form-control m-field" type="tel" placeholder="e.g +44xxxxxxxxxx" name="Gphone">
+											</div>
+											</div>
+										</div>
+										<div class="row" style="border:0px solid #9698d6;padding:5px 5px 5px 15px;">
+										<h6 class="w-100" style="border-bottom:1px solid #999;"><div class="bg-gradient-dark m-white" style="width:20px;height:20px;border-radius:10px;display:inline-block;padding-top:2px;padding-left:6px;">2</div> Other Information <span style="font-size:12px;" class="f-right"></span></h6>
+										    <div class="col-lg-4">
+										    
+											<div class="m-div ">
+										    <label class="m-label bg-gradient-gray m-white">Date Of Birth</label>
+										    <input type="date" name="dob" class="form-control m-field">
+										    </div>
+							                <div class="m-div ">
+										    <label class="m-label bg-gradient-gray m-white">Gender</label>
+											<select name="gender" class="form-control m-field">
+											<option value="">Gender</option>
+											<option value="male">Male</option>
+											<option value="female">Female</option>
+											</select>
+											</div>
+											<div class="m-div ">
+										    <label class="m-label bg-gradient-gray m-white">Any Identification Mark?</label>
+											<input type="text" placeholder="Any Identification Mark?" name="idmark" class="form-control m-field">
+											</div>
+											<div class="m-div ">
+										    <label class="m-label bg-gradient-gray m-white">Blood Group</label>
+											<select name="blood" class="form-control m-field">
+											<option value="">Blood Group</option>
+											<option value="A+">A+</option>
+											<option value="A-">A-</option>
+											<option value="B+">B+</option>
+											<option value="B-">B-</option>
+											<option value="O+">O+</option>
+											<option value="O-">O-</option>
+											<option value="AB+">AB+</option>
+											<option value="AB-">AB-</option>
+											</select>
+											</div>
+											<div class="m-div ">
+										    <label class="m-label bg-gradient-gray m-white">Disease If Any?</label>
+											<input type="text" placeholder="Disease If Any?" name="desease" class="form-control m-field">
+											</div>
+											</div>
+											<div class="col-lg-4">
+											<div class="m-div ">
+										    <label class="m-label bg-gradient-gray m-white">Student Birth Form ID / NIC</label>
+											<input type="text" placeholder="Student Birth Form ID / NIC" name="scnic" class="form-control m-field">
+											</div>
+											<div class="m-div ">
+										    <label class="m-label bg-gradient-gray m-white">Cast</label>
+											<input type="text" placeholder="Cast" name="cast" class="form-control m-field">
+											</div>
+											<div class="m-div ">
+										    <label class="m-label bg-gradient-gray m-white">Previous School</label>
+											<input type="text" placeholder="Previous School" name="pr" class="form-control m-field">
+											</div>
+											<div class="m-div ">
+										    <label class="m-label bg-gradient-gray m-white">Previous ID / Board Roll No</label>
+											<input type="text" placeholder="Previous ID / Board Roll No" name="previousid" class="form-control m-field">
+											</div>
+											<div class="m-div ">
+										    <label class="m-label bg-gradient-gray m-white">Any Additional Note</label>
+											<input type="text" placeholder="Any Additional Note" name="additionalinfo" class="form-control m-field">
+											</div>
+											
+											</div>
+											<div class="col-lg-4">
+											<div class="m-div ">
+										    <label class="m-label bg-gradient-gray m-white">Orphan Student</label>
+											<select name="os" class="form-control m-field">
+											<option value="">Select</option>
+											<option value="Yes">YES</option>
+											<option value="No">NO</option>
+											</select>
+											</div>
+											<div class="m-div ">
+										    <label class="m-label bg-gradient-gray m-white">OSC</label>
+											<select name="osc" class="form-control m-field">
+											<option value="">Select</option>
+											<option value="Yes">YES</option>
+											<option value="No">NO</option>
+											</select>
+											</div>
+											<div class="m-div p-t-0 p-b-0 ">
+										    <label class="m-label bg-gradient-gray m-white" style="margin-top:-9px;z-index:1001;">Religion</label>
+											<select name="religion" id="searchlist1" class="form-control m-field selectized" tabindex="-1" style="display: none;"><option value="" selected="selected"></option></select><div class="selectize-control form-control m-field single"><div class="selectize-input items not-full has-options"><input type="select-one" autocomplete="off" tabindex="" id="searchlist1-selectized" placeholder="Religion" style="width: 58.9125px;"></div><div class="selectize-dropdown single form-control m-field" style="display: none;"><div class="selectize-dropdown-content"></div></div></div>
+											</div>
+											<div class="m-div p-t-0 p-b-0">
+										    <label class="m-label bg-gradient-gray m-white" style="margin-top:-9px;z-index:2;">Select Family</label>
+											<select name="family" id="searchlist2" class="form-control m-field selectized" tabindex="-1" style="display: none;"><option value="0" selected="selected">Select</option></select><div class="selectize-control form-control m-field single"><div class="selectize-input items full has-options has-items"><div class="item" data-value="0">Select</div><input type="select-one" autocomplete="off" tabindex="" id="searchlist2-selectized" style="width: 4px;"></div><div class="selectize-dropdown single form-control m-field" style="display: none;"><div class="selectize-dropdown-content"></div></div></div>
+											</div>
+											<div class="m-div ">
+										    <label class="m-label bg-gradient-gray m-white">Total Siblings</label>
+							                <input type="number" name="noc" placeholder="Total Siblings" class="form-control m-field">
+							                </div>
+											</div>
+											<div class="col-lg-8">
+											<div class="m-div ">
+										    <label class="m-label bg-gradient-gray m-white">Address</label>
+											<input type="text" placeholder="Address" class="form-control m-field" name="address">
+											</div>
+							                </div>
+							                
+											<div class="col-lg-4 m-t-10">
+											    
+							                <button type="button" class="btn bg-c-yellow m-t-10" style="border-radius:25px;" data-toggle="modal" data-target="#myModal"><i class="ti-plus"></i> Add Parents</button>
+                                                
+                                              
+											</div>
+										
+										</div>
+                                        <div class="row" style="border:0px solid #9698d6;padding:5px 5px 5px 15px;">
+										<h6 class="w-100" style="border-bottom:1px solid #999;"><div class="bg-gradient-dark m-white" style="width:20px;height:20px;border-radius:10px;display:inline-block;padding-top:2px;padding-left:6px;">3</div> Father/Guardien Information <span style="font-size:12px;" class="f-right"></span></h6>
+										    <div class="col-lg-4">
+										    <div class="m-div ">
+										    <label class="m-label bg-gradient-gray m-white">Father Name</label>
+											<input type="text" placeholder="Father Name" name="fname" id="fname" class="form-control m-field">
+											</div>
+											<div class="m-div ">
+										    <label class="m-label bg-gradient-gray m-white">Education</label>
+							                <input type="text" placeholder="Education" name="fedu" id="fedu" class="form-control m-field">
+							                </div>
+											</div>
+											<div class="col-lg-4">
+											<div class="m-div ">
+										    <label class="m-label bg-gradient-gray m-white">Father National ID</label>
+											<input type="text" placeholder="Father National ID" name="fcnic" id="fcnic" class="form-control m-field">
+							                </div>
+							                <div class="m-div ">
+										    <label class="m-label bg-gradient-gray m-white">Mobile No</label>
+							                <input type="text" placeholder="Mobile No" name="fmobile" id="fmobile" class="form-control m-field">
+							                </div>
+											</div>
+											<div class="col-lg-4">
+											<div class="m-div ">
+										    <label class="m-label bg-gradient-gray m-white">Occupation</label>
+											<input type="text" placeholder="Occupation" name="fo" id="fo" class="form-control m-field">
+											</div>
+											<div class="m-div ">
+										    <label class="m-label bg-gradient-gray m-white">Profession</label>
+											<input type="text" placeholder="Profession" name="fp" id="fp" class="form-control m-field">
+											</div>
+											<div class="m-div ">
+										    <label class="m-label bg-gradient-gray m-white">Income</label>
+											<input type="number" placeholder="Income" name="fi" id="fi" class="form-control m-field">
+											</div>
+											</div>
+										
+										</div>
+										<div class="row" style="border:0px solid #9698d6;padding:5px 5px 5px 15px;">
+										<h6 class="w-100" style="border-bottom:1px solid #999;"><div class="bg-gradient-dark m-white" style="width:20px;height:20px;border-radius:10px;display:inline-block;padding-top:2px;padding-left:5px;">4</div> Mother Information <span style="font-size:12px;" class="f-right"></span></h6>
+										    <div class="col-lg-4">
+										    <div class="m-div ">
+										    <label class="m-label bg-gradient-gray m-white">Mother Name</label>
+											<input type="text" placeholder="Mother Name" name="mname" id="mname" class="form-control m-field">
+											</div>
+											<div class="m-div ">
+										    <label class="m-label bg-gradient-gray m-white">Education</label>
+							                <input type="text" placeholder="Education" name="medu" id="medu" class="form-control m-field">
+							                </div>
+											</div>
+											<div class="col-lg-4">
+											<div class="m-div ">
+										    <label class="m-label bg-gradient-gray m-white">Mother National ID</label>
+											<input type="text" placeholder="Mother National ID" name="mcnic" id="mcnic" class="form-control m-field">
+											</div>
+											<div class="m-div ">
+										    <label class="m-label bg-gradient-gray m-white">Mobile No</label>							
+											<input type="text" placeholder="Mobile No" name="mmobile" id="mmobile" class="form-control m-field">
+											</div>
+											</div>
+											<div class="col-lg-4">
+											<div class="m-div ">
+										    <label class="m-label bg-gradient-gray m-white">Occupation</label>
+											<input type="text" placeholder="Occupation" name="mo" id="mo" class="form-control m-field">
+											</div>
+											<div class="m-div ">
+										    <label class="m-label bg-gradient-gray m-white">Profession</label>
+											<input type="text" placeholder="Profession" name="mp" id="mp" class="form-control m-field">
+											</div>
+											<div class="m-div ">
+										    <label class="m-label bg-gradient-gray m-white">Income</label>
+											<input type="number" placeholder="Income" name="mi" id="mi" class="form-control m-field">
+											</div>
+											</div>
+										
+										</div><hr>
+										<div class="row" style="padding:5px 5px 5px 15px;">
+										<h5 class="w-100 text-center">
+										<button class="btn btn-large bg-c-yellow" style="border-radius:20px;" type="reset"><i class="ti-reload"></i> Reset</button>
+										<button class="btn btn-large bg-m-dblue m-white" style="width:170px;padding:10px;border-radius:20px;" type="submit" id="submitBtn" name="submit"><i class="ti-check"></i>   Submit</button>
+										</h5>
+										
+										
+										<!-- Modal -->
+                                              <div class="modal fade" id="myModal" role="dialog">
+                                                <div class="modal-dialog modal-md m-round">
+                                                  <div class="modal-content">
+                                                    <div class="modal-header p-10 p-t-0 p-b-0 bg-gradient-dark m-white">
+                                                      
+                                                      <strong class="modal-title">Add Parents Record if exist.</strong>
+                                                      <button type="button" class="close m-white btn-lg" data-dismiss="modal">×</button>
+                                                    </div>
+                                                    <div class="modal-body text-center">
+                                                    <div class="m-div text-left ">
+										            <label class="m-label bg-gradient-blue m-white">Father National ID*</label>
+                                                      <input type="text" class="form-control m-field" name="spid" id="spid" placeholder="Father National ID" required="">
+                                                      </div>
+                                                      <button class="btn btn-sm bg-gradient-green m-white p-10 m-t-10" style="border-radius:20px;" id="spidb"><i class="ti-search"></i> Search</button>
+                                                      
+                                                      <p id="spidr" class="m-t-10"></p>
+                                                    </div>
+                                                    <div class="modal-footer" style="padding-top:5px; padding-bottom:5px;">
+                                                      <button type="button" class="btn bg-c-yellow btn-sm" style="border-radius:20px;" data-dismiss="modal">Close</button>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+										
+										</div>
+										<!-- Row end -->
+										<!-- Row start -->
+										
+												<!-- Row end -->
+									</div>
+                                    <!-- Page-body end -->
+                                </div>
+                            </div>
+       
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="addnewclass" role="dialog">
+        <div class="modal-dialog">
+        
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header  bg-m-blue1 m-white" style="padding-top:2px;padding-bottom:2px;">
+                    
+                    <span class="modal-title text-center" style="display:inline;"><img src="./admission form_files/icon1.png" style="max-width:20px;"> eSkooly</span>
+                    <button type="button" class="close" style="display:inline;font-size:22px;" data-dismiss="modal">×</button>
+                </div>
+                <div class="modal-body" style="padding-top:5px;padding-bottom:5px;">
+                <strong><i class="ti-alert"></i> Alert</strong>
+                <p class="f-12">No Class has been found. Please add at leaset one Class before to access this feature.</p>
+                </div>
+                <div class="modal-footer" style="padding-top:5px;padding-bottom:10px;">
+                    <a href="https://eskooly.com/bb/addnewclass.php"><button type="button" class="btn btn-sm bg-gradient-success m-white f-10">Ok, Add Class</button></a>
+                    
+                    
+                </div>
+            </div>
+          
+        </div>
+    </div>
+<!-- end Modal -->
+<!-- Modal -->
+    <div class="modal fade" id="addsubjects" role="dialog">
+        <div class="modal-dialog">
+        
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header  bg-m-blue1 m-white" style="padding-top:2px;padding-bottom:2px;">
+                    
+                    <span class="modal-title text-center" style="display:inline;"><img src="./admission form_files/icon1.png" style="max-width:20px;"> eSkooly</span>
+                    <button type="button" class="close" style="display:inline;font-size:22px;" data-dismiss="modal">×</button>
+                </div>
+                <div class="modal-body" style="padding-top:5px;padding-bottom:5px;">
+                <strong><i class="ti-alert"></i> Alert</strong>
+                <p class="f-12">No Subject Found against this class. Please assign subjects to this class first!</p>
+                </div>
+                <div class="modal-footer" style="padding-top:5px;padding-bottom:10px;">
+                    <a href="https://eskooly.com/bb/subjects.php"><button type="button" class="btn btn-sm bg-gradient-success m-white f-10">Ok, Add Subjects</button></a>
+                    
+                    
+                </div>
+            </div>
+          
+        </div>
+    </div>
+<!-- end Modal -->
+<!-- Modal -->
+    <div class="modal fade" id="addteacher" role="dialog">
+        <div class="modal-dialog">
+        
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header  bg-m-blue1 m-white" style="padding-top:2px;padding-bottom:2px;">
+                    
+                    <span class="modal-title text-center" style="display:inline;"><img src="./admission form_files/icon1.png" style="max-width:20px;"> eSkooly</span>
+                    <button type="button" class="close" style="display:inline;font-size:22px;" data-dismiss="modal">×</button>
+                </div>
+                <div class="modal-body" style="padding-top:5px;padding-bottom:5px;">
+                <strong><i class="ti-alert"></i> Alert</strong>
+                <p class="f-12">0 Teachers ! Please add a Teacher first.</p>
+                </div>
+                <div class="modal-footer" style="padding-top:5px;padding-bottom:10px;">
+                    <a href="https://eskooly.com/bb/addnewteacher.php"><button type="button" class="btn btn-sm bg-gradient-success m-white f-10">Ok, Add Teacher</button></a>
+                    
+                    
+                </div>
+            </div>
+          
+        </div>
+    </div>
+<!-- end Modal -->
+<!-- Modal -->
+    <div class="modal fade" id="addchaptersm" role="dialog">
+        <div class="modal-dialog">
+        
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header  bg-m-blue1 m-white" style="padding-top:2px;padding-bottom:2px;">
+                    
+                    <span class="modal-title text-center" style="display:inline;"><img src="./admission form_files/icon1.png" style="max-width:20px;"> eSkooly</span>
+                    <button type="button" class="close" style="display:inline;font-size:22px;" data-dismiss="modal">×</button>
+                </div>
+                <div class="modal-body" style="padding-top:5px;padding-bottom:5px;">
+                <strong><i class="ti-alert"></i> Alert</strong>
+                <p class="f-12">No Chapter Found against this class and subject. Please add chapters first!</p>
+                </div>
+                <div class="modal-footer" style="padding-top:5px;padding-bottom:10px;">
+                    <a href="https://eskooly.com/bb/addchapters.php"><button type="button" class="btn btn-sm bg-gradient-success m-white f-10">Ok, Add Chapters</button></a>
+                    
+                    
+                </div>
+            </div>
+          
+        </div>
+    </div>
+<!-- end Modal -->
+<!-- Modal -->
+    <div class="modal fade" id="addstudent" role="dialog">
+        <div class="modal-dialog">
+        
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header  bg-m-blue1 m-white" style="padding-top:2px;padding-bottom:2px;">
+                    
+                    <span class="modal-title text-center" style="display:inline;"><img src="./admission form_files/icon1.png" style="max-width:20px;"> eSkooly</span>
+                    <button type="button" class="close" style="display:inline;font-size:22px;" data-dismiss="modal">×</button>
+                </div>
+                <div class="modal-body" style="padding-top:5px;padding-bottom:5px;">
+                <strong><i class="ti-alert"></i> Alert</strong>
+                <p class="f-12">0 Students in this class ! Please add atleast 1 student first!</p>
+                </div>
+                <div class="modal-footer" style="padding-top:5px;padding-bottom:10px;">
+                    <a href="https://eskooly.com/bb/admission.php"><button type="button" class="btn btn-sm bg-gradient-success m-white f-10">Ok, Add Student</button></a>
+                    
+                    
+                </div>
+            </div>
+          
+        </div>
+    </div>
+<!-- end Modal --><!-- Required Jquery -->
+<script type="text/javascript" src="./admission form_files/jquery.min.js.download"></script>
+<script type="text/javascript" src="./admission form_files/jquery-ui.min.js.download"></script>
+<script type="text/javascript" src="./admission form_files/popper.min.js.download"></script>
+<script type="text/javascript" src="./admission form_files/bootstrap.min.js.download"></script>
+<!-- jquery slimscroll js -->
+<script type="text/javascript" src="./admission form_files/jquery.slimscroll.js.download"></script>
+<!-- modernizr js -->
+<script type="text/javascript" src="./admission form_files/modernizr.js.download"></script>
+<script type="text/javascript" src="./admission form_files/css-scrollbars.js.download"></script>
+
+<!-- Accordion js -->
+<script type="text/javascript" src="./admission form_files/accordion.js.download"></script>
+<!-- Custom js -->
+<script type="text/javascript" src="./admission form_files/script.js.download"></script>
+<script src="./admission form_files/pcoded.min.js.download"></script>
+
+<script src="./admission form_files/vartical-demo.js.download"></script>
+<script src="./admission form_files/jquery.mCustomScrollbar.concat.min.js.download"></script>
+<script src="./admission form_files/selectlistsearch.js.download"></script>
+<script>
+
+// navigator activator
+document.getElementById("dashboard").classList.remove('active');
+document.getElementById("addnewstudent").classList.add('active');
+document.getElementById("students").classList.add('active');
+document.getElementById("students").classList.add('pcoded-trigger');
+//----------end----------------- 
+
+// search students api
+var availableTags = ["52728 - Ridansh Lodha - Seventh"];
+var availableTagsCode = ["52728"]; 
+$( "#tags" ).autocomplete({ 
+	source: availableTags,
+	select: function (event, ui) {
+		var index = availableTags.indexOf(ui.item.value);
+		$("#tags_code").val(availableTagsCode[index]);  
+	}
+});
+
+//---------end------------------
+function checkMailStatus(){
+    //alert("came");
+var reg=$("#reg").val();// value in field email
+$.ajax({
+    type:'post',
+        url:'checkMail.php',// put your real file name 
+        data:{reg: reg},
+        success:function(msg){
+			if(msg=="YES"){
+	          $("#checkReg").show();
+    		  $("#checkReg").html("<strong class='p-10'><i class='ti-alert'></i> This Registration No. Already Exist !</strong>");
+    		  $("#reg").focus();
+			}else{
+			    $("#checkReg").hide();
+			    $("#checkReg").html("");	
+			}
+         // alert(msg); // your message will come here.     
+        }
+ });
+}
+$(function()
+{
+    $("#myform").validate(
+      {
+        rules: 
+        {
+          class: 
+          {
+            required: true
+          }
+        }
+      });	
+});
+$(document).ready(function () {
+    $("#myform").submit(function () {
+        $("#submitBtn").attr("disabled", true);
+        $("#submitBtn").html("<i class='fa fa-circle-o-notch fa-spin'></i> Please Wait");
+        return true;
+    });
+});
+$("#spidb").on('click', function(e) {
+    
+      e.preventDefault();
+   
+    var cnic=$("#spid").val();// value in field email
+$.ajax({
+    type:'post',
+        url:'checkMail.php',// put your real file name 
+        data:{cnic: cnic},
+        beforeSend:function(){
+				$('#spidb').html('<i class="fa fa-spinner"></i>');
+				
+			},
+        success:function(result){
+        $('#spidb').html('<i class="ti-search"></i> Search');
+		$("#spidr").html(result);     
+        }
+ });
+});
+
+function addparents() {
+    var cnic=$("#spid").val();// value in field email
+$.ajax({
+    type:'post',
+        url:'checkMail.php',// put your real file name 
+        data:{id: cnic},
+        beforeSend:function(){
+				$('#addparents').html('<i class="fa fa-spinner"></i> Adding');
+				
+			},
+        success:function(r){
+		$("#fname").val(r[0]); 
+		$("#fedu").val(r[2]);
+		$("#fcnic").val(r[1]);
+		$("#fmobile").val(r[3]);
+		$("#fo").val(r[4]);
+		$("#fp").val(r[5]);
+		$("#fi").val(r[6]);
+		$("#mname").val(r[7]);
+		$("#medu").val(r[8]);
+		$("#mcnic").val(r[9]);
+		$("#mmobile").val(r[10]);
+		$("#mo").val(r[11]);
+		$("#mp").val(r[12]); 
+		$("#mi").val(r[13]); 
+		$('#myModal').modal('toggle');
+        },dataType: "json"
+ });
+}
+$('#studentname').on('input', function(){
+    var company_name = $('#studentname').val().replace(/[&\/\\#,+()$~%.'":*?<>{}]/ig, "");
+    $('#studentname').val(company_name);
+});
+$('#reg').on('input', function(){
+    var company_name = $('#reg').val().replace(/[&\/\\#,+$~%.'":*?<>{}]/ig, "");
+    $('#reg').val(company_name);
+});
+$(document).ready(function () {
+      $('#searchlist').selectize({
+          sortField: 'text'
+      });
+      $('#searchlist1').selectize({
+          sortField: 'text'
+      });
+      $('#searchlist2').selectize({
+          sortField: 'text'
+      });
+  });
+</script><ul id="ui-id-1" tabindex="0" class="ui-menu ui-widget ui-widget-content ui-autocomplete ui-front" style="display: none;"></ul><div role="status" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div>
+
+
+<div id="goog-gt-tt" class="VIpgJd-yAWNEb-L7lbkb skiptranslate" style="border-radius: 12px; margin: 0 0 0 -23px; padding: 0; font-family: &#39;Google Sans&#39;, Arial, sans-serif;" data-id=""><div id="goog-gt-vt" class="VIpgJd-yAWNEb-hvhgNd"><div class="VIpgJd-yAWNEb-hvhgNd-Ud7fr"><img src="./admission form_files/24px.svg" width="24" height="24" alt=""><div class=" VIpgJd-yAWNEb-hvhgNd-IuizWc-i3jM8c " dir="ltr">Original text</div></div><div class="VIpgJd-yAWNEb-hvhgNd-k77Iif"><div id="goog-gt-original-text" class="VIpgJd-yAWNEb-nVMfcd-fmcmS VIpgJd-yAWNEb-hvhgNd-axAV1"></div></div><div class="VIpgJd-yAWNEb-hvhgNd-N7Eqid ltr"><div class="VIpgJd-yAWNEb-hvhgNd-N7Eqid-B7I4Od ltr" dir="ltr"><div class="VIpgJd-yAWNEb-hvhgNd-UTujCb">Rate this translation</div><div class="VIpgJd-yAWNEb-hvhgNd-eO9mKe">Your feedback will be used to help improve Google Translate</div></div><div class="VIpgJd-yAWNEb-hvhgNd-xgov5 ltr"><button id="goog-gt-thumbUpButton" type="button" class="VIpgJd-yAWNEb-hvhgNd-bgm6sf" title="Good translation" aria-label="Good translation" aria-pressed="false"><span id="goog-gt-thumbUpIcon"><svg width="24" height="24" viewBox="0 0 24 24" focusable="false" class="VIpgJd-yAWNEb-hvhgNd-THI6Vb NMm5M"><path d="M21 7h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 0S7.08 6.85 7 7H2v13h16c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73V9c0-1.1-.9-2-2-2zM7 18H4V9h3v9zm14-7l-3 7H9V8l4.34-4.34L12 9h9v2z"></path></svg></span><span id="goog-gt-thumbUpIconFilled"><svg width="24" height="24" viewBox="0 0 24 24" focusable="false" class="VIpgJd-yAWNEb-hvhgNd-THI6Vb NMm5M"><path d="M21 7h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 0S7.08 6.85 7 7v13h11c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73V9c0-1.1-.9-2-2-2zM5 7H1v13h4V7z"></path></svg></span></button><button id="goog-gt-thumbDownButton" type="button" class="VIpgJd-yAWNEb-hvhgNd-bgm6sf" title="Poor translation" aria-label="Poor translation" aria-pressed="false"><span id="goog-gt-thumbDownIcon"><svg width="24" height="24" viewBox="0 0 24 24" focusable="false" class="VIpgJd-yAWNEb-hvhgNd-THI6Vb NMm5M"><path d="M3 17h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 24s7.09-6.85 7.17-7h5V4H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2zM17 6h3v9h-3V6zM3 13l3-7h9v10l-4.34 4.34L12 15H3v-2z"></path></svg></span><span id="goog-gt-thumbDownIconFilled"><svg width="24" height="24" viewBox="0 0 24 24" focusable="false" class="VIpgJd-yAWNEb-hvhgNd-THI6Vb NMm5M"><path d="M3 17h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 24s7.09-6.85 7.17-7V4H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2zm16 0h4V4h-4v13z"></path></svg></span></button></div></div><div id="goog-gt-votingHiddenPane" class="VIpgJd-yAWNEb-hvhgNd-aXYTce"><form id="goog-gt-votingForm" action="https://translate.googleapis.com/translate_voting?client=te" method="post" target="votingFrame" class="VIpgJd-yAWNEb-hvhgNd-aXYTce"><input type="text" name="sl" id="goog-gt-votingInputSrcLang"><input type="text" name="tl" id="goog-gt-votingInputTrgLang"><input type="text" name="query" id="goog-gt-votingInputSrcText"><input type="text" name="gtrans" id="goog-gt-votingInputTrgText"><input type="text" name="vote" id="goog-gt-votingInputVote"></form><iframe name="votingFrame" frameborder="0" src="./admission form_files/saved_resource.html"></iframe></div></div></div><span style="position: absolute; top: -99999px; left: -99999px; width: auto; padding: 0px; white-space: pre; letter-spacing: 0px; font-size: 14px; font-family: Poppins, sans-serif; font-weight: 400; text-transform: none;">Religion</span><div class="VIpgJd-ZVi9od-aZ2wEe-wOHMyf"><div class="VIpgJd-ZVi9od-aZ2wEe-OiiCO"><svg xmlns="http://www.w3.org/2000/svg" class="VIpgJd-ZVi9od-aZ2wEe" width="96px" height="96px" viewBox="0 0 66 66"><circle class="VIpgJd-ZVi9od-aZ2wEe-Jt5cK" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle></svg></div></div><iframe frameborder="0" class="VIpgJd-ZVi9od-xl07Ob-OEVmcd skiptranslate" title="Language Translate Widget" style="visibility: visible; box-sizing: content-box; width: 2622px; height: 274px; display: none;" src="./admission form_files/saved_resource(1).html"></iframe></body></html>

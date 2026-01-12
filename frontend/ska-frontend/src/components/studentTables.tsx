@@ -8,6 +8,10 @@ type StudentTableProps = {
 
 function StudentTable({ students }: StudentTableProps) {
     const navigate = useNavigate();
+    if (students.length === 0) {
+  return <p>No students admitted yet.</p>;
+}
+
     return(
         <table className="student-table">
             <thead>
@@ -26,10 +30,10 @@ function StudentTable({ students }: StudentTableProps) {
                 {students.map((student) => (
                     <tr key={student.id} 
                     onClick={() => navigate(`/students/${student.id}`)}>
-                        <td>{student.id}</td>
+                        <td>{student.id.slice(0, 8)}</td>
                         <td>{student.firstName} {student.lastName}</td>
                         <td>{student.academic.grade}</td>
-                        <td>{student.academic.section}</td>
+                        <td>{student.academic.section || "-"}</td>
                         <td>{student.gender}</td>
                         <td>{student.phoneNumber}</td>
                         <td>{student.address.city}</td>
