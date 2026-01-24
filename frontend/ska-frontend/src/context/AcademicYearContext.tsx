@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import { usePersistentState } from "../hooks/UsePersistentState";
+import {usePersistentState} from "../hooks/UsePersistentState";
 
 /* =========================
    Types
@@ -22,6 +22,11 @@ type PromotionSummary = {
 type PromotionSummaryMap = Record<string, PromotionSummary>;
 type PromotionLockMap = Record<string, boolean>;
 
+type AutoPromotionRequest = {
+  year: string;
+  requestedAt: string;
+};
+
 type AcademicYearContextType = {
   academicYear: string;
   setAcademicYear: (year: string) => void;
@@ -34,11 +39,19 @@ type AcademicYearContextType = {
   // Promotion system
   isPromotionLocked: (year: string) => boolean;
   lockPromotion: (year: string) => void;
-  getPromotionSummary: (year: string) => PromotionSummary | undefined;
+
+  getPromotionSummary: (
+    year: string
+  ) => PromotionSummary | undefined;
   setPromotionSummaryForYear: (
     year: string,
     summary: PromotionSummary
   ) => void;
+
+  // Auto promotion bridge
+  autoPromotionRequest: AutoPromotionRequest | null;
+  requestAutoPromotion: (year: string) => void;
+  clearAutoPromotionRequest: () => void;
 };
 
 /* =========================
@@ -57,16 +70,12 @@ function getCurrentAcademicYear() {
   const year = now.getFullYear();
   const month = now.getMonth(); // 0 = Jan
 
-  if (month >= 3) {
-    // Apr–Dec
-    return `${year}-${String(year + 1).slice(-2)}`;
-  } else {
-    // Jan–Mar
-    return `${year - 1}-${String(year).slice(-2)}`;
-  }
+  return month >= 3
+    ? `${year}-${String(year + 1).slice(-2)}`
+    : `${year - 1}-${String(year).slice(-2)}`;
 }
 
-const CURRENT_ACADEMIC_YEAR = getCurrentAcademicYear();
+const CURRENT_YEAR = getCurrentAcademicYear();
 
 /* =========================
    Provider
@@ -77,6 +86,33 @@ export function AcademicYearProvider({
 }: {
   children: React.ReactNode;
 }) {
+  const CURRENT_YEAR = getCurrentAcademicYear();
+
+  /* -------------------------
+     Academic year state
+  ------------------------- */
+
+  const [academicYear, setAcademicYear] =
+    usePersistentState<string>(
+      "academicYear",
+      CURRENT_YEAR
+    );
+
+  const [availableYears] = useState<string[]>([
+    "2025-26",
+    "2026-27",
+    "2027-28",
+  ]);
+
+  const [yearMeta, setYearMeta] =
+    usePersistentState<AcademicYearMeta[]>(
+      "academicYearMeta",
+      availableYears.map((year) => ({
+        year,
+        status: "OPEN",
+      }))
+    );
+
   /* -------------------------
      Promotion persistence
   ------------------------- */
@@ -92,6 +128,16 @@ export function AcademicYearProvider({
       "promotionSummary",
       {}
     );
+
+  const [autoPromotionRequest, setAutoPromotionRequest] =
+    usePersistentState<AutoPromotionRequest | null>(
+      "autoPromotionRequest",
+      null
+    );
+
+  /* -------------------------
+     Promotion helpers
+  ------------------------- */
 
   const isPromotionLocked = (year: string) =>
     promotionLocked[year] === true;
@@ -116,44 +162,31 @@ export function AcademicYearProvider({
   const getPromotionSummary = (year: string) =>
     promotionSummary[year];
 
-  /* -------------------------
-     Current academic year
-  ------------------------- */
+  const requestAutoPromotion = (year: string) => {
+    setAutoPromotionRequest({
+      year,
+      requestedAt: new Date().toISOString(),
+    });
+  };
 
-  const [academicYear, setAcademicYear] =
-    usePersistentState<string>(
-      "academicYear",
-      CURRENT_ACADEMIC_YEAR
-    );
-
-  /* -------------------------
-     Available years (UI)
-  ------------------------- */
-
-  const [availableYears] = useState<string[]>([
-    "2025-26",
-    "2026-27",
-    "2027-28",
-  ]);
+  const clearAutoPromotionRequest = () => {
+    setAutoPromotionRequest(null);
+  };
 
   /* -------------------------
-     Year metadata
+     Year actions
   ------------------------- */
-
-  const [yearMeta, setYearMeta] =
-    usePersistentState<AcademicYearMeta[]>(
-      "academicYearMeta",
-      availableYears.map((year) => ({
-        year,
-        status: "OPEN",
-      }))
-    );
-
-  /* =========================
-     Actions
-  ========================= */
 
   const closeYear = (year: string) => {
+    if (!isPromotionLocked(year)) {
+      const ok = window.confirm(
+        "Closing the academic year will automatically promote students and mark Class 10 as Alumni.\n\nProceed?"
+      );
+      if (!ok) return;
+
+      requestAutoPromotion(year);
+    }
+
     setYearMeta((prev) =>
       prev.map((y) =>
         y.year === year
@@ -186,17 +219,23 @@ export function AcademicYearProvider({
         closeYear,
         isYearClosed,
 
-        // Promotion system
         isPromotionLocked,
         lockPromotion,
         getPromotionSummary,
         setPromotionSummaryForYear,
+
+        autoPromotionRequest,
+        requestAutoPromotion,
+        clearAutoPromotionRequest,
       }}
     >
       {children}
     </AcademicYearContext.Provider>
   );
 }
+
+
+export { CURRENT_YEAR };
 
 /* =========================
    Hook
@@ -211,9 +250,3 @@ export function useAcademicYear() {
   }
   return ctx;
 }
-
-/* =========================
-   Constants
-========================= */
-
-export const CURRENT_YEAR = CURRENT_ACADEMIC_YEAR;

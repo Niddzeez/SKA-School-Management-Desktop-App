@@ -1,217 +1,243 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useStudents } from "../../context/StudentContext";
 import { useClasses } from "../../context/ClassContext";
 import { useAcademicYear } from "../../context/AcademicYearContext";
-import "./BulkPromotion.css";
+import { printReport } from "../Reports/Utils/printUtils";
+import "../../styles/BulkPromotion.css";
 
 /* =========================
    School Promotion Order
-   (Stops at 10th)
 ========================= */
 
 const SCHOOL_CLASS_ORDER = [
-    "Playgroup",
-    "Nursery",
-    "LKG",
-    "UKG",
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-    "10",
+  "Playgroup",
+  "Nursery",
+  "LKG",
+  "UKG",
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
 ];
 
-/* =========================
-   Helpers
-========================= */
-
 function getNextAcademicYear(year: string): string {
-    const [start, end] = year.split("-").map(Number);
-    return `${start + 1}-${String(end + 1).padStart(2, "0")}`;
+  const [start, end] = year.split("-").map(Number);
+  return `${start + 1}-${String(end + 1).padStart(2, "0")}`;
 }
 
 function BulkPromotion() {
-    const { students, updateStudent } = useStudents();
-    const { classes } = useClasses();
-    const { academicYear, isPromotionLocked, lockPromotion, getPromotionSummary, setPromotionSummaryForYear
-    } = useAcademicYear();
+  const { students, updateStudent } = useStudents();
+  const { classes } = useClasses();
+  const {
+    academicYear,
+    isPromotionLocked,
+    lockPromotion,
+    getPromotionSummary,
+    setPromotionSummaryForYear,
+    autoPromotionRequest,
+    clearAutoPromotionRequest,
+  } = useAcademicYear();
 
-    const [fromAcademicYear] = useState(academicYear);
+  const [fromAcademicYear] = useState(academicYear);
+  const summary = getPromotionSummary(fromAcademicYear);
 
-    const summary = getPromotionSummary(fromAcademicYear);
+  /* =========================
+     Resolve Next Class
+  ========================= */
 
-    /* =========================
-       Resolve Next Class
-    ========================= */
-
-    const getNextClassID = (
-        currentClassID: string
-    ): string | null => {
-        const currentClass = classes.find(
-            (c) => c.id === currentClassID
-        );
-        if (!currentClass) return null;
-
-        const index = SCHOOL_CLASS_ORDER.indexOf(
-            currentClass.ClassName
-        );
-
-        // Not a school class OR already in 10th
-        if (
-            index === -1 ||
-            index === SCHOOL_CLASS_ORDER.length - 1
-        ) {
-            return null;
-        }
-
-        const nextClassName =
-            SCHOOL_CLASS_ORDER[index + 1];
-
-        const nextClass = classes.find(
-            (c) => c.ClassName === nextClassName
-        );
-
-        return nextClass?.id ?? null;
-    };
-
-    /* =========================
-       Bulk Promotion
-    ========================= */
-
-
-
-    const handlePromotion = () => {
-
-        if (isPromotionLocked(fromAcademicYear)) {
-            alert(
-                "Bulk promotion has already been completed for this academic year."
-            );
-            return;
-        }
-
-        const nextAcademicYear =
-            getNextAcademicYear(fromAcademicYear);
-
-        let promoted = 0;
-        let alumniMarked = 0;
-
-        students.forEach((student) => {
-            if (!student.id) return;
-            if (student.status !== "Active") return;
-            if (!student.classID) return;
-
-            const nextClassID = getNextClassID(
-                student.classID
-            );
-
-            // 🎓 Completed Class 10 → Alumni
-            if (nextClassID === null) {
-                updateStudent(student.id, {
-                    status: "Alumni",
-                });
-                alumniMarked++;
-                return;
-            }
-
-            // Promote student
-            updateStudent(student.id, {
-                classID: nextClassID,
-                sectionID: "", // reset section
-            });
-
-            promoted++;
-        });
-
-        setPromotionSummaryForYear(fromAcademicYear, {
-            promotedCount: promoted,
-            alumniCount: alumniMarked,
-            promotedAt: new Date().toISOString(),
-        });
-
-        lockPromotion(fromAcademicYear);
-
-        alert(
-            `Bulk Promotion Completed\n\n` +
-            `Promoted Students: ${promoted}\n` +
-            `Marked as Alumni (Class 10 passed): ${alumniMarked}\n` +
-            `New Academic Year: ${nextAcademicYear}`
-        );
-
-
-    };
-
-    /* =========================
-       Render
-    ========================= */
-
-    return (
-        <div className="page-container">
-            <h1>Bulk Promotion</h1>
-
-
-            {/* Promotion Summary */}
-            {summary && (
-                <div className="summary-box">
-                    <h3>Promotion Summary</h3>
-                    <p>
-                        <strong>Promoted Students:</strong>{" "}
-                        {summary.promotedCount}
-                    </p>
-                    <p>
-                        <strong>Alumni (Class 10 passed):</strong>{" "}
-                        {summary.alumniCount}
-                    </p>
-                    <p>
-                        <strong>Promotion Date:</strong>{" "}
-                        {new Date(
-                            summary.promotedAt
-                        ).toLocaleString()}
-                    </p>
-                </div>
-            )}
-
-            <div className="promotion-info">
-                <p>
-                    Promoting students from{" "}
-                    <strong>{fromAcademicYear}</strong> to{" "}
-                    <strong>
-                        {getNextAcademicYear(fromAcademicYear)}
-                    </strong>
-                </p>
-
-                <p className="warning">
-                    Students completing Class 10 will be marked
-                    as <strong>Alumni</strong>.
-                </p>
-
-                <p className="note">
-                    Classes 11 and 12 are treated as a separate
-                    academic flow and are not auto-promoted.
-                </p>
-            </div>
-
-
-
-            <button
-                className="danger"
-                onClick={handlePromotion}
-                disabled={isPromotionLocked(fromAcademicYear)}
-            >
-                Promote All Eligible Students
-            </button>
-            {isPromotionLocked(fromAcademicYear) && (
-                <p className="note">
-                    Promotion already completed for this academic year.
-                </p>
-            )}
-
-        </div>
+  const getNextClassID = (
+    currentClassID: string
+  ): string | null => {
+    const currentClass = classes.find(
+      (c) => c.id === currentClassID
     );
+    if (!currentClass) return null;
+
+    const index = SCHOOL_CLASS_ORDER.indexOf(
+      currentClass.ClassName
+    );
+
+    if (
+      index === -1 ||
+      index === SCHOOL_CLASS_ORDER.length - 1
+    ) {
+      return null;
+    }
+
+    const nextClassName =
+      SCHOOL_CLASS_ORDER[index + 1];
+
+    const nextClass = classes.find(
+      (c) => c.ClassName === nextClassName
+    );
+
+    return nextClass?.id ?? null;
+  };
+
+  /* =========================
+     Promotion Runner
+  ========================= */
+
+  const handlePromotion = () => {
+    if (isPromotionLocked(fromAcademicYear)) return;
+
+    let promoted = 0;
+    let alumni = 0;
+
+    students.forEach((student) => {
+      if (!student.id) return;
+      if (student.status !== "Active") return;
+      if (!student.classID) return;
+
+      const nextClassID = getNextClassID(
+        student.classID
+      );
+
+      if (nextClassID === null) {
+        updateStudent(student.id, {
+          status: "Alumni",
+        });
+        alumni++;
+        return;
+      }
+
+      updateStudent(student.id, {
+        classID: nextClassID,
+        sectionID: "",
+      });
+
+      promoted++;
+    });
+
+    setPromotionSummaryForYear(fromAcademicYear, {
+      promotedCount: promoted,
+      alumniCount: alumni,
+      promotedAt: new Date().toISOString(),
+    });
+
+    lockPromotion(fromAcademicYear);
+  };
+
+  /* =========================
+     Auto-run on Year Close
+  ========================= */
+
+  useEffect(() => {
+    if (
+      autoPromotionRequest &&
+      autoPromotionRequest.year === fromAcademicYear &&
+      !isPromotionLocked(fromAcademicYear)
+    ) {
+      handlePromotion();
+      clearAutoPromotionRequest();
+    }
+  }, [autoPromotionRequest]);
+
+  /* =========================
+     Print Data
+  ========================= */
+
+  const printData = summary
+    ? {
+        title: "Promotion Summary",
+        meta: {
+          academicYear: fromAcademicYear,
+          reportType: "STATEMENT",
+          granularity: "YEARLY",
+          periodLabel: "Academic Year Promotion",
+        },
+        sections: [
+          {
+            title: "Summary",
+            headers: ["Metric", "Value"],
+            rows: [
+              {
+                columns: [
+                  "Promoted Students",
+                  String(summary.promotedCount),
+                ],
+              },
+              {
+                columns: [
+                  "Alumni (Class 10 Passed)",
+                  String(summary.alumniCount),
+                ],
+              },
+              {
+                columns: [
+                  "Promotion Date",
+                  new Date(
+                    summary.promotedAt
+                  ).toLocaleString(),
+                ],
+              },
+            ],
+          },
+        ],
+      } as const
+    : null;
+
+  /* =========================
+     Render
+  ========================= */
+
+  return (
+    <div className="page-container">
+      <h1>Bulk Promotion</h1>
+
+      {summary && (
+        <div className="summary-box">
+          <h3>Promotion Summary</h3>
+          <p>
+            <strong>Promoted Students:</strong>{" "}
+            {summary.promotedCount}
+          </p>
+          <p>
+            <strong>Alumni:</strong>{" "}
+            {summary.alumniCount}
+          </p>
+          <p>
+            <strong>Date:</strong>{" "}
+            {new Date(
+              summary.promotedAt
+            ).toLocaleString()}
+          </p>
+
+          {printData && (
+            <button
+              className="secondary"
+              onClick={() =>
+                printReport(printData)
+              }
+            >
+              Export Promotion Summary (PDF)
+            </button>
+          )}
+        </div>
+      )}
+
+      <button
+        className="danger"
+        onClick={handlePromotion}
+        disabled={isPromotionLocked(fromAcademicYear)}
+      >
+        Promote All Eligible Students
+      </button>
+
+      {isPromotionLocked(fromAcademicYear) && (
+        <p className="note">
+          Promotion already completed for this academic
+          year.
+        </p>
+      )}
+    </div>
+  );
 }
 
 export default BulkPromotion;

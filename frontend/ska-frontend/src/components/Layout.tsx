@@ -11,6 +11,9 @@ function Layout() {
         </div>
 
         <nav className="sidebar-nav">
+          <NavLink to="/dashboard" className="nav-link">
+            Dashboard
+          </NavLink>
           <NavLink to="/students" className="nav-link">
             Students
           </NavLink>
