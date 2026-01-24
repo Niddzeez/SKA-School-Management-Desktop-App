@@ -40,3 +40,31 @@
 .read-the-docs {
   color: #888;
 }
+
+/* =========================
+   PRINT RULES
+========================= */
+@media print {
+  /* Hide everything */
+  body * {
+    display: none !important;
+  }
+
+  /* Show only fee statement */
+  .statement-page,
+  .statement-page * {
+    display: block !important;
+  }
+
+  /* Position it cleanly */
+  .statement-page {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    background: white;
+  }
+}
+
+
+

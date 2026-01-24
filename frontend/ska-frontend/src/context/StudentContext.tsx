@@ -1,5 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import type { Student, StudentStatus } from "../types/Student";
+import { usePersistentState } from "../hooks/UsePersistentState";
 
 type StudentContextType = {
   students: Student[];
@@ -11,7 +12,9 @@ type StudentContextType = {
 const StudentContext = createContext<StudentContextType | null>(null);
 
 export function StudentProvider({ children }: { children: React.ReactNode }) {
-  const [students, setStudents] = useState<Student[]>([]);
+  const [students, setStudents] =
+    usePersistentState<Student[]>("students", []);
+  console.log("StudentContext mounted, students:", students);
 
   const addStudent = (student: Student) => {
     setStudents((prev) => [...prev, student]);
@@ -29,19 +32,19 @@ export function StudentProvider({ children }: { children: React.ReactNode }) {
 
 
   const assignStudenttoSection = (
-    studentId : string,
-    classID : string,
+    studentId: string,
+    classID: string,
     sectionID: string
   ) => {
-    setStudents((prev) => 
-      prev.map((student) => 
+    setStudents((prev) =>
+      prev.map((student) =>
         student.id == studentId
-          ? {...student, classID, sectionID}
+          ? { ...student, classID, sectionID }
           : student
-  )
+      )
     );
 
-    
+
   };
 
   return (

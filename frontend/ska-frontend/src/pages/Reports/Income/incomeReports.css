@@ -1,0 +1,25 @@
+.income-report {
+  margin-top: 16px;
+}
+
+.income-report table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+
+.income-report th,
+.income-report td {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+}
+
+.income-report th:last-child,
+.income-report td:last-child {
+  text-align: right;
+}
+
+.income-report .total {
+  margin-top: 12px;
+  font-weight: bold;
+}

@@ -1,0 +1,45 @@
+.pending-fees-page {
+  padding: 20px;
+}
+
+.pending-fees-page h2 {
+  margin-bottom: 16px;
+}
+
+.pending-fees-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.pending-fees-table th,
+.pending-fees-table td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.pending-fees-table th {
+  text-align: left;
+  background: #f9f9f9;
+}
+
+.pending-fees-table td.pending {
+  color: #d97706;
+  font-weight: 600;
+}
+
+.kpi-card.clickable {
+  cursor: pointer;
+}
+
+.kpi-card.clickable:hover {
+  background: #fffbeb;
+}
+
+.clickable-row {
+  cursor: pointer;
+}
+
+.clickable-row:hover {
+  background-color: #f8fafc;
+}
+

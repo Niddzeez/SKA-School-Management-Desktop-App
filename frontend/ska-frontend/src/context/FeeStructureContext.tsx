@@ -1,5 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import type { FeeStructure, FeeComponent } from "../types/ClassFeeStructure";
+import { usePersistentState } from "../hooks/UsePersistentState";
 
 type FeeStructureContextType = {
   feeStructures: FeeStructure[];
@@ -11,7 +12,8 @@ type FeeStructureContextType = {
   ) => void;
   activateFeeStructure: (feeStructureID: string) => void;
   removeFeeComponent: (feeStructureID: string,
-  componentID: string) => void;
+    componentID: string) => void;
+  getActiveFeeStructure: (classID: string, academicYear: string) => FeeStructure | undefined;
 };
 
 const FeeStructureContext = createContext<FeeStructureContextType | null>(null);
@@ -21,7 +23,7 @@ export function FeeStructureProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [feeStructures, setFeeStructures] = useState<FeeStructure[]>([]);
+  const [feeStructures, setFeeStructures] = usePersistentState<FeeStructure[]>("feeStructures", []);
 
   const createFeeStructure = (classID: string, academicYear: string) => {
     setFeeStructures((prev) => [
@@ -38,16 +40,38 @@ export function FeeStructureProvider({
   };
 
   const activateFeeStructure = (feeStructureID: string) => {
-  setFeeStructures((prev) =>
-    prev.map((fs) =>
-      fs.id === feeStructureID
-        ? { ...fs, status: "ACTIVE" }
-        : fs.status === "ACTIVE"
-        ? { ...fs, status: "DRAFT" }
-        : fs
-    )
+  setFeeStructures(prev =>
+    prev.map(fs => {
+      const target = prev.find(f => f.id === feeStructureID);
+      if (!target) return fs;
+
+      if (
+        fs.classID === target.classID &&
+        fs.academicYear === target.academicYear
+      ) {
+        return fs.id === feeStructureID
+          ? { ...fs, status: "ACTIVE" }
+          : { ...fs, status: "DRAFT" };
+      }
+
+      return fs;
+    })
   );
 };
+
+
+  const getActiveFeeStructure = (
+    classID: string,
+    academicYear: string
+  ) => {
+    return feeStructures.find(
+      (fs) =>
+        fs.classID === classID &&
+        fs.academicYear === academicYear &&
+        fs.status === "ACTIVE"
+    );
+  };
+
 
 
   const addFeeComponent = (
@@ -64,27 +88,27 @@ export function FeeStructureProvider({
   };
 
   const removeFeeComponent = (
-  feeStructureID: string,
-  componentID: string
-) => {
-  setFeeStructures((prev) =>
-    prev.map((fs) =>
-      fs.id === feeStructureID && fs.status === "DRAFT"
-        ? {
+    feeStructureID: string,
+    componentID: string
+  ) => {
+    setFeeStructures((prev) =>
+      prev.map((fs) =>
+        fs.id === feeStructureID && fs.status === "DRAFT"
+          ? {
             ...fs,
             components: fs.components.filter(
               (c) => c.id !== componentID
             ),
           }
-        : fs
-    )
-  );
-};
+          : fs
+      )
+    );
+  };
 
 
   return (
     <FeeStructureContext.Provider
-      value={{ feeStructures, createFeeStructure, addFeeComponent, activateFeeStructure, removeFeeComponent }}
+      value={{ feeStructures, createFeeStructure, addFeeComponent, activateFeeStructure, removeFeeComponent, getActiveFeeStructure}}
     >
       {children}
     </FeeStructureContext.Provider>

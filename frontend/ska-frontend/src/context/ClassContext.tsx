@@ -1,5 +1,6 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext} from "react";
 import type { Class as SchoolClass } from "../types/Class";
+import { usePersistentState } from "../hooks/UsePersistentState";
 
 type ClassContextType = {
   classes: SchoolClass[];
@@ -9,7 +10,7 @@ type ClassContextType = {
 const ClassContext = createContext<ClassContextType | null>(null);
 
 export function ClassProvider({ children }: { children: React.ReactNode }) {
-  const [classes, setClasses] = useState<SchoolClass[]>([]);
+  const [classes, setClasses] = usePersistentState<SchoolClass[]>("classes",[]);
 
   const addClass = (newClass: SchoolClass) => {
     setClasses((prev) => [...prev, newClass]);

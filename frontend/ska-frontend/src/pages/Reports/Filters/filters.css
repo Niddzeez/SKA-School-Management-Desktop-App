@@ -1,0 +1,18 @@
+/* src/pages/Reports/filters/filters.css */
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.filter-group label {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.filter-group select,
+.filter-group input {
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+}

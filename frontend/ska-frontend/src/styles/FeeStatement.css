@@ -1,0 +1,94 @@
+.statement-page {
+  padding: 20px;
+  max-width: 800px;
+  margin: auto;
+  background: white;
+  color: #000;
+}
+
+.statement-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.statement-section {
+  margin-bottom: 16px;
+}
+
+.statement-section h3 {
+  border-bottom: 1px solid #000;
+  padding-bottom: 4px;
+}
+
+.statement-section table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.statement-section td,
+.statement-section th {
+  padding: 6px;
+  border-bottom: 1px solid #ccc;
+}
+
+.statement-summary {
+  margin-top: 20px;
+  font-size: 1.05rem;
+}
+
+.print-actions {
+  text-align: center;
+  margin-top: 20px;
+}
+
+@media print {
+  .print-actions {
+    display: none;
+  }
+}
+
+.statement-section p {
+  word-break: keep-all;
+}
+
+.statement-section p strong + span,
+.statement-section p {
+  white-space: nowrap;
+}
+
+.statement-section table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 6px;
+}
+
+.statement-section td,
+.statement-section th {
+  padding: 6px 8px;
+  border-bottom: 1px solid #ccc;
+}
+
+.statement-section td:last-child,
+.statement-section th:last-child {
+  text-align: right;
+}
+
+
+.statement-header h1 {
+  margin-bottom: 2px;
+  font-size: 1.6rem;
+}
+
+.statement-header p {
+  margin: 2px 0;
+  font-size: 0.95rem;
+}
+
+.statement-section h3 {
+  margin-top: 14px;
+  margin-bottom: 6px;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+}
+
+

@@ -1,0 +1,45 @@
+/* src/pages/Reports/expenses/expenseReports.css */
+
+.report-card {
+  padding: 16px;
+  border: 1px solid #ddd;
+  background: #fff;
+}
+
+.report-card h3 {
+  margin-bottom: 12px;
+}
+
+.report-table,
+.summary-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 8px;
+}
+
+.report-table th,
+.report-table td,
+.summary-table td {
+  padding: 8px;
+  border-bottom: 1px solid #ccc;
+}
+
+.report-table th:last-child,
+.report-table td:last-child,
+.summary-table td:last-child {
+  text-align: right;
+}
+
+.amount {
+  text-align: right;
+}
+
+.report-summary {
+  margin-top: 16px;
+}
+
+.total-line {
+  margin-top: 8px;
+  font-size: 1.05rem;
+  font-weight: 600;
+}

@@ -1,9 +1,9 @@
 import { NavLink, Outlet } from "react-router-dom";
-import "../styles/layout.css";
+import "../styles/Layout.css";
 
 function Layout() {
   return (
-    <div className="app-layout">
+    <div className="app-layout no-print">
       {/* Sidebar */}
       <aside className="sidebar">
         <div className="sidebar-header">
@@ -31,6 +31,9 @@ function Layout() {
           </NavLink>
           <NavLink to="/feestructure" className="nav-link">
             Fee Structure
+          </NavLink>
+          <NavLink to="/expenses" className="nav-link">
+            Expenses
           </NavLink>
         </nav>
       </aside>

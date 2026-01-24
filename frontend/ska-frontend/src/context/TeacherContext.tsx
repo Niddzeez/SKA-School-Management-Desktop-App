@@ -1,5 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import type { Teacher, CurrentStatus } from "../types/Teachers";
+import { usePersistentState } from "../hooks/UsePersistentState";
 
 type TeacherContextType = {
   teachers: Teacher[];
@@ -10,7 +11,7 @@ type TeacherContextType = {
 const TeacherContext = createContext<TeacherContextType | null>(null);
 
 export function TeacherProvider({ children }: { children: React.ReactNode }) {
-  const [teachers, setTeachers] = useState<Teacher[]>([]);
+  const [teachers, setTeachers] = usePersistentState<Teacher[]>("teachers", []);
 
   const addTeacher = (teacher: Teacher) => {
     setTeachers((prev) => [...prev, teacher]);

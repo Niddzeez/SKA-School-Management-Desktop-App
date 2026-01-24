@@ -1,0 +1,25 @@
+/* src/pages/Reports/ReportsPage.css */
+
+.reports-page {
+  padding: 24px;
+}
+
+.reports-page h2 {
+  margin-bottom: 16px;
+}
+
+.reports-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid #ddd;
+  background: #fafafa;
+  margin-bottom: 20px;
+}
+
+.reports-output {
+  padding: 16px;
+  border: 1px solid #ddd;
+  background: #fff;
+}

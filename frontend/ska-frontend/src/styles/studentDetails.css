@@ -100,3 +100,31 @@
 .danger-btn:hover {
   background-color: #b91c1c;
 }
+
+.fees-card {
+  border: 1px solid #ddd;
+  padding: 16px;
+  border-radius: 8px;
+  margin-top: 8px;
+}
+
+.fee-status.paid {
+  color: green;
+  font-weight: bold;
+}
+
+.fee-status.pending {
+  color: red;
+  font-weight: bold;
+}
+
+.fee-status.partial {
+  color: orange;
+  font-weight: bold;
+}
+
+.fee-status.overpaid {
+  color: blue;
+  font-weight: bold;
+}
+

@@ -11,4 +11,6 @@ export type Expense = {
   mode: "CASH" | "BANK" | "UPI";
 
   recordedBy: string;
+  reference?: string; 
+  recordedAt: string;  
 };

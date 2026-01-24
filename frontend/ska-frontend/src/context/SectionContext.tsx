@@ -1,5 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import type { Section } from "../types/Section";
+import { usePersistentState } from "../hooks/UsePersistentState";
 
 type SectionContextType = {
   sections: Section[];
@@ -10,7 +11,7 @@ type SectionContextType = {
 const SectionContext = createContext<SectionContextType | null>(null);
 
 export function SectionProvider({ children }: { children: React.ReactNode }) {
-  const [sections, setSections] = useState<Section[]>([]);
+  const [sections, setSections] = usePersistentState<Section[]>("sections", []);
 
   const addSection = (section: Section) => {
     setSections((prev) => [...prev, section]);

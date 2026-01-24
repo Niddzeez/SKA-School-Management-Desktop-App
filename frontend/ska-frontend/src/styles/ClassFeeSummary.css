@@ -1,0 +1,35 @@
+.page-container {
+  padding: 20px;
+}
+
+.summary-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+  font-size: 0.95rem;
+}
+
+.summary-table th,
+.summary-table td {
+  padding: 10px 8px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.summary-table th {
+  background: #f1f1f1;
+}
+
+.summary-table tbody tr:hover {
+  background: #fafafa;
+}
+
+.summary-table tfoot th {
+  background: #e9ecef;
+  font-weight: 700;
+}
+
+.pending {
+  color: #b00020;
+  font-weight: 600;
+}
