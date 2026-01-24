@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useFeeLedger } from "../../context/FeeLedgerContext";
 import InputBox from "../../components/FormInputBoxes";
 import "../../styles/Expenses.css";
+import { useAcademicYear } from "../../context/AcademicYearContext";
 
 type ExpenseCategory =
   | "SALARY"
@@ -23,6 +24,8 @@ function getAcademicYearFromDate(dateStr: string) {
 
 function Expenses() {
   const { expenses, addExpense } = useFeeLedger();
+
+  const {isYearClosed} = useAcademicYear();
 
   const [form, setForm] = useState({
     category: "SALARY" as ExpenseCategory,
@@ -154,7 +157,8 @@ function Expenses() {
             !form.amount ||
             !form.expenseDate ||
             !form.paidTo ||
-            !form.description
+            !form.description||
+            isYearClosed(getAcademicYearFromDate(form.expenseDate))
           }
           onClick={handleAddExpense}
         >

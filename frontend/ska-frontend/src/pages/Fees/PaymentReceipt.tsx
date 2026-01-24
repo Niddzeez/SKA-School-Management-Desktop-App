@@ -31,7 +31,7 @@ function PaymentReceipt() {
   const cls = classes.find(c => c.id === ledger.classId);
   const sec = sections.find(s => s.id === student.sectionID);
 
-  const receiptNo = getReceiptNumber(payment.id, ledger.academicYear);
+  const receiptNo = getReceiptNumber(payment.id);
 
   /* =========================
      PDF Filename

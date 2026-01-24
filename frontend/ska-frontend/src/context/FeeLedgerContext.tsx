@@ -1,339 +1,382 @@
-import { createContext, useContext, type ReactNode } from "react";
+import { createContext, useContext } from "react";
+import { usePersistentState } from "../hooks/UsePersistentState";
+import { useAcademicYear } from "./AcademicYearContext";
+
 import type { StudentFeeLedger } from "../types/StudentFeeLedger";
+import type { LedgerAdjustment } from "../types/LedgerAdjustments";
 import type { Payment } from "../types/Payments";
 import type { Expense } from "../types/Expenses";
-import { usePersistentState } from "../hooks/UsePersistentState";
 
 /* =========================
-   Types internal to context
+   Types
 ========================= */
 
-type LedgerAdjustmentType =
-    | "DISCOUNT"
-    | "CONCESSION"
-    | "WAIVER"
-    | "EXTRA"
-    | "LATE_FEE";
+type LedgerSummary = {
+  baseTotal: number;
+  adjustmentsTotal: number;
+  finalFee: number;
 
-export type LedgerAdjustment = {
-    id: string;
-    ledgerId: string;
-    type: LedgerAdjustmentType;
-    amount: number; // negative or positive
-    reason: string;
-    approvedBy: string;
-    createdAt: string;
-};
+  paid: number;
+  paidTotal: number; // backward compatibility
 
-export type LedgerSummary = {
-    baseTotal: number;
-    adjustmentsTotal: number;
-    finalFee: number;
-    paidTotal: number;
-    pending: number;
-    status: "PAID" | "PENDING" | "PARTIAL" | "OVERPAID";
+  pending: number;
+  status: "PAID" | "PARTIAL" | "PENDING";
 };
 
 type FeeLedgerContextType = {
-    // tables
-    ledgers: StudentFeeLedger[];
-    adjustments: LedgerAdjustment[];
-    payments: Payment[];
-    expenses: Expense[];
+  ledgers: StudentFeeLedger[];
+  adjustments: LedgerAdjustment[];
+  payments: Payment[];
+  expenses: Expense[];
 
-    // mutations (INSERT only)
-    createLedger: (
-        studentId: string,
-        classId: string,
-        academicYear: string,
-        baseComponents: StudentFeeLedger["baseComponents"]
-    ) => void;
+  createLedger: (
+    studentId: string,
+    classId: string,
+    academicYear: string,
+    baseComponents: StudentFeeLedger["baseComponents"]
+  ) => void;
 
-    addAdjustment: (adjustment: Omit<LedgerAdjustment, "id" | "createdAt">) => void;
+  upsertLedgerFromFeeStructure: (
+    studentId: string,
+    classId: string,
+    academicYear: string,
+    baseComponents: StudentFeeLedger["baseComponents"]
+  ) => void;
 
-    addPayment: (payment: Omit<Payment, "id" | "createdAt">) => void;
+  addAdjustment: (
+    adjustment: Omit<LedgerAdjustment, "id" | "createdAt">
+  ) => void;
 
-    addExpense: (expense: Omit<Expense, "id" | "recordedAt">) => void;
+  addPayment: (
+    payment: Omit<Payment, "id" | "createdAt">
+  ) => void;
 
-    upsertLedgerFromFeeStructure: (
-        studentId: string,
-        classId: string,
-        academicYear: string,
-        baseComponents: StudentFeeLedger["baseComponents"]
-    ) => void;
+  addExpense: (
+    expense: Omit<Expense, "id" | "recordedAt">
+  ) => void;
 
-    // selectors (VIEWS)
-    getLedgerByStudentYear: (
-        studentId: string,
-        academicYear: string
-    ) => StudentFeeLedger | undefined;
+  getLedgerSummary: (ledgerId: string) => LedgerSummary;
+  getLedgerByStudentYear: (
+    studentId: string,
+    academicYear: string
+  ) => StudentFeeLedger | undefined;
 
-    getLedgerSummary: (ledgerId: string) => LedgerSummary;
-
-    getReceiptsForStudent: (studentId: string) => Payment[];
-
-    getNetBalance: () => number;
-
-    getReceiptNumber : (paymentId: string, academicYear: string) => string;
+  getReceiptNumber: (paymentId: string) => string;
 };
 
+/* =========================
+   Context
+========================= */
 
+const FeeLedgerContext =
+  createContext<FeeLedgerContextType | null>(null);
 
-const FeeLedgerContext = createContext<FeeLedgerContextType | null>(null);
+/* =========================
+   Helpers
+========================= */
 
+function getAcademicYearFromDate(date: Date): string {
+  const year = date.getFullYear();
+  const month = date.getMonth(); // 0 = Jan
 
+  if (month >= 3) {
+    return `${year}-${String(year + 1).slice(-2)}`;
+  } else {
+    return `${year - 1}-${String(year).slice(-2)}`;
+  }
+}
 
 /* =========================
    Provider
 ========================= */
 
-export function FeeLedgerProvider({ children }: { children: ReactNode }) {
-    const [ledgers, setLedgers] = usePersistentState<StudentFeeLedger[]>("ledgers", []);
-    const [adjustments, setAdjustments] = usePersistentState<LedgerAdjustment[]>("adjustments", []);
-    const [payments, setPayments] = usePersistentState<Payment[]>("payments", []);
-    const [expenses, setExpenses] = usePersistentState<Expense[]>("expenses", []);
+export function FeeLedgerProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const { academicYear, isYearClosed } = useAcademicYear();
 
-    /* =========================
-       Mutations (SQL INSERT)
-    ========================= */
+  /* -------------------------
+     Persistent State
+  ------------------------- */
 
-    const createLedger = (
-        studentId: string,
-        classId: string,
-        academicYear: string,
-        baseComponents: StudentFeeLedger["baseComponents"]
-    ) => {
-        const existing = ledgers.find(
-            (l) => l.studentId === studentId && l.academicYear === academicYear
-        );
+  const [ledgers, setLedgers] =
+    usePersistentState<StudentFeeLedger[]>("ledgers", []);
 
-        if (existing) {
-            throw new Error(
-                "Ledger already exists for this student and academic year"
-            );
-        }
+  const [adjustments, setAdjustments] =
+    usePersistentState<LedgerAdjustment[]>("adjustments", []);
 
-        setLedgers((prev) => [
-            ...prev,
-            {
-                id: crypto.randomUUID(),
-                studentId,
-                classId,
-                academicYear,
-                baseComponents,
-                createdAt: new Date().toISOString(),
-            },
-        ]);
-    };
+  const [payments, setPayments] =
+    usePersistentState<Payment[]>("payments", []);
 
-    const addAdjustment = (
-        adjustment: Omit<LedgerAdjustment, "id" | "createdAt">
-    ) => {
-        setAdjustments((prev) => [
-            ...prev,
-            {
-                ...adjustment,
-                id: crypto.randomUUID(),
-                createdAt: new Date().toISOString(),
-            },
-        ]);
-    };
+  const [expenses, setExpenses] =
+    usePersistentState<Expense[]>("expenses", []);
 
-    const addPayment = (payment: Omit<Payment, "id" | "createdAt">) => {
-        if (payment.amount <= 0) {
-            throw new Error("Payment amount must be positive");
-        }
+  /* =========================
+     Ledger Creation
+  ========================= */
 
-        setPayments((prev) => [
-            ...prev,
-            {
-                ...payment,
-                id: crypto.randomUUID(),
-                createdAt: new Date().toISOString(),
-            },
-        ]);
-    };
+  const createLedger = (
+    studentId: string,
+    classId: string,
+    academicYear: string,
+    baseComponents: StudentFeeLedger["baseComponents"]
+  ) => {
+    if (isYearClosed(academicYear)) {
+      throw new Error(
+        "Cannot create ledger for a closed academic year"
+      );
+    }
 
-    const addExpense = (expense: Omit<Expense, "id" | "recordedAt">) => {
-        if (expense.amount <= 0) {
-            throw new Error("Expense amount must be positive");
-        }
-
-        setExpenses((prev) => [
-            ...prev,
-            {
-                ...expense,
-                id: crypto.randomUUID(),
-                recordedAt: new Date().toISOString(),
-            },
-        ]);
-    };
-
-    const getReceiptNumber = (paymentId: string, academicYear: string) => {
-        // Get all payments for that academic year
-        const yearPayments = payments
-            .filter((p) => {
-                const ledger = ledgers.find(l => l.id === p.ledgerId);
-                return ledger?.academicYear === academicYear;
-            })
-            .sort(
-                (a, b) =>
-                    new Date(a.createdAt).getTime() -
-                    new Date(b.createdAt).getTime()
-            );
-
-        const index = yearPayments.findIndex(p => p.id === paymentId);
-        if (index === -1) return "—";
-
-        const sequence = String(index + 1).padStart(6, "0");
-
-        return `SKA/${academicYear}/${sequence}`;
-    };
-
-
-    /* =========================
-       Selectors (SQL VIEWS)
-    ========================= */
-
-    const getLedgerByStudentYear = (
-        studentId: string,
-        academicYear: string
-    ) => {
-        return ledgers.find(
-            (l) => l.studentId === studentId && l.academicYear === academicYear
-        );
-    };
-
-    const getLedgerSummary = (ledgerId: string): LedgerSummary => {
-        const ledger = ledgers.find((l) => l.id === ledgerId);
-        if (!ledger) {
-            throw new Error("Ledger not found");
-        }
-
-        const baseTotal = ledger.baseComponents.reduce(
-            (sum, c) => sum + c.amount,
-            0
-        );
-
-        const adjustmentsTotal = adjustments
-            .filter((a) => a.ledgerId === ledgerId)
-            .reduce((sum, a) => sum + a.amount, 0);
-
-        const paidTotal = payments
-            .filter((p) => p.ledgerId === ledgerId)
-            .reduce((sum, p) => sum + p.amount, 0);
-
-        const finalFee = baseTotal + adjustmentsTotal;
-        const pending = finalFee - paidTotal;
-
-        let status: LedgerSummary["status"] = "PENDING";
-        if (pending === 0) status = "PAID";
-        else if (pending < 0) status = "OVERPAID";
-        else if (paidTotal > 0) status = "PARTIAL";
-
-        return {
-            baseTotal,
-            adjustmentsTotal,
-            finalFee,
-            paidTotal,
-            pending,
-            status,
-        };
-    };
-
-    const upsertLedgerFromFeeStructure = (
-        studentId: string,
-        classId: string,
-        academicYear: string,
-        baseComponents: StudentFeeLedger["baseComponents"]
-    ) => {
-        setLedgers((prev) => {
-            const existing = prev.find(
-                (l) =>
-                    l.studentId === studentId &&
-                    l.academicYear === academicYear
-            );
-
-            // CASE 1: Ledger does not exist → create
-            if (!existing) {
-                return [
-                    ...prev,
-                    {
-                        id: crypto.randomUUID(),
-                        studentId,
-                        classId,
-                        academicYear,
-                        baseComponents,
-                        createdAt: new Date().toISOString(),
-                    },
-                ];
-            }
-
-            // CASE 2: Ledger exists BUT no payments → re-snapshot
-            const hasPayments = payments.some(
-                (p) => p.ledgerId === existing.id
-            );
-
-            if (!hasPayments) {
-                return prev.map((l) =>
-                    l.id === existing.id
-                        ? { ...l, baseComponents }
-                        : l
-                );
-            }
-
-            // CASE 3: Ledger exists AND payments exist → frozen
-            return prev;
-        });
-    };
-
-
-    const getReceiptsForStudent = (studentId: string) => {
-        return payments
-            .filter((p) => p.studentId === studentId)
-            .sort(
-                (a, b) =>
-                    new Date(a.createdAt).getTime() -
-                    new Date(b.createdAt).getTime()
-            );
-    };
-
-    const getNetBalance = () => {
-        const totalIncome = payments.reduce(
-            (sum, p) => sum + p.amount,
-            0
-        );
-        const totalExpense = expenses.reduce(
-            (sum, e) => sum + e.amount,
-            0
-        );
-
-        return totalIncome - totalExpense;
-    };
-
-    return (
-        <FeeLedgerContext.Provider
-            value={{
-                ledgers,
-                adjustments,
-                payments,
-                expenses,
-                createLedger,
-                addAdjustment,
-                addPayment,
-                addExpense,
-                getLedgerByStudentYear,
-                getLedgerSummary,
-                getReceiptsForStudent,
-                getNetBalance,
-                upsertLedgerFromFeeStructure,
-                getReceiptNumber,
-
-            }}
-        >
-            {children}
-        </FeeLedgerContext.Provider>
+    const exists = ledgers.find(
+      (l) =>
+        l.studentId === studentId &&
+        l.academicYear === academicYear
     );
+
+    if (exists) {
+      throw new Error("Ledger already exists");
+    }
+
+    setLedgers((prev) => [
+      ...prev,
+      {
+        id: crypto.randomUUID(),
+        studentId,
+        classId,
+        academicYear,
+        baseComponents,
+        createdAt: new Date().toISOString(),
+      },
+    ]);
+  };
+
+  /* =========================
+     Ledger Upsert (Promotion / Fee Activation)
+  ========================= */
+
+  const upsertLedgerFromFeeStructure = (
+    studentId: string,
+    classId: string,
+    academicYear: string,
+    baseComponents: StudentFeeLedger["baseComponents"]
+  ) => {
+    if (isYearClosed(academicYear)) return;
+
+    setLedgers((prev) => {
+      const existing = prev.find(
+        (l) =>
+          l.studentId === studentId &&
+          l.academicYear === academicYear
+      );
+
+      if (!existing) {
+        return [
+          ...prev,
+          {
+            id: crypto.randomUUID(),
+            studentId,
+            classId,
+            academicYear,
+            baseComponents,
+            createdAt: new Date().toISOString(),
+          },
+        ];
+      }
+
+      const hasPayments = payments.some(
+        (p) => p.ledgerId === existing.id
+      );
+
+      if (!hasPayments) {
+        return prev.map((l) =>
+          l.id === existing.id
+            ? { ...l, baseComponents }
+            : l
+        );
+      }
+
+      return prev;
+    });
+  };
+
+  /* =========================
+     Adjustments (BLOCKED if closed)
+  ========================= */
+
+  const addAdjustment = (
+    adjustment: Omit<LedgerAdjustment, "id" | "createdAt">
+  ) => {
+    const ledger = ledgers.find(
+      (l) => l.id === adjustment.ledgerId
+    );
+
+    if (!ledger) throw new Error("Ledger not found");
+
+    if (isYearClosed(ledger.academicYear)) {
+      throw new Error(
+        "Cannot add adjustment to a closed academic year"
+      );
+    }
+
+    setAdjustments((prev) => [
+      ...prev,
+      {
+        ...adjustment,
+        id: crypto.randomUUID(),
+        createdAt: new Date().toISOString(),
+      },
+    ]);
+  };
+
+  /* =========================
+     Payments (ALLOWED if closed)
+  ========================= */
+
+  const addPayment = (
+    payment: Omit<Payment, "id" | "createdAt">
+  ) => {
+    if (payment.amount <= 0) {
+      throw new Error("Payment amount must be positive");
+    }
+
+    const ledger = ledgers.find(
+      (l) => l.id === payment.ledgerId
+    );
+
+    if (!ledger) throw new Error("Ledger not found");
+
+    const closed = isYearClosed(ledger.academicYear);
+
+    
+
+    setPayments((prev) => [
+      ...prev,
+      {
+        ...payment,
+        id: crypto.randomUUID(),
+        createdAt: new Date().toISOString(),
+        isLateSettlement: closed ? true : false,
+        settledInYear: closed ? academicYear : undefined,
+      },
+    ]);
+  };
+
+  /* =========================
+     Expenses (BLOCKED if closed)
+  ========================= */
+
+  const addExpense = (
+    expense: Omit<Expense, "id" | "recordedAt">
+  ) => {
+    if (expense.amount <= 0) {
+      throw new Error("Expense amount must be positive");
+    }
+
+    const expenseYear = getAcademicYearFromDate(
+      new Date(expense.expenseDate)
+    );
+
+    if (isYearClosed(expenseYear)) {
+      throw new Error(
+        "Cannot add expense to a closed academic year"
+      );
+    }
+
+    setExpenses((prev) => [
+      ...prev,
+      {
+        ...expense,
+        id: crypto.randomUUID(),
+        recordedAt: new Date().toISOString(),
+      },
+    ]);
+  };
+
+  /* =========================
+     Ledger Summary
+  ========================= */
+
+  const getLedgerSummary = (ledgerId: string): LedgerSummary => {
+    const ledger = ledgers.find((l) => l.id === ledgerId);
+    if (!ledger) throw new Error("Ledger not found");
+
+    const baseTotal = Object.values(
+      ledger.baseComponents
+    ).reduce((sum, c) => sum + c.amount, 0);
+
+    const adjustmentsTotal = adjustments
+      .filter((a) => a.ledgerId === ledgerId)
+      .reduce((sum, a) => sum + a.amount, 0);
+
+    const paid = payments
+      .filter((p) => p.ledgerId === ledgerId)
+      .reduce((sum, p) => sum + p.amount, 0);
+
+    const finalFee = baseTotal + adjustmentsTotal;
+    const pending = finalFee - paid;
+
+    let status: LedgerSummary["status"] = "PENDING";
+    if (pending <= 0) status = "PAID";
+    else if (paid > 0) status = "PARTIAL";
+
+    return {
+      baseTotal,
+      adjustmentsTotal,
+      finalFee,
+      paid,
+      paidTotal: paid, // compatibility
+      pending,
+      status,
+    };
+  };
+
+  /* =========================
+     Compatibility Helpers
+  ========================= */
+
+  const getLedgerByStudentYear = (
+    studentId: string,
+    academicYear: string
+  ) => {
+    return ledgers.find(
+      (l) =>
+        l.studentId === studentId &&
+        l.academicYear === academicYear
+    );
+  };
+
+  const getReceiptNumber = (paymentId: string) => {
+    return `REC-${paymentId
+      .slice(0, 8)
+      .toUpperCase()}`;
+  };
+
+  /* =========================
+     Provider
+  ========================= */
+
+  return (
+    <FeeLedgerContext.Provider
+      value={{
+        ledgers,
+        adjustments,
+        payments,
+        expenses,
+        createLedger,
+        upsertLedgerFromFeeStructure,
+        addAdjustment,
+        addPayment,
+        addExpense,
+        getLedgerSummary,
+        getLedgerByStudentYear,
+        getReceiptNumber,
+      }}
+    >
+      {children}
+    </FeeLedgerContext.Provider>
+  );
 }
 
 /* =========================
@@ -341,11 +384,11 @@ export function FeeLedgerProvider({ children }: { children: ReactNode }) {
 ========================= */
 
 export function useFeeLedger() {
-    const ctx = useContext(FeeLedgerContext);
-    if (!ctx) {
-        throw new Error(
-            "useFeeLedger must be used inside FeeLedgerProvider"
-        );
-    }
-    return ctx;
+  const ctx = useContext(FeeLedgerContext);
+  if (!ctx) {
+    throw new Error(
+      "useFeeLedger must be used within FeeLedgerProvider"
+    );
+  }
+  return ctx;
 }

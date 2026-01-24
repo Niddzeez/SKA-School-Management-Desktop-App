@@ -5,6 +5,14 @@ import { usePersistentState } from "../hooks/UsePersistentState";
    Types
 ========================= */
 
+type AcademicYearStatus = "OPEN" | "CLOSED";
+
+type AcademicYearMeta = {
+    year: string;
+    status: AcademicYearStatus;
+    closedAt?: string;
+};
+
 type AcademicYearContextType = {
     academicYear: string;
     setAcademicYear: (year: string) => void;
@@ -22,57 +30,97 @@ const AcademicYearContext =
     createContext<AcademicYearContextType | null>(null);
 
 /* =========================
-   Provider
+   Helpers
 ========================= */
 
 function getCurrentAcademicYear() {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = now.getMonth(); // 0 = Jan
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth(); // 0 = Jan
 
-  if (month >= 3) {
-    // Apr–Dec → 2025-26
-    return `${year}-${String(year + 1).slice(-2)}`;
-  } else {
-    // Jan–Mar → 2024-25
-    return `${year - 1}-${String(year).slice(-2)}`;
-  }
+    if (month >= 3) {
+        // Apr–Dec → 2025-26
+        return `${year}-${String(year + 1).slice(-2)}`;
+    } else {
+        // Jan–Mar → 2024-25
+        return `${year - 1}-${String(year).slice(-2)}`;
+    }
 }
 
-
-
 const CURRENT_ACADEMIC_YEAR = getCurrentAcademicYear();
+
+/* =========================
+   Provider
+========================= */
 
 export function AcademicYearProvider({
     children,
 }: {
     children: React.ReactNode;
 }) {
-    const [academicYear, setAcademicYear] = usePersistentState<string>(
-        "academicYear",
-        CURRENT_ACADEMIC_YEAR
-    );
+    /* -------------------------
+       Current academic year
+    ------------------------- */
+    const [academicYear, setAcademicYear] =
+        usePersistentState<string>(
+            "academicYear",
+            CURRENT_ACADEMIC_YEAR
+        );
 
-    // You can later generate this dynamically
+    /* -------------------------
+       Available years (UI)
+    ------------------------- */
     const [availableYears] = useState<string[]>([
         "2025-26",
         "2026-27",
         "2027-28",
     ]);
 
-    // UI-only "closed year" tracking
-    const [closedYears, setClosedYears] = useState<string[]>([]);
+    /* -------------------------
+       Persistent year metadata
+    ------------------------- */
+    const [yearMeta, setYearMeta] =
+        usePersistentState<AcademicYearMeta[]>(
+            "academicYearMeta",
+            availableYears.map((year) => ({
+                year,
+                status:
+                    year === CURRENT_ACADEMIC_YEAR
+                        ? "OPEN"
+                        : "OPEN",
+            }))
+        );
+
+    /* =========================
+       Actions
+    ========================= */
 
     const closeYear = (year: string) => {
-        setClosedYears((prev) =>
-            prev.includes(year) ? prev : [...prev, year]
+        setYearMeta((prev) =>
+            prev.map((y) =>
+                y.year === year
+                    ? {
+                          ...y,
+                          status: "CLOSED",
+                          closedAt:
+                              y.closedAt ??
+                              new Date().toISOString(),
+                      }
+                    : y
+            )
         );
     };
 
     const isYearClosed = (year: string) => {
-        return closedYears.includes(year);
+        return (
+            yearMeta.find((y) => y.year === year)
+                ?.status === "CLOSED"
+        );
     };
 
+    /* =========================
+       Provider
+    ========================= */
 
     return (
         <AcademicYearContext.Provider
@@ -104,7 +152,7 @@ export function useAcademicYear() {
 }
 
 /* =========================
-   Constants (optional export)
+   Constants
 ========================= */
 
 export const CURRENT_YEAR = CURRENT_ACADEMIC_YEAR;

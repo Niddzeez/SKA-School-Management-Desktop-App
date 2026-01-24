@@ -201,7 +201,7 @@ function FeeStatement() {
                             {studentPayments.map((p) => (
                                 <tr key={p.id}>
                                     <tr key={p.id}>
-                                        <td>{getReceiptNumber(p.id, academicYear)}</td>
+                                        <td>{getReceiptNumber(p.id)}</td>
                                         <td>{new Date(p.createdAt).toLocaleDateString()}</td>
                                         <td>₹{p.amount}</td>
                                         <td>{p.mode}</td>

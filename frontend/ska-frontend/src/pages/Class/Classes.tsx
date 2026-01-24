@@ -3,6 +3,7 @@ import { useClasses } from "../../context/ClassContext";
 import { useSections } from "../../context/SectionContext";
 import { useTeachers } from "../../context/TeacherContext";
 import "../../styles/Classes.css";
+import ClassRegisterModal from "./ClassRegisterModal";
 
 function Classes() {
   const { classes, addClass } = useClasses();
@@ -13,6 +14,11 @@ function Classes() {
   const [newSectionNames, setNewSectionNames] = useState<
     Record<string, string>
   >({});
+
+  const [showRegisterModal, setShowRegisterModal] = useState(false);
+  /* =========================
+     Add Class
+  ========================= */
 
   const handleAddClass = () => {
     if (!newClassName.trim()) return;
@@ -25,25 +31,40 @@ function Classes() {
     setNewClassName("");
   };
 
-  const handleAddSection = (classId: string) => {
-    const sectionName = newSectionNames[classId];
+  /* =========================
+     Add Section
+  ========================= */
+
+  const handleAddSection = (classID: string) => {
+    const sectionName = newSectionNames[classID];
     if (!sectionName?.trim()) return;
 
     addSection({
       id: crypto.randomUUID(),
-      classID: classId,
+      classID,
       name: sectionName.trim(),
     });
 
     setNewSectionNames((prev) => ({
       ...prev,
-      [classId]: "",
+      [classID]: "",
     }));
   };
+
+  /* =========================
+     Render
+  ========================= */
 
   return (
     <div className="page-container">
       <h1>Classes & Sections</h1>
+
+      <button
+  className="primary"
+  onClick={() => setShowRegisterModal(true)}
+>
+  Generate Class Register
+</button>
 
       {/* Add Class */}
       <div className="add-class">
@@ -89,8 +110,6 @@ function Classes() {
                         </div>
                       </div>
 
-                      
-
                       <select
                         value={sec.classTeacherID || ""}
                         onChange={(e) =>
@@ -101,7 +120,10 @@ function Classes() {
                         {teachers
                           .filter((t) => t.status === "Active")
                           .map((teacher) => (
-                            <option key={teacher.id} value={teacher.id}>
+                            <option
+                              key={teacher.id}
+                              value={teacher.id}
+                            >
                               {teacher.firstName} {teacher.lastName}
                             </option>
                           ))}
@@ -127,11 +149,20 @@ function Classes() {
                 <button onClick={() => handleAddSection(cls.id)}>
                   Add Section
                 </button>
+
+                
               </div>
             </div>
           );
         })}
       </div>
+
+      {/* Register Modal (rendered ONCE) */}
+      {showRegisterModal && (
+        <ClassRegisterModal
+          onClose={() => setShowRegisterModal(false)}
+        />
+      )}
     </div>
   );
 }

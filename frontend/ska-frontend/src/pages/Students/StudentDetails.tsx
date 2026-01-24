@@ -608,6 +608,13 @@ function StudentDetails() {
             onChange={(e) => setReference(e.target.value)}
           />
 
+          {isYearClosed(ledger.academicYear) && (
+            <p className="warning">
+              This payment will be recorded as a late settlement.
+            </p>
+          )}
+
+
           <button
             disabled={
               isReadOnly ||
