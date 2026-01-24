@@ -5,6 +5,8 @@ import { useSections } from "../../context/SectionContext";
 import { useStudents } from "../../context/StudentContext";
 import { useTeachers } from "../../context/TeacherContext";
 import { useAcademicYear } from "../../context/AcademicYearContext";
+import { exportToCSV } from "../../utils/exportTOCSV";
+
 
 type Props = {
     onClose: () => void;
@@ -127,6 +129,41 @@ export default function ClassRegisterModal({ onClose }: Props) {
         printReport(printData);
     };
 
+
+    const handleExportCSV = () => {
+        if (!selectedClass || !selectedSection) return;
+
+        const teacherName =
+            teachers.find(
+                (t) => t.id === selectedSection.classTeacherID
+            )?.firstName +
+            " " +
+            teachers.find(
+                (t) => t.id === selectedSection.classTeacherID
+            )?.lastName || "Not Assigned";
+
+        const sorted = [...classStudents].sort((a, b) => {
+            const f = a.firstName.localeCompare(b.firstName);
+            if (f !== 0) return f;
+            return a.lastName.localeCompare(b.lastName);
+        });
+
+        const rows = sorted.map((s, idx) => ({
+            "Roll No": idx + 1,
+            "First Name": s.firstName,
+            "Last Name": s.lastName,
+            Phone: s.phoneNumber ?? s.father?.phone ?? "",
+            Class: selectedClass.ClassName,
+            Section: selectedSection.name,
+        }));
+
+        exportToCSV(
+            rows,
+            `Class-Register-${academicYear}-${selectedClass.ClassName}-${selectedSection.name}.csv`
+        );
+    };
+
+
     /* =========================
        Render
     ========================= */
@@ -179,10 +216,20 @@ export default function ClassRegisterModal({ onClose }: Props) {
                     >
                         Generate PDF
                     </button>
+
+                    <button
+                        className="secondary"
+                        onClick={handleExportCSV}
+                        disabled={!selectedClassID || !selectedSectionID}
+                    >
+                        Export CSV
+                    </button>
+
                     <button className="secondary" onClick={onClose}>
                         Cancel
                     </button>
                 </div>
+
             </div>
         </div>
     );

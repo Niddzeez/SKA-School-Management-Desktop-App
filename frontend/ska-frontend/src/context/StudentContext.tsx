@@ -7,9 +7,12 @@ type StudentContextType = {
   addStudent: (student: Student) => void;
   UpdateStudentStatus: (id: string, status: StudentStatus) => void;
   assignStudenttoSection: (studentID: string, classID: string, sectionID: string) => void;
+  updateStudent: (studentId: string, updates: StudentUpdate) => void;
 };
 
 const StudentContext = createContext<StudentContextType | null>(null);
+type StudentUpdate = Partial<Omit<Student, "id">>;
+
 
 export function StudentProvider({ children }: { children: React.ReactNode }) {
   const [students, setStudents] =
@@ -47,8 +50,17 @@ export function StudentProvider({ children }: { children: React.ReactNode }) {
 
   };
 
+  const updateStudent = (studentId: string, updates: StudentUpdate) => {
+  setStudents((prev) =>
+    prev.map((s) =>
+      s.id === studentId ? { ...s, ...updates } : s
+    )
+  );
+};
+
+
   return (
-    <StudentContext.Provider value={{ students, addStudent, UpdateStudentStatus: updateStudentStatus, assignStudenttoSection }}>
+    <StudentContext.Provider value={{ students, addStudent, UpdateStudentStatus: updateStudentStatus, assignStudenttoSection , updateStudent}}>
       {children}
     </StudentContext.Provider>
   );

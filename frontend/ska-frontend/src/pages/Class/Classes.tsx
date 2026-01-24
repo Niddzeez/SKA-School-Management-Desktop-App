@@ -1,35 +1,62 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useClasses } from "../../context/ClassContext";
 import { useSections } from "../../context/SectionContext";
 import { useTeachers } from "../../context/TeacherContext";
 import "../../styles/Classes.css";
 import ClassRegisterModal from "./ClassRegisterModal";
 
+/* =========================
+   Fixed Class List
+========================= */
+
+const FIXED_CLASSES = [
+  "Playgroup",
+  "Nursery",
+  "LKG",
+  "UKG",
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+];
+
 function Classes() {
   const { classes, addClass } = useClasses();
   const { sections, addSection, assignClassTeacher } = useSections();
   const { teachers } = useTeachers();
 
-  const [newClassName, setNewClassName] = useState("");
   const [newSectionNames, setNewSectionNames] = useState<
     Record<string, string>
   >({});
 
   const [showRegisterModal, setShowRegisterModal] = useState(false);
+
   /* =========================
-     Add Class
+     Seed Fixed Classes (SAFE)
   ========================= */
 
-  const handleAddClass = () => {
-    if (!newClassName.trim()) return;
+  useEffect(() => {
+    FIXED_CLASSES.forEach((className) => {
+      const exists = classes.find(
+        (c) => c.ClassName === className
+      );
 
-    addClass({
-      id: crypto.randomUUID(),
-      ClassName: newClassName.trim(),
+      if (!exists) {
+        addClass({
+          id: crypto.randomUUID(),
+          ClassName: className,
+        });
+      }
     });
-
-    setNewClassName("");
-  };
+  }, [classes, addClass]);
 
   /* =========================
      Add Section
@@ -52,6 +79,16 @@ function Classes() {
   };
 
   /* =========================
+     Sorted Classes
+  ========================= */
+
+  const sortedClasses = [...classes].sort(
+    (a, b) =>
+      FIXED_CLASSES.indexOf(a.ClassName) -
+      FIXED_CLASSES.indexOf(b.ClassName)
+  );
+
+  /* =========================
      Render
   ========================= */
 
@@ -60,26 +97,15 @@ function Classes() {
       <h1>Classes & Sections</h1>
 
       <button
-  className="primary"
-  onClick={() => setShowRegisterModal(true)}
->
-  Generate Class Register
-</button>
-
-      {/* Add Class */}
-      <div className="add-class">
-        <input
-          type="text"
-          placeholder="Enter class / grade"
-          value={newClassName}
-          onChange={(e) => setNewClassName(e.target.value)}
-        />
-        <button onClick={handleAddClass}>Add Class</button>
-      </div>
+        className="primary"
+        onClick={() => setShowRegisterModal(true)}
+      >
+        Generate Class Register
+      </button>
 
       {/* Class Cards */}
       <div className="class-list">
-        {classes.map((cls) => {
+        {sortedClasses.map((cls) => {
           const classSections = sections.filter(
             (sec) => sec.classID === cls.id
           );
@@ -113,18 +139,26 @@ function Classes() {
                       <select
                         value={sec.classTeacherID || ""}
                         onChange={(e) =>
-                          assignClassTeacher(sec.id, e.target.value)
+                          assignClassTeacher(
+                            sec.id,
+                            e.target.value
+                          )
                         }
                       >
-                        <option value="">Assign Teacher</option>
+                        <option value="">
+                          Assign Teacher
+                        </option>
                         {teachers
-                          .filter((t) => t.status === "Active")
+                          .filter(
+                            (t) => t.status === "Active"
+                          )
                           .map((teacher) => (
                             <option
                               key={teacher.id}
                               value={teacher.id}
                             >
-                              {teacher.firstName} {teacher.lastName}
+                              {teacher.firstName}{" "}
+                              {teacher.lastName}
                             </option>
                           ))}
                       </select>
@@ -146,18 +180,18 @@ function Classes() {
                     }))
                   }
                 />
-                <button onClick={() => handleAddSection(cls.id)}>
+                <button
+                  onClick={() => handleAddSection(cls.id)}
+                >
                   Add Section
                 </button>
-
-                
               </div>
             </div>
           );
         })}
       </div>
 
-      {/* Register Modal (rendered ONCE) */}
+      {/* Register Modal */}
       {showRegisterModal && (
         <ClassRegisterModal
           onClose={() => setShowRegisterModal(false)}

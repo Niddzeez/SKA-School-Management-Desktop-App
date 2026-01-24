@@ -1,172 +1,215 @@
 import { useState } from "react";
 import { useStudents } from "../../context/StudentContext";
 import { useClasses } from "../../context/ClassContext";
-import { useFeeLedger } from "../../context/FeeLedgerContext";
-import { useFeeStructures } from "../../context/FeeStructureContext";
 import { useAcademicYear } from "../../context/AcademicYearContext";
+import "./BulkPromotion.css";
 
-const getNextAcademicYear = (year: string) => {
+/* =========================
+   School Promotion Order
+   (Stops at 10th)
+========================= */
+
+const SCHOOL_CLASS_ORDER = [
+    "Playgroup",
+    "Nursery",
+    "LKG",
+    "UKG",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+];
+
+/* =========================
+   Helpers
+========================= */
+
+function getNextAcademicYear(year: string): string {
     const [start, end] = year.split("-").map(Number);
-    return `${start + 1}-${end + 1}`;
-};
+    return `${start + 1}-${String(end + 1).padStart(2, "0")}`;
+}
 
 function BulkPromotion() {
-    const { students, assignStudenttoSection } = useStudents();
+    const { students, updateStudent } = useStudents();
     const { classes } = useClasses();
-    const { getLedgerByStudentYear, getLedgerSummary, upsertLedgerFromFeeStructure } =
-        useFeeLedger();
-    const { getActiveFeeStructure } = useFeeStructures();
-    const { academicYear } = useAcademicYear();
+    const { academicYear, isPromotionLocked, lockPromotion, getPromotionSummary, setPromotionSummaryForYear
+    } = useAcademicYear();
 
-    const [fromClassId, setFromClassId] = useState("");
-    const [fromAcademicYear, setFromAcademicYear] = useState(academicYear);
+    const [fromAcademicYear] = useState(academicYear);
 
+    const summary = getPromotionSummary(fromAcademicYear);
 
-    const getNextClassId = (currentClassId: string) => {
-        const sorted = [...classes].sort(
-            (a, b) => Number(a.ClassName) - Number(b.ClassName)
+    /* =========================
+       Resolve Next Class
+    ========================= */
+
+    const getNextClassID = (
+        currentClassID: string
+    ): string | null => {
+        const currentClass = classes.find(
+            (c) => c.id === currentClassID
+        );
+        if (!currentClass) return null;
+
+        const index = SCHOOL_CLASS_ORDER.indexOf(
+            currentClass.ClassName
         );
 
-        const index = sorted.findIndex((c) => c.id === currentClassId);
-        if (index === -1 || index === sorted.length - 1) return null;
+        // Not a school class OR already in 10th
+        if (
+            index === -1 ||
+            index === SCHOOL_CLASS_ORDER.length - 1
+        ) {
+            return null;
+        }
 
-        return sorted[index + 1].id;
+        const nextClassName =
+            SCHOOL_CLASS_ORDER[index + 1];
+
+        const nextClass = classes.find(
+            (c) => c.ClassName === nextClassName
+        );
+
+        return nextClass?.id ?? null;
     };
 
-    const eligibleStudents = students.filter((student) => {
-        if (student.status !== "Active") return false;
-
-        const ledger = getLedgerByStudentYear(
-            student.id,
-            fromAcademicYear
-        );
-
-        if (!ledger) return false;
-
-        return ledger.classId === fromClassId;
-    });
+    /* =========================
+       Bulk Promotion
+    ========================= */
 
 
-    const handleBulkPromote = () => {
-        if (!fromClassId) return;
 
-        const nextClassId = getNextClassId(fromClassId);
-        if (!nextClassId) {
-            alert("Selected class is the final class.");
+    const handlePromotion = () => {
+
+        if (isPromotionLocked(fromAcademicYear)) {
+            alert(
+                "Bulk promotion has already been completed for this academic year."
+            );
             return;
         }
 
-        const nextAcademicYear = getNextAcademicYear(fromAcademicYear);
+        const nextAcademicYear =
+            getNextAcademicYear(fromAcademicYear);
 
-        eligibleStudents.forEach((student) => {
-            // 1️⃣ Promote student
-            assignStudenttoSection(student.id, nextClassId, "");
+        let promoted = 0;
+        let alumniMarked = 0;
 
-            // 2️⃣ Create new ledger if fee structure exists
-            const fs = getActiveFeeStructure(
-                nextClassId,
-                nextAcademicYear
+        students.forEach((student) => {
+            if (!student.id) return;
+            if (student.status !== "Active") return;
+            if (!student.classID) return;
+
+            const nextClassID = getNextClassID(
+                student.classID
             );
 
-            if (!fs) return;
+            // 🎓 Completed Class 10 → Alumni
+            if (nextClassID === null) {
+                updateStudent(student.id, {
+                    status: "Alumni",
+                });
+                alumniMarked++;
+                return;
+            }
 
-            upsertLedgerFromFeeStructure(
-                student.id,
-                nextClassId,
-                nextAcademicYear,
-                fs.components.map((c) => ({
-                    name: c.name,
-                    amount: c.amount,
-                }))
-            );
+            // Promote student
+            updateStudent(student.id, {
+                classID: nextClassID,
+                sectionID: "", // reset section
+            });
+
+            promoted++;
         });
 
+        setPromotionSummaryForYear(fromAcademicYear, {
+            promotedCount: promoted,
+            alumniCount: alumniMarked,
+            promotedAt: new Date().toISOString(),
+        });
+
+        lockPromotion(fromAcademicYear);
+
         alert(
-            `Promoted ${eligibleStudents.length} students to next class (${nextAcademicYear})`
+            `Bulk Promotion Completed\n\n` +
+            `Promoted Students: ${promoted}\n` +
+            `Marked as Alumni (Class 10 passed): ${alumniMarked}\n` +
+            `New Academic Year: ${nextAcademicYear}`
         );
+
+
     };
+
+    /* =========================
+       Render
+    ========================= */
 
     return (
         <div className="page-container">
             <h1>Bulk Promotion</h1>
 
-            <p>
-                Promote all students from one class to the next academic year.
-                <br />
-                <strong>Pending dues will remain payable in the old year.</strong>
-            </p>
 
-            <select
-                value={fromClassId}
-                onChange={(e) => setFromClassId(e.target.value)}
-            >
-                <option value="">Select Class</option>
-                {classes.map((cls) => (
-                    <option key={cls.id} value={cls.id}>
-                        Class {cls.ClassName}
-                    </option>
-                ))}
-            </select>
-
-            <select
-                value={fromAcademicYear}
-                onChange={(e) => setFromAcademicYear(e.target.value)}
-            >
-                <option value="2026-27">2026-27</option>
-                <option value="2027-28">2027-28</option>
-            </select>
-
-
-            {fromClassId && (
-                <>
-                    <h3>Students to be Promoted</h3>
-
-                    {eligibleStudents.length === 0 && (
-                        <p>No active students found.</p>
-                    )}
-
-                    {eligibleStudents.length > 0 && (
-                        <table className="payments-table">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Pending ({academicYear})</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {eligibleStudents.map((s) => {
-                                    const ledger = getLedgerByStudentYear(
-                                        s.id,
-                                        academicYear
-                                    );
-                                    const pending = ledger
-                                        ? getLedgerSummary(ledger.id).pending
-                                        : 0;
-
-                                    return (
-                                        <tr key={s.id}>
-                                            <td>
-                                                {s.firstName} {s.lastName}
-                                            </td>
-                                            <td>
-                                                {pending > 0 ? `₹${pending}` : "—"}
-                                            </td>
-                                        </tr>
-                                    );
-                                })}
-                            </tbody>
-                        </table>
-                    )}
-
-                    <button
-                        className="primary-btn"
-                        onClick={handleBulkPromote}
-                        style={{ marginTop: "12px" }}
-                    >
-                        Promote All Students
-                    </button>
-                </>
+            {/* Promotion Summary */}
+            {summary && (
+                <div className="summary-box">
+                    <h3>Promotion Summary</h3>
+                    <p>
+                        <strong>Promoted Students:</strong>{" "}
+                        {summary.promotedCount}
+                    </p>
+                    <p>
+                        <strong>Alumni (Class 10 passed):</strong>{" "}
+                        {summary.alumniCount}
+                    </p>
+                    <p>
+                        <strong>Promotion Date:</strong>{" "}
+                        {new Date(
+                            summary.promotedAt
+                        ).toLocaleString()}
+                    </p>
+                </div>
             )}
+
+            <div className="promotion-info">
+                <p>
+                    Promoting students from{" "}
+                    <strong>{fromAcademicYear}</strong> to{" "}
+                    <strong>
+                        {getNextAcademicYear(fromAcademicYear)}
+                    </strong>
+                </p>
+
+                <p className="warning">
+                    Students completing Class 10 will be marked
+                    as <strong>Alumni</strong>.
+                </p>
+
+                <p className="note">
+                    Classes 11 and 12 are treated as a separate
+                    academic flow and are not auto-promoted.
+                </p>
+            </div>
+
+
+
+            <button
+                className="danger"
+                onClick={handlePromotion}
+                disabled={isPromotionLocked(fromAcademicYear)}
+            >
+                Promote All Eligible Students
+            </button>
+            {isPromotionLocked(fromAcademicYear) && (
+                <p className="note">
+                    Promotion already completed for this academic year.
+                </p>
+            )}
+
         </div>
     );
 }

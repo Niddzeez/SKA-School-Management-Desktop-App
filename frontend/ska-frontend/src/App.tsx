@@ -26,39 +26,40 @@ import PendingFees from "./pages/Fees/PendingFees";
 function App() {
   return (
     <FeeLedgerProvider>
-    <FeeStructureProvider>
-      <ClassProvider>
-        <SectionProvider>
-          <TeacherProvider>
-            <StudentProvider>
-              <BrowserRouter>
-                <Routes>
-                  <Route element={<Layout />}>
-                    <Route path="/" element={<Dashboard />} />
-                    <Route path="/students" element={<Students />} />
-                    <Route path="/teachers" element={<Teachers />} />
-                    <Route path="/students/:id" element={<StudentDetails />} />
-                    <Route path="/teachers/:id" element={<TeacherDetails />} />
-                    <Route path="/admissionForm" element={<AdmissionForm />} />
-                    <Route path="/teachersForm" element={<TeachersForm />} />
-                    <Route path="/allclasses" element={<Classes />} />
-                    <Route path="/feestructure" element={<FeeStructures/>} />
-                    <Route path="/bulkpromotion" element={<BulkPromotion/>}/>
-                    <Route path="/outstandingdues" element={<OutstandingDues/>}/>
-                    <Route path="/students/:id/statement" element={<FeeStatement />} />
-                    <Route path="/receipts/:paymentId" element={<PaymentReceipt />} />
-                    <Route path="/expenses" element={<Expenses/>}/>
-                    <Route path="/reports/*" element={<ReportsPage/>} />
-                    <Route path="/dashboard" element={<Dashboard />} />
-                    <Route path="/dashboard/pending-fees" element={<PendingFees />} />
-                  </Route>
-                </Routes>
-              </BrowserRouter>
-            </StudentProvider>
-          </TeacherProvider>
-        </SectionProvider>
-      </ClassProvider>
-    </FeeStructureProvider>
+      <FeeStructureProvider>
+        <ClassProvider>
+          <SectionProvider>
+            <TeacherProvider>
+              <StudentProvider>
+                <BrowserRouter>
+                  <Routes>
+                    <Route element={<Layout />}>
+                      <Route path="/" element={<Dashboard />} />
+                      <Route path="/students" element={<Students />} />
+                      <Route path="/teachers" element={<Teachers />} />
+                      <Route path="/students/:id" element={<StudentDetails />} />
+                      <Route path="/teachers/:id" element={<TeacherDetails />} />
+                      <Route path="/admissionForm" element={<AdmissionForm />} />
+                      <Route path="/teachersForm" element={<TeachersForm />} />
+                      <Route path="/allclasses" element={<Classes />} />
+                      <Route path="/feestructure" element={<FeeStructures />} />
+                      <Route path="/bulkpromotion" element={<BulkPromotion />} />
+                      <Route path="/outstandingdues" element={<OutstandingDues />} />
+                      <Route path="/students/:id/statement" element={<FeeStatement />} />
+                      <Route path="/receipts/:paymentId" element={<PaymentReceipt />} />
+                      <Route path="/expenses" element={<Expenses />} />
+                      <Route path="/reports/*" element={<ReportsPage />} />
+                      <Route path="/dashboard" element={<Dashboard />} />
+                      <Route path="/dashboard/pending-fees" element={<PendingFees />} />
+                      <Route path="/admin/bulk-promotion" element={<BulkPromotion />} />
+                    </Route>
+                  </Routes>
+                </BrowserRouter>
+              </StudentProvider>
+            </TeacherProvider>
+          </SectionProvider>
+        </ClassProvider>
+      </FeeStructureProvider>
     </FeeLedgerProvider>
   );
 }
