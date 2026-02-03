@@ -2,8 +2,8 @@
 
 import { useFeeLedger } from "../../../context/FeeLedgerContext";
 import { getAcademicYearRange } from "../Utils/reportDateUtils";
-import "./CombinedReports.css";
-import { printReport } from "../Utils/printUtils";
+import "../../../components/print/report-print.css";
+import { printReport } from "../Utils/PrintUtils";
 import { useStudents } from "../../../context/StudentContext";
 
 
@@ -13,6 +13,8 @@ type Props = {
 };
 
 function MonthlyIncomeVsExpense({
+
+
     academicYear,
     selectedMonth,
 }: Props) {
@@ -78,49 +80,52 @@ function MonthlyIncomeVsExpense({
     };
 
     const printData = {
-  title: "Monthly Income vs Expense Report",
-  meta: {
-    academicYear,
-    reportType: "COMBINED",
-    granularity: "MONTHLY",
-    periodLabel: monthLabel,
-  },
-  sections: [
-    {
-      title: "Income Details",
-      headers: ["Description", "Amount"],
-      rows: monthlyIncome.map((p) => ({
-        columns: [
-          `${new Date(p.createdAt).toLocaleDateString()} — ${getStudentName(
-            p.studentId
-          )} — ${p.mode}`,
-          `₹${p.amount}`,
-        ],
-      })),
-    },
-    {
-      title: "Expense Details",
-      headers: ["Description", "Amount"],
-      rows: monthlyExpenses.map((e) => ({
-        columns: [
-          `${new Date(e.expenseDate).toLocaleDateString()} — ${e.category} — ${e.paidTo}`,
-          `₹${e.amount}`,
-        ],
-      })),
-    },
-    {
-      title: "Summary",
-      headers: ["Metric", "Value"],
-      rows: [
-        { columns: ["Total Income", `₹${totalIncome}`] },
-        { columns: ["Total Expense", `₹${totalExpense}`] },
-        {
-          columns: ["Net Result", `₹${totalIncome - totalExpense}`],
+        title: "Monthly Income vs Expense Report",
+        meta: {
+            academicYear,
+            reportType: "COMBINED",
+            granularity: "MONTHLY",
+            periodLabel: monthLabel,
         },
-      ],
-    },
-  ],
-} as const;
+        sections: [
+            {
+                title: "Income Details",
+                headers: ["Date", "Student", "Mode", "Amount"],
+                rows: monthlyIncome.map((p) => ({
+                    columns: [
+                        new Date(p.createdAt).toLocaleDateString(),
+                        getStudentName(p.studentId),
+                        p.mode,
+                        `₹${p.amount}`,
+                    ],
+                })),
+            },
+
+            {
+                title: "Expense Details",
+                headers: ["Date", "Category", "Paid To", "Amount"],
+                rows: monthlyExpenses.map((e) => ({
+                    columns: [
+                        new Date(e.expenseDate).toLocaleDateString(),
+                        e.category,
+                        e.paidTo,
+                        `₹${e.amount}`,
+                    ],
+                })),
+            },
+            {
+                title: "Summary",
+                headers: ["Metric", "Value"],
+                rows: [
+                    { columns: ["Total Income", `₹${totalIncome}`] },
+                    { columns: ["Total Expense", `₹${totalExpense}`] },
+                    {
+                        columns: ["Net Result", `₹${totalIncome - totalExpense}`],
+                    },
+                ],
+            },
+        ],
+    } as const;
 
 
 

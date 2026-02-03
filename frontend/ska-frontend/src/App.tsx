@@ -22,6 +22,8 @@ import PaymentReceipt from "./pages/Fees/PaymentReceipt";
 import Expenses from "./pages/Expenses/Expenses";
 import ReportsPage from "./pages/Reports/ReportsPage";
 import PendingFees from "./pages/Fees/PendingFees";
+import AdmissionPrint from "./pages/Students/AdmissionPrint";
+import BonafideCertificate from "./pages/Students/BonafideCertificate";
 
 function App() {
   return (
@@ -33,6 +35,10 @@ function App() {
               <StudentProvider>
                 <BrowserRouter>
                   <Routes>
+                    <Route path="/admission/print" element={<AdmissionPrint />} />
+                  </Routes>
+                  <Routes>
+
                     <Route element={<Layout />}>
                       <Route path="/" element={<Dashboard />} />
                       <Route path="/students" element={<Students />} />
@@ -52,6 +58,7 @@ function App() {
                       <Route path="/dashboard" element={<Dashboard />} />
                       <Route path="/dashboard/pending-fees" element={<PendingFees />} />
                       <Route path="/admin/bulk-promotion" element={<BulkPromotion />} />
+                      <Route path="/students/admission/print" element={<AdmissionPrint />} />
                     </Route>
                   </Routes>
                 </BrowserRouter>

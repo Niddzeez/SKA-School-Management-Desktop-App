@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import StudentTable from "../../components/studentTables";
 import { useStudents } from "../../context/StudentContext";
 import "../../styles/Students.css";
@@ -6,12 +6,34 @@ import "../../styles/Students.css";
 // Students Page Component
 
 function Students() {
-  const { students } = useStudents();   
+  const { students } = useStudents();
   const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState<
+    "ACTIVE" | "WITHDRAWN" | "ALUMNI" | "ALL"
+  >("ACTIVE");
+
 
   // Filter active students
 
-  const activeStudents = students.filter((student) => student.status === "Active"); 
+  const visibleStudents = students.filter((student) => {
+    switch (statusFilter) {
+      case "ACTIVE":
+        return student.status === "Active";
+
+      case "WITHDRAWN":
+        return student.status === "Withdrawn";
+
+      case "ALUMNI":
+        return student.status === "Alumni";
+
+      case "ALL":
+        return true;
+
+      default:
+        return false;
+    }
+  });
+  const activeStudents = visibleStudents;
 
   // Filter students based on search query
 
@@ -38,12 +60,32 @@ function Students() {
     );
   });
 
+  useEffect(() => {
+    setSearch("");
+  }, [statusFilter]);
+
+
   // Render the Students Page
 
   return (
     <div className="students-page">
       <div className="students-header">
         <h1>Students</h1>
+
+        <div className="status-filter">
+          <select
+            value={statusFilter}
+            onChange={(e) =>
+              setStatusFilter(e.target.value as any)
+            }
+          >
+            <option value="ACTIVE">Active Students</option>
+            <option value="WITHDRAWN">Withdrawn / Inactive</option>
+            <option value="ALUMNI">Alumni</option>
+            <option value="ALL">All Students</option>
+          </select>
+        </div>
+
 
         <div className="search-wrapper">
           <input

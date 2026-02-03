@@ -3,8 +3,8 @@
 import { useFeeLedger } from "../../../context/FeeLedgerContext";
 import { useStudents } from "../../../context/StudentContext";
 import { getAcademicYearRange } from "../Utils/reportDateUtils";
-import { printReport } from "../Utils/printUtils";
-import "./CombinedReports.css";
+import { printReport } from "../Utils/PrintUtils";
+import "../../../components/print/report-print.css";
 
 type Props = {
   academicYear: string;
@@ -71,14 +71,36 @@ function YearlyIncomeVsExpense({ academicYear }: Props) {
   },
   sections: [
     {
+      title: "Income Details",
+      headers: ["Date", "Student", "Mode", "Amount"],
+      rows: yearlyIncome.map((p) => ({
+        columns: [
+          p.createdAt,
+          `${getStudentName(p.studentId)} — ${p.mode}`,
+          `₹${p.amount}`,
+        ],
+      })),
+    },
+    {
+      title: "Expense Details",
+      headers: ["Date", "Category", "Paid To", "Mode", "Amount"],
+      rows: yearlyExpenses.map((e) => ({
+        columns: [
+          e.expenseDate,
+          e.category,
+          e.paidTo,
+          e.mode,
+          `₹${e.amount}`,
+        ],
+      })),
+    },
+    {
       title: "Summary",
-      headers: ["Metric", "Amount"],
+      headers: ["Metric", "Value"],
       rows: [
         { columns: ["Total Income", `₹${totalIncome}`] },
         { columns: ["Total Expense", `₹${totalExpense}`] },
-        {
-          columns: ["Net Result", `₹${totalIncome - totalExpense}`],
-        },
+        { columns: ["Net Result", `₹${netResult}`] },
       ],
     },
   ],

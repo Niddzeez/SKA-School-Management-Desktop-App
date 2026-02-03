@@ -7,7 +7,7 @@ export type ParentInfo = {
   income?: number;
 };
 
-export type StudentStatus = "Active" | "Inactive" | "Alumni" | "Transferred";
+export type StudentStatus = "Active" | "Inactive" | "Alumni" | "Transferred" | "Withdrawn" | "Expelled";
 
 export type Address = {
   addressLine?: string;

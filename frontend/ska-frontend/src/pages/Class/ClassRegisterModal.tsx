@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { printReport } from "../Reports/Utils/printUtils";
+import { printReport } from "../Reports/Utils/PrintUtils";
 import { useClasses } from "../../context/ClassContext";
 import { useSections } from "../../context/SectionContext";
 import { useStudents } from "../../context/StudentContext";

@@ -2,8 +2,8 @@
 
 import { useFeeLedger } from "../../../context/FeeLedgerContext";
 import { getAcademicYearRange } from "../Utils/reportDateUtils";
-import "./expenseReports.css";
-import { printReport } from "../Utils/printUtils";
+import "../../../components/print/report-print.css";
+import { printReport } from "../Utils/PrintUtils";
 
 
 type Props = {
@@ -55,10 +55,11 @@ function DailyExpenseReport({ academicYear, selectedDate }: Props) {
         sections: [
             {
                 title: "Expense Details",
-                headers: ["Date", "Category", "Amount"],
+                headers: ["Date", "Paid to", "Category", "Amount"],
                 rows: dailyExpenses.map((e) => ({
                     columns: [
                         new Date(e.expenseDate).toLocaleDateString(),
+                        e.paidTo,
                         e.category,
                         `₹${e.amount}`,
                     ],

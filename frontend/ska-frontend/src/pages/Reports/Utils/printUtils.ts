@@ -21,7 +21,7 @@ export type PrintSection = {
 export type PrintMeta = {
   academicYear: string;
   reportType: "INCOME" | "EXPENSE" | "COMBINED" | "STATEMENT";
-  granularity: "DAILY" | "MONTHLY" | "HALF_YEARLY" | "YEARLY";
+  granularity: "DAILY" | "MONTHLY" | "HALF_YEARLY" | "YEARLY" | "CLASS_WISE";
   periodLabel: string; // "15 Mar 2027", "Jan 2026", "H1", etc
 };
 

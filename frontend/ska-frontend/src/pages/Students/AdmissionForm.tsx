@@ -3,12 +3,21 @@ import InputBox from "../../components/FormInputBoxes";
 import { useState } from "react";
 import { mapFormDataToStudent } from "../../mappers/formtostudents";
 import type { Student } from "../../types/Student";
+import { useNavigate } from "react-router-dom";
 import { useStudents } from "../../context/StudentContext";
+import { useClasses } from "../../context/ClassContext";
+import { useSections } from "../../context/SectionContext";
+
 
 function AdmissionForm() {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const { addStudent } = useStudents();
+  const { classes } = useClasses();
+  const { sections } = useSections();
+
+
+  const navigate = useNavigate();
 
   const initialFormData = {
     firstName: "",
@@ -24,6 +33,9 @@ function AdmissionForm() {
     grade: "",
     feeDiscount: "",
     admissionDate: "",
+    classID: "",
+    sectionID: "",
+
 
     religion: "",
     caste: "",
@@ -121,16 +133,33 @@ function AdmissionForm() {
     }
 
     const student: Student = mapFormDataToStudent(formData);
+
     addStudent(student);
-    console.log("STORED STUDENT:", student);
+
+    // 👉 Navigate to print page
+    navigate("/admission/print", {
+      state: {
+        student,
+        academicYear: student.academic.dateOfAdmission?.slice(0, 4) || "",
+      },
+    });
 
     setFormData(initialFormData);
-    
     setErrors({});
-    setSuccessMessage("Admission submitted successfully");
-
-    setTimeout(() => setSuccessMessage(""), 3000);
   }
+
+  const classOptions = classes.map((c) => ({
+    label: c.ClassName,
+    value: c.id,
+  }));
+
+  const sectionOptions = sections
+    .filter((s) => s.classID === formData.classID)
+    .map((s) => ({
+      label: s.name,
+      value: s.id,
+    }));
+
 
   return (
     <form className="admission-form-page" onSubmit={handleSubmit}>
@@ -267,14 +296,6 @@ function AdmissionForm() {
             onChange={handleChange}
           />
           <InputBox
-            label="Grade Applying For"
-            name="grade"
-            type="select"
-            options={["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]}
-            value={formData.grade}
-            onChange={handleChange}
-          />
-          <InputBox
             label="Fees Discount %"
             name="feeDiscount"
             type="text"
@@ -288,6 +309,57 @@ function AdmissionForm() {
             value={formData.admissionDate}
             onChange={handleChange}
           />
+          <InputBox
+            label="Class"
+            name="classID"
+            type="select"
+            options={classes.map((c) => c.ClassName)}
+            value={
+              classes.find((c) => c.id === formData.classID)?.ClassName || ""
+            }
+            onChange={(name, value) => {
+              const selectedClass = classes.find(
+                (c) => c.ClassName === value
+              );
+
+              setFormData((prev) => ({
+                ...prev,
+                classID: selectedClass?.id || "",
+                sectionID: "",
+              }));
+            }}
+            required
+          />
+
+          <InputBox
+            label="Section"
+            name="sectionID"
+            type="select"
+            options={sections
+              .filter((s) => s.classID === formData.classID)
+              .map((s) => s.name)}
+            value={
+              sections.find((s) => s.id === formData.sectionID)?.name || ""
+            }
+            onChange={(name, value) => {
+              const selectedSection = sections.find(
+                (s) =>
+                  s.classID === formData.classID &&
+                  s.name === value
+              );
+
+              setFormData((prev) => ({
+                ...prev,
+                sectionID: selectedSection?.id || "",
+              }));
+            }}
+            required
+          />
+
+
+
+
+
         </div>
       </div>
 

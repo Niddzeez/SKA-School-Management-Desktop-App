@@ -1,12 +1,10 @@
 import DashboardKPIs from "../Dashboard/DashboardKPI";
-import { useAcademicYear } from "../../context/AcademicYearContext";
 import { exportBackup, importBackup } from "../../utils/Backup";
 
 import "./dashboard.css";
 
 function Dashboard() {
-    const { academicYear, setAcademicYear, availableYears } =
-        useAcademicYear();
+    
 
     const handleImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -30,19 +28,7 @@ function Dashboard() {
             <div className="dashboard-header">
                 <h1>Dashboard</h1>
 
-                <div className="dashboard-year-selector">
-                    <label>Academic Year:</label>
-                    <select
-                        value={academicYear}
-                        onChange={(e) => setAcademicYear(e.target.value)}
-                    >
-                        {availableYears.map((yr) => (
-                            <option key={yr} value={yr}>
-                                {yr}
-                            </option>
-                        ))}
-                    </select>
-                </div>
+                
             </div>
 
             {/* =========================

@@ -1,7 +1,7 @@
 import { useFeeLedger } from "../../../context/FeeLedgerContext";
 import { useAcademicYear } from "../../../context/AcademicYearContext";
 import { getAcademicYearRange } from "../Utils/reportDateUtils";
-import { printReport } from "../Utils/printUtils";
+import { printReport } from "../Utils/PrintUtils";
 import "./statements.css";
 
 function YearEndStatement() {

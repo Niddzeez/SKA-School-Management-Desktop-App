@@ -3,7 +3,7 @@ import { useFeeLedger } from "../../context/FeeLedgerContext";
 import { useStudents } from "../../context/StudentContext";
 import { useClasses } from "../../context/ClassContext";
 import { useAcademicYear } from "../../context/AcademicYearContext";
-import { printReport } from "../Reports/Utils/printUtils";
+import { printReport } from "../Reports/Utils/PrintUtils";
 import "../../styles/PendingFees.css";
 
 function PendingFees() {

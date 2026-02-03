@@ -153,7 +153,8 @@ function StudentDetails() {
 
 
   const handlePromote = () => {
-    if (!student.classID) return;
+    if (!student.classID || student.status !== "Active") return;
+
 
     const nextClassId = getNextClassId(student.classID);
     if (!nextClassId) {
@@ -190,6 +191,18 @@ function StudentDetails() {
     );
   };
 
+  const handleWithdraw = () => {
+    const confirmed = window.confirm(
+      "This will mark the student as withdrawn. This action cannot be undone. Continue?"
+    );
+
+    if (!confirmed) return;
+
+    UpdateStudentStatus(student.id, "Withdrawn");
+    navigate("/students");
+  };
+
+  const isClassEditable = student.status === "Active";
 
 
   /* =========================
@@ -197,7 +210,8 @@ function StudentDetails() {
   ========================= */
 
   return (
-    <div className="student-detail">
+    <div className={`student-detail ${student.status === "Withdrawn" ? "withdrawn" : ""}`}>
+
       <button className="back-button" onClick={() => navigate("/students")}>
         Back to Students
       </button>
@@ -205,6 +219,31 @@ function StudentDetails() {
       <h2>
         {student.firstName} {student.lastName}
       </h2>
+
+      <div className="student-actions">
+
+        {student.status === "Active" && (
+          <>
+            <button className="danger-btn" onClick={handleDeactivate}>
+              Deactivate
+            </button>
+
+            <button className="danger-btn" onClick={handleWithdraw}>
+              Withdraw Student
+            </button>
+          </>
+        )}
+
+        {student.status === "Inactive" && (
+          <button className="primary-btn" onClick={handleActivate}>
+            Activate
+          </button>
+        )}
+
+        {/* Withdrawn & Alumni → NO ACTIONS */}
+      </div>
+
+
 
       {/* =========================
     Admission Details
@@ -293,26 +332,6 @@ function StudentDetails() {
         <p><strong>Education:</strong> {student.mother.education}</p>
       </div>
 
-
-      <p>
-        <strong>Status:</strong>{" "}
-        <span className={`status ${student.status.toLowerCase()}`}>
-          {student.status}
-        </span>
-      </p>
-
-      <div className="student-actions">
-        {student.status === "Active" ? (
-          <button className="danger-btn" onClick={handleDeactivate}>
-            Deactivate
-          </button>
-        ) : (
-          <button className="primary-btn" onClick={handleActivate}>
-            Activate
-          </button>
-        )}
-      </div>
-
       {/* =========================
           Class & Section
       ========================= */}
@@ -334,6 +353,7 @@ function StudentDetails() {
 
       <div className="assignment-row">
         <select
+          disabled={!isClassEditable}
           value={tempClassID}
           onChange={(e) => {
             setTempClassID(e.target.value);
@@ -364,7 +384,7 @@ function StudentDetails() {
         </select>
 
         <button
-          disabled={!tempClassID || !tempSectionID}
+          disabled={!tempClassID || !tempSectionID || !isClassEditable}
           onClick={() => {
             assignStudenttoSection(student.id, tempClassID, tempSectionID);
             setTempClassID("");
@@ -372,19 +392,40 @@ function StudentDetails() {
           }}
         >
           Assign
-        </button><button
-          disabled={isReadOnly}
-          className="primary-btn"
-          onClick={handlePromote}
-          style={{ marginTop: "12px" }}
-        >
-          Promote to Next Class
         </button>
+
+        {student.status === "Active" && (
+          <button
+            disabled={isReadOnly}
+            className="primary-btn"
+            onClick={handlePromote}
+            style={{ marginTop: "12px" }}
+          >
+            Promote to Next Class
+          </button>
+        )}
+
 
 
 
 
       </div>
+
+      <h3>Admission Details</h3>
+
+      <button
+        className="secondary-btn"
+        style={{ marginBottom: "12px" }}
+        onClick={() =>
+          navigate("/admission/print", {
+            state: {
+              student,
+            },
+          })
+        }
+      >
+        Re-print Admission Form
+      </button>
 
       {/* =========================
           Fees Summary

@@ -1,10 +1,10 @@
-import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useStudents } from "../../context/StudentContext";
 import { useClasses } from "../../context/ClassContext";
 import { useSections } from "../../context/SectionContext";
 import { useFeeLedger } from "../../context/FeeLedgerContext";
 import { useAcademicYear } from "../../context/AcademicYearContext";
+import { printReport } from "../Reports/Utils/PrintUtils";
 import "../../styles/FeeStatement.css";
 
 function FeeStatement() {
@@ -13,8 +13,13 @@ function FeeStatement() {
     const { students } = useStudents();
     const { classes } = useClasses();
     const { sections } = useSections();
-    const { getLedgerByStudentYear, getLedgerSummary, payments, adjustments, getReceiptNumber } =
-        useFeeLedger();
+    const {
+        getLedgerByStudentYear,
+        getLedgerSummary,
+        payments,
+        adjustments,
+        getReceiptNumber,
+    } = useFeeLedger();
     const { academicYear } = useAcademicYear();
 
     const student = students.find((s) => s.id === id);
@@ -37,95 +42,88 @@ function FeeStatement() {
     const sec = sections.find((s) => s.id === student.sectionID);
 
     /* =========================
-       PDF Filename Handling
+       PRINT DATA (UNIFIED SYSTEM)
     ========================= */
 
-    useEffect(() => {
-        const originalTitle = document.title;
-        document.title = `${student.firstName} ${student.lastName} - ${academicYear} - Fee Statement`;
+    const printData = {
+        title: "Fee Statement",
+        meta: {
+            academicYear,
+            studentName: `${student.firstName} ${student.lastName}`,
+            reportType: "FEE_STATEMENT",
+        },
+        sections: [
+            {
+                title: "Student Details",
+                headers: ["Field", "Value"],
+                rows: [
+                    {
+                        columns: ["Name", `${student.firstName} ${student.lastName}`],
+                    },
+                    {
+                        columns: ["Class", cls?.ClassName ?? "-"],
+                    },
+                    {
+                        columns: ["Section", sec?.name ?? "-"],
+                    },
+                ],
+            },
 
-        return () => {
-            document.title = originalTitle;
-        };
-    }, [student, academicYear]);
+            {
+                title: "Fee Breakdown",
+                headers: ["Fee Component", "Amount"],
+                rows: ledger.baseComponents.map((c) => ({
+                    columns: [c.name, `₹${c.amount}`],
+                })),
+            },
 
-    /* =========================
-       PRINT HANDLER (ISOLATED)
-    ========================= */
+            ...(studentAdjustments.length > 0
+                ? [
+                    {
+                        title: "Adjustments",
+                        headers: ["Type", "Amount"],
+                        rows: studentAdjustments.map((a) => ({
+                            columns: [
+                                a.type,
+                                `${a.amount < 0 ? "-" : "+"}₹${Math.abs(a.amount)}`,
+                            ],
+                        })),
+                    },
+                ]
+                : []),
 
-    const handlePrint = () => {
-        const printWindow = window.open(
-            "",
-            "_blank",
-            "width=900,height=650"
-        );
+            ...(studentPayments.length > 0
+                ? [
+                    {
+                        title: "Payments",
+                        headers: ["Receipt No", "Date", "Mode", "Amount"],
+                        rows: studentPayments.map((p) => ({
+                            columns: [
+                                getReceiptNumber(p.id),
+                                new Date(p.createdAt).toLocaleDateString(),
+                                p.mode,
+                                `₹${p.amount}`,
+                            ],
+                        })),
+                    },
+                ]
+                : []),
 
-        if (!printWindow) return;
-
-        const title = `${student.firstName} ${student.lastName} - ${academicYear} - Fee Statement`;
-
-        printWindow.document.write(`
-      <html>
-        <head>
-          <title>${title}</title>
-          <style>
-            body {
-              font-family: Arial, sans-serif;
-              padding: 20px;
-              color: #000;
-            }
-
-            h1 {
-              text-align: center;
-              margin-bottom: 4px;
-            }
-
-            h3 {
-              margin-top: 16px;
-              border-bottom: 1px solid #000;
-              padding-bottom: 4px;
-            }
-
-            table {
-              width: 100%;
-              border-collapse: collapse;
-              margin-top: 8px;
-            }
-
-            th, td {
-              padding: 6px;
-              border-bottom: 1px solid #ccc;
-            }
-
-            th:last-child,
-            td:last-child {
-              text-align: right;
-            }
-
-            .section {
-              margin-top: 12px;
-            }
-
-            .summary {
-              margin-top: 16px;
-              font-size: 1.05rem;
-            }
-          </style>
-        </head>
-        <body>
-          ${document.querySelector(".statement-page")?.innerHTML}
-        </body>
-      </html>
-    `);
-
-        printWindow.document.close();
-        printWindow.focus();
-        printWindow.print();
-        printWindow.close();
+            {
+                title: "Summary",
+                headers: ["Metric", "Value"],
+                rows: [
+                    { columns: ["Total Fee", `₹${summary.finalFee}`] },
+                    { columns: ["Paid", `₹${summary.paidTotal}`] },
+                    { columns: ["Pending", `₹${summary.pending}`] },
+                    { columns: ["Status", summary.status] },
+                ],
+            },
+        ],
     };
 
     /* =========================
-       RENDER
+       RENDER (SCREEN VIEW)
     ========================= */
 
     return (
@@ -140,12 +138,14 @@ function FeeStatement() {
             {/* Student Info */}
             <div className="statement-section">
                 <h3>Student Details</h3>
-                <p><strong>Name:</strong> {student.firstName} {student.lastName}</p>
-                <p><strong>Class:</strong> Class {cls?.ClassName}</p>
-                <p><strong>Section:</strong> {sec?.name ?? "—"}</p>
                 <p>
-                    <strong>Student ID:</strong>{" "}
-                    <span>{student.id}</span>
+                    <strong>Name:</strong> {student.firstName} {student.lastName}
+                </p>
+                <p>
+                    <strong>Class:</strong> Class {cls?.ClassName}
+                </p>
+                <p>
+                    <strong>Section:</strong> {sec?.name ?? "—"}
                 </p>
             </div>
 
@@ -154,8 +154,8 @@ function FeeStatement() {
                 <h3>Fee Breakdown</h3>
                 <table>
                     <tbody>
-                        {ledger.baseComponents.map((c, idx) => (
-                            <tr key={idx}>
+                        {ledger.baseComponents.map((c) => (
+                            <tr key={c.name}>
                                 <td>{c.name}</td>
                                 <td>₹{c.amount}</td>
                             </tr>
@@ -192,21 +192,19 @@ function FeeStatement() {
                             <tr>
                                 <th>Receipt No</th>
                                 <th>Date</th>
-                                <th>Amount</th>
                                 <th>Mode</th>
-
+                                <th>Amount</th>
                             </tr>
                         </thead>
                         <tbody>
                             {studentPayments.map((p) => (
                                 <tr key={p.id}>
-                                    <tr key={p.id}>
-                                        <td>{getReceiptNumber(p.id)}</td>
-                                        <td>{new Date(p.createdAt).toLocaleDateString()}</td>
-                                        <td>₹{p.amount}</td>
-                                        <td>{p.mode}</td>
-                                    </tr>
-
+                                    <td>{getReceiptNumber(p.id)}</td>
+                                    <td>
+                                        {new Date(p.createdAt).toLocaleDateString()}
+                                    </td>
+                                    <td>{p.mode}</td>
+                                    <td>₹{p.amount}</td>
                                 </tr>
                             ))}
                         </tbody>
@@ -216,15 +214,23 @@ function FeeStatement() {
 
             {/* Summary */}
             <div className="statement-summary">
-                <p><strong>Total Fee:</strong> ₹{summary.finalFee}</p>
-                <p><strong>Paid:</strong> ₹{summary.paidTotal}</p>
-                <p><strong>Pending:</strong> ₹{summary.pending}</p>
-                <p><strong>Status:</strong> {summary.status}</p>
+                <p>
+                    <strong>Total Fee:</strong> ₹{summary.finalFee}
+                </p>
+                <p>
+                    <strong>Paid:</strong> ₹{summary.paidTotal}
+                </p>
+                <p>
+                    <strong>Pending:</strong> ₹{summary.pending}
+                </p>
+                <p>
+                    <strong>Status:</strong> {summary.status}
+                </p>
             </div>
 
             {/* Print */}
             <div className="print-actions">
-                <button onClick={handlePrint}>
+                <button onClick={() => printReport(printData)}>
                     Print / Save as PDF
                 </button>
             </div>

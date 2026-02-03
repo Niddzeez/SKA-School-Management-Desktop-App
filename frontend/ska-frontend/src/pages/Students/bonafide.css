@@ -1,0 +1,26 @@
+@media print {
+  .print-layout,
+  .print-page {
+    display: block !important;
+    visibility: visible !important;
+  }
+}
+
+@media print {
+  .print-layout {
+    display: block !important;
+    height: auto !important;
+  }
+}
+
+.watermark {
+  position: fixed;
+  z-index: 0;
+  opacity: 0.03;
+}
+
+.print-page,
+.print-layout {
+  position: relative;
+  z-index: 1;
+}

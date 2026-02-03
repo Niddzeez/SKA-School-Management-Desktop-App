@@ -1,0 +1,300 @@
+/* =====================================================
+   BASE REPORT TYPOGRAPHY + PAGE WIDTH FIX
+===================================================== */
+
+.print-page {
+    width: 100%;
+    min-width: 100%;
+    /* 🔴 critical */
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    /* 🔴 avoid centering */
+    padding: 12px 14px;
+}
+
+/* Ensure page starts from top */
+.print-page {
+    display: block;
+    align-items: unset;
+    justify-content: unset;
+}
+
+
+.print-header {
+    align-self: flex-start;
+    margin-top: 0;
+}
+
+
+/* Lock root width for print engines */
+@media print {
+
+    html,
+    body {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+}
+
+/* =====================================================
+   HEADER TUNING (COMPACT, STABLE)
+===================================================== */
+
+.print-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    /* 🔴 prevent shrink */
+    margin-bottom: 6px;
+}
+
+.print-header h1 {
+    font-size: 18px;
+    letter-spacing: 0.3px;
+    color: #444;
+}
+
+.print-header .letterhead {
+    font-size: 10px;
+    color: #666;
+}
+
+.print-header .contact-line {
+    font-size: 10px;
+    color: #777;
+}
+
+/* =====================================================
+   LOGO — HARD LOCK (NO SHRINK, NO COLLAPSE)
+===================================================== */
+
+.print-header .logo-box {
+    width: 90px;
+    min-width: 90px;
+    flex-shrink: 0;
+}
+
+.print-header .logo-svg {
+    display: block;
+    width: 90px;
+    height: auto;
+}
+
+
+.reports-meta {
+    font-size: 15px;
+    color: #444;
+    margin-top: 4px;
+}
+
+/* =====================================================
+   SECTION STRUCTURE
+===================================================== */
+
+.section {
+    width: 100%;
+    margin-bottom: 14px;
+    page-break-inside: avoid;
+    color: #444;
+}
+
+.report-card h3 {
+    font-size: 22px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 4px;
+    margin-bottom: 6px;
+    color: #444;
+}
+
+/* =====================================================
+   TABLE STYLING (FINANCE-OPTIMIZED)
+===================================================== */
+
+.report-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    /* 🔴 prevents horizontal drift */
+    margin-top: 4px;
+    color: #444;
+}
+
+.report-table thead th {
+    font-size: 12px;
+    font-weight: bold;
+    text-align: left;
+    padding: 6px;
+    border-bottom: 2px solid #444;
+    background: #f2f2f2;
+    color: #444;
+}
+
+.report-table tbody td {
+    padding: 5px 6px;
+    border-bottom: 1px solid #ddd;
+    vertical-align: top;
+    word-wrap: break-word;
+    /* 🔴 prevents overflow */
+    text-align: left;
+    color: #444;
+}
+
+/* Zebra striping */
+.report-table tbody tr:nth-child(even) {
+    background: #fafafa;
+}
+
+/* Amount alignment */
+.report-table td.amount,
+.report-table th.amount {
+    text-align: right;
+    white-space: nowrap;
+}
+
+/* =====================================================
+   SUMMARY SECTION (VISUAL PRIORITY)
+===================================================== */
+
+.summary-table {
+    background: #f6f6f6;
+    border: 1px solid #999;
+    padding: 10px 12px;
+    margin-top: 10px;
+    color: #444;
+    width: 100%;
+}
+
+.summary-table h3 {
+    border-bottom: none;
+    margin-bottom: 8px;
+}
+
+.summary-table table {
+    width: 100%;
+    border: 1px solid #ccc;
+
+}
+
+.summary-table td {
+    padding: 6px 4px;
+    font-size: 14px;
+}
+
+.summary-table td:last-child {
+    text-align: right;
+    font-weight: bold;
+}
+
+.summary-positive {
+    color: #0a7a0a;
+}
+
+.summary-negative {
+    color: #a30000;
+}
+
+/* =====================================================
+   WATERMARK (PRINT SAFE, CENTERED)
+===================================================== */
+
+.watermark {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 320px;
+    transform: translate(-50%, -50%);
+    opacity: 0.025;
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* =====================================================
+   PAGE BREAK CONTROL
+===================================================== */
+
+table,
+tr,
+td,
+th {
+    page-break-inside: avoid;
+}
+
+.report-table {
+    page-break-inside: auto;
+}
+
+/* =====================================================
+   PRINT-SPECIFIC CLEANUP
+===================================================== */
+
+/* =====================================================
+   FIX: FORCE TOP-ALIGNED PRINT LAYOUT
+===================================================== */
+
+
+
+
+
+@media print {
+
+    html,
+    body {
+        height: auto !important;
+    }
+
+    /* Kill vertical centering from any parent */
+    body,
+    .print-root,
+    .print-page,
+    .print-layout {
+        display: block !important;
+        align-items: flex-start !important;
+        justify-content: flex-start !important;
+    }
+
+    /* Ensure header is always first & at top */
+    .print-header {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+    }
+}
+
+@media print {
+
+    .print-controls,
+    .sidebar,
+    .navbar,
+    .app-layout {
+        display: none !important;
+    }
+}
+
+.section h4 {
+    color: #444;
+}
+
+.report-card h4 {
+    color: #444;
+}
+
+.total-line {
+    font-weight: bold;
+    color: #444;
+}
+
+
+.report-footer {
+    margin-top: 16px;
+    vertical-align: bottom;
+    text-align: right;
+    color: #666;
+    font-size: 12px;
+
+    
+}

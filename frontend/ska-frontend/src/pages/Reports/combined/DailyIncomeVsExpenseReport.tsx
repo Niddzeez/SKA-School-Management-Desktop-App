@@ -3,8 +3,8 @@
 import { useFeeLedger } from "../../../context/FeeLedgerContext";
 import { useStudents } from "../../../context/StudentContext";
 import { getAcademicYearRange } from "../Utils/reportDateUtils";
-import { printReport } from "../Utils/printUtils";
-import "./CombinedReports.css";
+import { printReport } from "../Utils/PrintUtils";
+import "../../../components/print/report-print.css";
 
 type Props = {
   academicYear: string;
@@ -83,9 +83,10 @@ function DailyIncomeVsExpense({ academicYear, selectedDate }: Props) {
   sections: [
     {
       title: "Income Details",
-      headers: ["Description", "Amount"],
+      headers: ["Date", "Student", "Mode", "Amount"],
       rows: dailyIncome.map((p) => ({
         columns: [
+          p.createdAt,
           `${getStudentName(p.studentId)} — ${p.mode}`,
           `₹${p.amount}`,
         ],
@@ -93,10 +94,13 @@ function DailyIncomeVsExpense({ academicYear, selectedDate }: Props) {
     },
     {
       title: "Expense Details",
-      headers: ["Description", "Amount"],
+      headers: ["Date", "Category", "Paid To", "Mode", "Amount"],
       rows: dailyExpenses.map((e) => ({
         columns: [
-          `${e.category} — ${e.paidTo}`,
+          e.expenseDate,
+          e.category,
+          e.paidTo,
+          e.mode,
           `₹${e.amount}`,
         ],
       })),

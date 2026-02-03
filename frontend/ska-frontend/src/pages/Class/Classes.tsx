@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useClasses } from "../../context/ClassContext";
 import { useSections } from "../../context/SectionContext";
 import { useTeachers } from "../../context/TeacherContext";
@@ -9,27 +9,10 @@ import ClassRegisterModal from "./ClassRegisterModal";
    Fixed Class List
 ========================= */
 
-const FIXED_CLASSES = [
-  "Playgroup",
-  "Nursery",
-  "LKG",
-  "UKG",
-  "1",
-  "2",
-  "3",
-  "4",
-  "5",
-  "6",
-  "7",
-  "8",
-  "9",
-  "10",
-  "11",
-  "12",
-];
+
 
 function Classes() {
-  const { classes, addClass } = useClasses();
+  const { classes } = useClasses();
   const { sections, addSection, assignClassTeacher } = useSections();
   const { teachers } = useTeachers();
 
@@ -39,24 +22,6 @@ function Classes() {
 
   const [showRegisterModal, setShowRegisterModal] = useState(false);
 
-  /* =========================
-     Seed Fixed Classes (SAFE)
-  ========================= */
-
-  useEffect(() => {
-    FIXED_CLASSES.forEach((className) => {
-      const exists = classes.find(
-        (c) => c.ClassName === className
-      );
-
-      if (!exists) {
-        addClass({
-          id: crypto.randomUUID(),
-          ClassName: className,
-        });
-      }
-    });
-  }, [classes, addClass]);
 
   /* =========================
      Add Section
@@ -78,15 +43,7 @@ function Classes() {
     }));
   };
 
-  /* =========================
-     Sorted Classes
-  ========================= */
 
-  const sortedClasses = [...classes].sort(
-    (a, b) =>
-      FIXED_CLASSES.indexOf(a.ClassName) -
-      FIXED_CLASSES.indexOf(b.ClassName)
-  );
 
   /* =========================
      Render
@@ -105,7 +62,7 @@ function Classes() {
 
       {/* Class Cards */}
       <div className="class-list">
-        {sortedClasses.map((cls) => {
+        {classes.map((cls) => {
           const classSections = sections.filter(
             (sec) => sec.classID === cls.id
           );

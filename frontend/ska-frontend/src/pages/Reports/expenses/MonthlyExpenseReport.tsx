@@ -2,8 +2,8 @@
 
 import { useFeeLedger } from "../../../context/FeeLedgerContext";
 import { getAcademicYearRange } from "../Utils/reportDateUtils";
-import "./expenseReports.css";
-import { printReport } from "../Utils/printUtils";
+import "../../../components/print/report-print.css";
+import { printReport } from "../Utils/PrintUtils";
 
 type Props = {
     academicYear: string;
@@ -56,27 +56,39 @@ function MonthlyExpenseReport({ academicYear, selectedMonth }: Props) {
             periodLabel: monthLabel, // e.g. "January"
         },
         sections: [
-            {
-                title: "Expense Details",
-                headers: ["Date", "Category", "Amount"],
-                rows: monthlyExpenses.map((e) => ({
-                    columns: [
-                        new Date(e.expenseDate).toLocaleDateString(),
-                        e.category,
-                        `₹${e.amount}`,
-                    ],
-                })),
-            },
-            {
-                title: "Summary",
-                headers: ["Metric", "Value"],
-                rows: [
-                    {
-                        columns: ["Total Expense", `₹${totalExpense}`],
-                    },
-                ],
-            },
+      {
+        title: "Expense Details",
+        headers: ["Date", "Paid To", "Category", "Amount"],
+        rows: monthlyExpenses.map((e) => ({
+          columns: [
+            new Date(e.expenseDate).toLocaleDateString(),
+            e.paidTo,
+            e.category,
+            `₹${e.amount}`,
+          ],
+        })),
+      },
+      {
+        title: "Expense Details",
+        headers: ["Date", "Category", "Amount"],
+        rows: monthlyExpenses.map((e) => ({
+          columns: [
+            new Date(e.expenseDate).toLocaleDateString(),
+            e.category,
+            `₹${e.amount}`,
+          ],
+        })),
+      },
+      {
+        title: "Summary",
+        headers: ["Metric", "Value"],
+        rows: [
+          {
+            columns: ["Total Expense", `₹${totalExpense}`],
+          },
         ],
+      },
+    ],
     } as const;
 
 

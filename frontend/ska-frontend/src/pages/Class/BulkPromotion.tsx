@@ -3,7 +3,7 @@ import { useStudents } from "../../context/StudentContext";
 import { useClasses } from "../../context/ClassContext";
 import { useAcademicYear } from "../../context/AcademicYearContext";
 import { printReport } from "../Reports/Utils/printUtils";
-import "../../styles/BulkPromotion.css";
+import "./BulkPromotion.css";
 
 /* =========================
    School Promotion Order
