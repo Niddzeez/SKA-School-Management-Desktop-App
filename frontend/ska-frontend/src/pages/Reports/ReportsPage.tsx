@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { CURRENT_YEAR } from "../../context/AcademicYearContext";
+import { useAuth } from "../../context/AuthContext";
+import {can} from "../../auth/permissions"
+import { Navigate } from "react-router-dom";
 
 /* Filters */
 import ReportTypeSelector from "./Filters/ReportTypeSelector";
@@ -31,6 +34,13 @@ type ReportGranularity = "DAILY" | "MONTHLY" | "HALF_YEARLY" | "YEARLY";
 type ReportCategory = "INCOME" | "EXPENSE" | "COMBINED";
 
 function ReportsPage() {
+
+    const {role} = useAuth();
+
+    if(!can(role, "VIEW_REPORTS")){
+        return <Navigate to="/students" replace />;
+    }
+
     const [granularity, setGranularity] =
         useState<ReportGranularity>("MONTHLY");
 
@@ -184,7 +194,7 @@ function ReportsPage() {
                 )}
             </div>
 
-            <YearEndStatement />
+            {can(role, "VIEW_REPORTS")&&<YearEndStatement />}
         </div>
     );
 }

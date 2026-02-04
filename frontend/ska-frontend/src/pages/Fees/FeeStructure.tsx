@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { use, useState } from "react";
 import { useClasses } from "../../context/ClassContext";
 import { useFeeStructures } from "../../context/FeeStructureContext";
+import { useAuth } from "../../context/AuthContext";
+import {can} from "../../auth/permissions"
 
 type ComponentDraft = {
   name: string;
@@ -20,6 +22,7 @@ function FeeStructures() {
 
   const [selectedClass, setSelectedClass] = useState("");
   const [academicYear, setAcademicYear] = useState("");
+  const {role} = useAuth();
 
   /**
    * Component drafts keyed by feeStructureId
@@ -65,6 +68,22 @@ function FeeStructures() {
       },
     }));
   };
+
+  const handleActivate = (feeStructureId: string) => {
+  if (!can(role, "VIEW_REPORTS")) {
+    alert("You do not have permission to activate fee structures.");
+    return;
+  }
+
+  const confirmed = window.confirm(
+    "Activating this fee structure will affect all new ledgers.\n\nDo you want to continue?"
+  );
+
+  if (!confirmed) return;
+
+  activateFeeStructure(feeStructureId);
+};
+
 
   return (
     <div className="page-container">
@@ -203,10 +222,10 @@ function FeeStructures() {
             )}
 
             {/* Activate */}
-            {fs.status === "DRAFT" && (
+            {fs.status === "DRAFT" && can(role, "VIEW_REPORTS") && (
               <button
                 disabled={fs.components.length === 0}
-                onClick={() => activateFeeStructure(fs.id)}
+                onClick={() => handleActivate(fs.id)}
                 style={{ marginTop: "8px" }}
               >
                 Activate Fee Structure

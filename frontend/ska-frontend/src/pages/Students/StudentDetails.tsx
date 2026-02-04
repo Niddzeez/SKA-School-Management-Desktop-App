@@ -9,7 +9,8 @@ import { useState, useEffect } from "react";
 import { useFeeLedger } from "../../context/FeeLedgerContext";
 import { useFeeStructures } from "../../context/FeeStructureContext";
 import { useAcademicYear, CURRENT_YEAR } from "../../context/AcademicYearContext";
-
+import { useAuth} from "../../context/AuthContext"
+import  {can} from "../../auth/permissions";
 
 
 function StudentDetails() {
@@ -20,6 +21,8 @@ function StudentDetails() {
     useStudents();
   const { classes } = useClasses();
   const { sections } = useSections();
+
+  const {role} = useAuth();
 
   const {
     getLedgerByStudentYear,
@@ -126,11 +129,19 @@ function StudentDetails() {
   ========================= */
 
   const handleDeactivate = () => {
+    if (!can(role, "WITHDRAW_STUDENT")) {
+    alert("You do not have permission to perform this action.");
+    return;
+  }
     UpdateStudentStatus(student.id, "Inactive");
     navigate("/students");
   };
 
   const handleActivate = () => {
+    if (!can(role, "WITHDRAW_STUDENT")) {
+    alert("You do not have permission to perform this action.");
+    return;
+  }
     UpdateStudentStatus(student.id, "Active");
     navigate("/students");
   };
@@ -153,6 +164,10 @@ function StudentDetails() {
 
 
   const handlePromote = () => {
+    if (!can(role, "PROMOTE_STUDENT")) {
+    alert("You do not have permission to perform this action.");
+    return;
+  }
     if (!student.classID || student.status !== "Active") return;
 
 
@@ -192,6 +207,10 @@ function StudentDetails() {
   };
 
   const handleWithdraw = () => {
+    if (!can(role, "WITHDRAW_STUDENT")) {
+    alert("You do not have permission to perform this action.");
+    return;
+  }
     const confirmed = window.confirm(
       "This will mark the student as withdrawn. This action cannot be undone. Continue?"
     );
@@ -222,7 +241,7 @@ function StudentDetails() {
 
       <div className="student-actions">
 
-        {student.status === "Active" && (
+        {student.status === "Active" && can(role, "WITHDRAW_STUDENT") && (
           <>
             <button className="danger-btn" onClick={handleDeactivate}>
               Deactivate
@@ -234,7 +253,7 @@ function StudentDetails() {
           </>
         )}
 
-        {student.status === "Inactive" && (
+        {student.status === "Inactive" && can(role, "WITHDRAW_STUDENT") && (
           <button className="primary-btn" onClick={handleActivate}>
             Activate
           </button>
@@ -384,7 +403,7 @@ function StudentDetails() {
         </select>
 
         <button
-          disabled={!tempClassID || !tempSectionID || !isClassEditable}
+          disabled={!tempClassID || !tempSectionID || !isClassEditable || !can(role, "ASSIGN_CLASS")} 
           onClick={() => {
             assignStudenttoSection(student.id, tempClassID, tempSectionID);
             setTempClassID("");
@@ -394,7 +413,7 @@ function StudentDetails() {
           Assign
         </button>
 
-        {student.status === "Active" && (
+        {student.status === "Active" && can(role, "PROMOTE_STUDENT") && (
           <button
             disabled={isReadOnly}
             className="primary-btn"
@@ -487,7 +506,7 @@ function StudentDetails() {
           Adjustments
       ========================= */}
 
-      {ledger && (
+      {ledger &&  can(role, "ADD_ADJUSTMENT") && (
         <>
           <h4>Adjustments</h4>
 
@@ -619,7 +638,7 @@ function StudentDetails() {
       </button>
 
 
-      {ledger && pendingAmount > 0 && (
+      {ledger && pendingAmount > 0 && can(role, "ADD_PAYMENT") &&(
         <div className="payment-form">
           <h4>Add Payment</h4>
 

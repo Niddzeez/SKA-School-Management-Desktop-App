@@ -1,73 +1,101 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Layout from "./components/Layout";
-import Dashboard from "./pages/Dashboard/Dashboard";
-import Students from "./pages/Students/Students";
-import StudentDetails from "./pages/Students/StudentDetails";
-import AdmissionForm from "./pages/Students/AdmissionForm";
+
+import { AuthProvider } from "./context/AuthContext";
 import { StudentProvider } from "./context/StudentContext";
 import { TeacherProvider } from "./context/TeacherContext";
-import TeachersForm from "./pages/Teachers/TeacherForm";
-import TeacherDetails from "./pages/Teachers/TeacherDetails";
-import Teachers from "./pages/Teachers/Teachers";
 import { SectionProvider } from "./context/SectionContext";
 import { ClassProvider } from "./context/ClassContext";
-import Classes from "./pages/Class/Classes";
 import { FeeStructureProvider } from "./context/FeeStructureContext";
-import FeeStructures from "./pages/Fees/FeeStructure";
 import { FeeLedgerProvider } from "./context/FeeLedgerContext";
-import BulkPromotion from "./pages/Class/BulkPromotion";
-import OutstandingDues from "./pages/Fees/OutstandingDues";
-import FeeStatement from "./pages/Fees/FeeStatement";
-import PaymentReceipt from "./pages/Fees/PaymentReceipt";
+
+/* Layouts */
+import AdminLayout from "./components/LayoutShell/Layout";
+import TeacherLayout from "./components/LayoutShell/TeacherLayout";
+
+/* Dashboards */
+import DashboardRouter from "./pages/Dashboard/DashboardRouter";
+import AdminDashboard from "./pages/Dashboard/AdminDashboard";
+import TeacherDashboard from "./pages/Dashboard/TeacherDashboard";
+
+/* Pages */
+import Students from "./pages/Students/Students";
+import StudentDetails from "./pages/Students/StudentDetails";
+import Teachers from "./pages/Teachers/Teachers";
+import TeacherDetails from "./pages/Teachers/TeacherDetails";
+import AdmissionForm from "./pages/Students/AdmissionForm";
+import AdmissionPrint from "./pages/Students/AdmissionPrint";
+
+import Classes from "./pages/Class/Classes";
+import FeeStructures from "./pages/Fees/FeeStructure";
 import Expenses from "./pages/Expenses/Expenses";
 import ReportsPage from "./pages/Reports/ReportsPage";
+import AcademicYearAdmin from "./pages/Admin/AcademicYear";
+import BulkPromotion from "./pages/Class/BulkPromotion";
+import FeeStatement from "./pages/Fees/FeeStatement";
+import PaymentReceipt from "./pages/Fees/PaymentReceipt";
 import PendingFees from "./pages/Fees/PendingFees";
-import AdmissionPrint from "./pages/Students/AdmissionPrint";
-import BonafideCertificate from "./pages/Students/BonafideCertificate";
+import TeachersForm from "./pages/Teachers/TeacherForm"
+
+
 
 function App() {
   return (
-    <FeeLedgerProvider>
-      <FeeStructureProvider>
-        <ClassProvider>
-          <SectionProvider>
-            <TeacherProvider>
-              <StudentProvider>
-                <BrowserRouter>
-                  <Routes>
-                    <Route path="/admission/print" element={<AdmissionPrint />} />
-                  </Routes>
-                  <Routes>
+    <AuthProvider>
+      <FeeLedgerProvider>
+        <FeeStructureProvider>
+          <ClassProvider>
+            <SectionProvider>
+              <TeacherProvider>
+                <StudentProvider>
+                  <BrowserRouter>
+                    <Routes>
 
-                    <Route element={<Layout />}>
-                      <Route path="/" element={<Dashboard />} />
-                      <Route path="/students" element={<Students />} />
-                      <Route path="/teachers" element={<Teachers />} />
-                      <Route path="/students/:id" element={<StudentDetails />} />
-                      <Route path="/teachers/:id" element={<TeacherDetails />} />
-                      <Route path="/admissionForm" element={<AdmissionForm />} />
-                      <Route path="/teachersForm" element={<TeachersForm />} />
-                      <Route path="/allclasses" element={<Classes />} />
-                      <Route path="/feestructure" element={<FeeStructures />} />
-                      <Route path="/bulkpromotion" element={<BulkPromotion />} />
-                      <Route path="/outstandingdues" element={<OutstandingDues />} />
-                      <Route path="/students/:id/statement" element={<FeeStatement />} />
-                      <Route path="/receipts/:paymentId" element={<PaymentReceipt />} />
-                      <Route path="/expenses" element={<Expenses />} />
-                      <Route path="/reports/*" element={<ReportsPage />} />
-                      <Route path="/dashboard" element={<Dashboard />} />
-                      <Route path="/dashboard/pending-fees" element={<PendingFees />} />
-                      <Route path="/admin/bulk-promotion" element={<BulkPromotion />} />
-                      <Route path="/students/admission/print" element={<AdmissionPrint />} />
-                    </Route>
-                  </Routes>
-                </BrowserRouter>
-              </StudentProvider>
-            </TeacherProvider>
-          </SectionProvider>
-        </ClassProvider>
-      </FeeStructureProvider>
-    </FeeLedgerProvider>
+                      {/* ===== Shared / Utility ===== */}
+                      <Route path="/dashboard" element={<DashboardRouter />} />
+                      <Route path="/admission/print" element={<AdmissionPrint />} />
+
+                      {/* ===== ADMIN AREA ===== */}
+                      <Route element={<AdminLayout />}>
+                        <Route path="/dashboard/admin" element={<AdminDashboard />} />
+                        <Route path="/students" element={<Students />} />
+                        <Route path="/students/:id" element={<StudentDetails />} />
+                        <Route path="/teachers" element={<Teachers />} />
+                        <Route path="/teachers/:id" element={<TeacherDetails />} />
+                        <Route path="/admissionForm" element={<AdmissionForm />} />
+                        <Route path="/teachersForm" element={<TeachersForm />} />
+                        <Route path="/allclasses" element={<Classes />} />
+                        <Route path="/feestructure" element={<FeeStructures />} />
+                        <Route path="/expenses" element={<Expenses />} />
+                        <Route path="/reports/*" element={<ReportsPage />} />
+                        <Route path="/admin/academic-year" element={<AcademicYearAdmin />} />
+                        <Route path="/bulkpromotion" element={<BulkPromotion />} />
+                        <Route path="/students/:id/statement" element={<FeeStatement />} />
+                        <Route path="/receipts/:paymentId" element={<PaymentReceipt />} />
+                        <Route path="/dashboard/admin/pending-fees" element={<PendingFees />} />
+                        <Route path="/students/admission/print" element={<AdmissionPrint />} />
+                      </Route>
+
+                      {/* ===== TEACHER AREA ===== */}
+                      <Route element={<TeacherLayout />}>
+                        <Route path="/dashboard/teacher" element={<TeacherDashboard />} />
+                        <Route path="/students" element={<Students />} />
+                        <Route path="/students/:id" element={<StudentDetails />} />
+                        <Route path="/allclasses" element={<Classes />} />
+                        <Route path="/students/admission/print" element={<AdmissionPrint />} />
+                        <Route path="/students/:id/statement" element={<FeeStatement />} />
+                        <Route path="/receipts/:paymentId" element={<PaymentReceipt />} />
+
+                      </Route>
+
+                    </Routes>
+                  </BrowserRouter>
+                </StudentProvider>
+              </TeacherProvider>
+            </SectionProvider>
+          </ClassProvider>
+        </FeeStructureProvider>
+      </FeeLedgerProvider>
+    </AuthProvider>
   );
 }
 

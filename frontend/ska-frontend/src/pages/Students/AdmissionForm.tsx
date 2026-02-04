@@ -1,22 +1,30 @@
 import "../../styles/AdmissionForm.css";
 import InputBox from "../../components/FormInputBoxes";
-import { useState } from "react";
+import { use, useState } from "react";
 import { mapFormDataToStudent } from "../../mappers/formtostudents";
 import type { Student } from "../../types/Student";
 import { useNavigate } from "react-router-dom";
 import { useStudents } from "../../context/StudentContext";
 import { useClasses } from "../../context/ClassContext";
 import { useSections } from "../../context/SectionContext";
-
+import { useAuth } from "../../context/AuthContext";
+import {can} from "../../auth/permissions"
 
 function AdmissionForm() {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-
+  const {role} = useAuth();
   const { addStudent } = useStudents();
   const { classes } = useClasses();
   const { sections } = useSections();
 
-
+  if (!can(role, "ADMIT_STUDENT")) {
+  return (
+    <div className="unauthorized">
+      <h2>Access Denied</h2>
+      <p>You do not have permission to admit new students.</p>
+    </div>
+  );
+}
   const navigate = useNavigate();
 
   const initialFormData = {
@@ -125,6 +133,11 @@ function AdmissionForm() {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
+    if (!can(role, "ADMIT_STUDENT")) {
+    alert("You do not have permission to admit students.");
+    return;
+  }
+
     const validationErrors = validateForm();
     setErrors(validationErrors);
 
@@ -160,9 +173,11 @@ function AdmissionForm() {
       value: s.id,
     }));
 
+  
+
 
   return (
-    <form className="admission-form-page" onSubmit={handleSubmit}>
+    <form className="admission-form-page" onSubmit={handleSubmit} >
       <h1 className="heading">Admission Form</h1>
       {successMessage && (
         <div className="success-message">{successMessage}</div>

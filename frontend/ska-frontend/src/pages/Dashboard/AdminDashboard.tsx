@@ -1,10 +1,17 @@
-import DashboardKPIs from "../Dashboard/DashboardKPI";
+import DashboardKPIs from "./DashboardKPI";
 import { exportBackup, importBackup } from "../../utils/Backup";
-
+import { useAuth } from "../../context/AuthContext";
 import "./dashboard.css";
+import {can} from "../../auth/permissions"
+import { Navigate } from "react-router-dom";
 
-function Dashboard() {
-    
+function AdminDashboard() {
+    const {role} = useAuth();
+
+    if(!can(role, "VIEW_REPORTS"))
+    {
+        return <Navigate to="/dashboard" replace />
+    }
 
     const handleImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -62,4 +69,4 @@ function Dashboard() {
     );
 }
 
-export default Dashboard;
+export default AdminDashboard;
