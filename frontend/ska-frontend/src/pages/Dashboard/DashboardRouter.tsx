@@ -12,7 +12,7 @@ function DashboardRouter() {
     return <Navigate to="/dashboard/teacher" replace />;
   }
 
-  return null;
+  return <Navigate to="/login" replace />;
 }
 
 export default DashboardRouter;

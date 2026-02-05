@@ -37,7 +37,7 @@ function ReportsPage() {
 
     const {role} = useAuth();
 
-    if(!can(role, "VIEW_REPORTS")){
+    if(!role || !can(role, "VIEW_REPORTS")){
         return <Navigate to="/students" replace />;
     }
 
@@ -194,7 +194,7 @@ function ReportsPage() {
                 )}
             </div>
 
-            {can(role, "VIEW_REPORTS")&&<YearEndStatement />}
+            {!role || can(role, "VIEW_REPORTS")&&<YearEndStatement />}
         </div>
     );
 }

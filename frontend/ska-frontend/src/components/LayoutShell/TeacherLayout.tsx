@@ -16,7 +16,7 @@ function TeacherLayout() {
       <nav className="sidebar-nav">
         <NavLink to="/dashboard" className="nav-link">Dashboard</NavLink>
         <NavLink to="/students" className="nav-link">Students</NavLink>
-        <NavLink to="/class-register" className="nav-link">
+        <NavLink to="/allclasses" className="nav-link">
           Class Register
         </NavLink>
       </nav>

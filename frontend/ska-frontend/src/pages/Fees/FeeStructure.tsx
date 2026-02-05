@@ -70,7 +70,7 @@ function FeeStructures() {
   };
 
   const handleActivate = (feeStructureId: string) => {
-  if (!can(role, "VIEW_REPORTS")) {
+  if (!role || !can(role, "VIEW_REPORTS")) {
     alert("You do not have permission to activate fee structures.");
     return;
   }
@@ -222,7 +222,7 @@ function FeeStructures() {
             )}
 
             {/* Activate */}
-            {fs.status === "DRAFT" && can(role, "VIEW_REPORTS") && (
+            {fs.status === "DRAFT" && role && can(role, "VIEW_REPORTS") && (
               <button
                 disabled={fs.components.length === 0}
                 onClick={() => handleActivate(fs.id)}

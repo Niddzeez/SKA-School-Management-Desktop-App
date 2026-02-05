@@ -129,7 +129,7 @@ function StudentDetails() {
   ========================= */
 
   const handleDeactivate = () => {
-    if (!can(role, "WITHDRAW_STUDENT")) {
+    if (!role || !can(role, "WITHDRAW_STUDENT")) {
     alert("You do not have permission to perform this action.");
     return;
   }
@@ -138,7 +138,7 @@ function StudentDetails() {
   };
 
   const handleActivate = () => {
-    if (!can(role, "WITHDRAW_STUDENT")) {
+    if (!role || !can(role, "WITHDRAW_STUDENT")) {
     alert("You do not have permission to perform this action.");
     return;
   }
@@ -164,7 +164,7 @@ function StudentDetails() {
 
 
   const handlePromote = () => {
-    if (!can(role, "PROMOTE_STUDENT")) {
+    if (!role || can(role, "PROMOTE_STUDENT")) {
     alert("You do not have permission to perform this action.");
     return;
   }
@@ -207,7 +207,7 @@ function StudentDetails() {
   };
 
   const handleWithdraw = () => {
-    if (!can(role, "WITHDRAW_STUDENT")) {
+    if (!role || !can(role, "WITHDRAW_STUDENT")) {
     alert("You do not have permission to perform this action.");
     return;
   }
@@ -241,7 +241,7 @@ function StudentDetails() {
 
       <div className="student-actions">
 
-        {student.status === "Active" && can(role, "WITHDRAW_STUDENT") && (
+        {student.status === "Active" && role && can(role, "WITHDRAW_STUDENT") && (
           <>
             <button className="danger-btn" onClick={handleDeactivate}>
               Deactivate
@@ -253,7 +253,7 @@ function StudentDetails() {
           </>
         )}
 
-        {student.status === "Inactive" && can(role, "WITHDRAW_STUDENT") && (
+        {student.status === "Inactive" && role && can(role, "WITHDRAW_STUDENT") && (
           <button className="primary-btn" onClick={handleActivate}>
             Activate
           </button>
@@ -403,7 +403,7 @@ function StudentDetails() {
         </select>
 
         <button
-          disabled={!tempClassID || !tempSectionID || !isClassEditable || !can(role, "ASSIGN_CLASS")} 
+          disabled={!tempClassID || !tempSectionID || !isClassEditable || !role || !can(role, "ASSIGN_CLASS")} 
           onClick={() => {
             assignStudenttoSection(student.id, tempClassID, tempSectionID);
             setTempClassID("");
@@ -413,7 +413,7 @@ function StudentDetails() {
           Assign
         </button>
 
-        {student.status === "Active" && can(role, "PROMOTE_STUDENT") && (
+        {student.status === "Active" && role && can(role, "PROMOTE_STUDENT") && (
           <button
             disabled={isReadOnly}
             className="primary-btn"
@@ -506,7 +506,7 @@ function StudentDetails() {
           Adjustments
       ========================= */}
 
-      {ledger &&  can(role, "ADD_ADJUSTMENT") && (
+      {ledger && role && can(role, "ADD_ADJUSTMENT") && (
         <>
           <h4>Adjustments</h4>
 
@@ -638,7 +638,7 @@ function StudentDetails() {
       </button>
 
 
-      {ledger && pendingAmount > 0 && can(role, "ADD_PAYMENT") &&(
+      {ledger && pendingAmount > 0 && role && can(role, "ADD_PAYMENT") &&(
         <div className="payment-form">
           <h4>Add Payment</h4>
 

@@ -10,7 +10,7 @@ function AdminLayout() {
   const { academicYear, setAcademicYear, availableYears } = useAcademicYear();
 
   // 🔒 Hard admin gate
-  if (!can(role, "VIEW_REPORTS")) {
+  if (!role || !can(role, "VIEW_REPORTS")) {
     return <Navigate to="/dashboard" replace />;
   }
 

@@ -6,6 +6,7 @@ import { AcademicYearProvider } from './context/AcademicYearContext.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
+    
     <AcademicYearProvider>
     <App />
     </AcademicYearProvider>

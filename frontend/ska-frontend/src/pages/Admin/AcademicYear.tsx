@@ -8,7 +8,7 @@ function AcademicYearAdmin() {
   const { role } = useAuth();
 
   // 🔒 Hard RBAC gate
-  if (!can(role, "CLOSE_ACADEMIC_YEAR")) {
+  if (!role || !can(role, "CLOSE_ACADEMIC_YEAR")) {
     return <Navigate to="/students" replace />;
   }
 
