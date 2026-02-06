@@ -121,6 +121,8 @@ function BulkPromotion() {
       promotedAt: new Date().toISOString(),
     });
 
+    
+
     lockPromotion(fromAcademicYear);
   };
 

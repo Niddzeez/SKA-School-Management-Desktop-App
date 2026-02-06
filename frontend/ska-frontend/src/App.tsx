@@ -8,6 +8,7 @@ import { SectionProvider } from "./context/SectionContext";
 import { ClassProvider } from "./context/ClassContext";
 import { FeeStructureProvider } from "./context/FeeStructureContext";
 import { FeeLedgerProvider } from "./context/FeeLedgerContext";
+import { SystemLogProvider } from "./context/SystemLogContext";
 
 /* Auth */
 import RequireAuth from "./auth/RequireAuth";
@@ -43,9 +44,11 @@ import PaymentReceipt from "./pages/Fees/PaymentReceipt";
 import PendingFees from "./pages/Fees/PendingFees";
 import TeachersForm from "./pages/Teachers/TeacherForm";
 import RoleLayout from "./components/LayoutShell/RoleLayout";
+import SettingsPage from "./pages/Admin/Settings";
 
 function App() {
   return (
+    <SystemLogProvider>
     <AuthProvider>
       <FeeLedgerProvider>
         <FeeStructureProvider>
@@ -101,6 +104,7 @@ function App() {
                                 <Route path="/receipts/:paymentId" element={<PaymentReceipt />} />
                                 <Route path="/dashboard/admin/pending-fees" element={<PendingFees />} />
                                 <Route path="/students/admission/print" element={<AdmissionPrint />} />
+                                <Route path="settings" element={<SettingsPage/>}/>
                               </Route>
 
                               {/* ===== TEACHER AREA ===== */}
@@ -128,6 +132,7 @@ function App() {
         </FeeStructureProvider>
       </FeeLedgerProvider>
     </AuthProvider>
+    </SystemLogProvider>
   );
 }
 

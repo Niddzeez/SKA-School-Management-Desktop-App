@@ -28,6 +28,7 @@ function AdminLayout() {
         <NavLink to="/allclasses" className="nav-link">Classes</NavLink>
         <NavLink to="/feestructure" className="nav-link">Fee Structure</NavLink>
         <NavLink to="/expenses" className="nav-link">Expenses</NavLink>
+        <NavLink to="/settings" className="nav-link">Settings</NavLink>
       </nav>
     </>
   );
