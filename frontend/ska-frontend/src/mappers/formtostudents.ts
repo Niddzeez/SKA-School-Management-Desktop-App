@@ -28,7 +28,8 @@ type FormData = {
   state?: string;
   pinCode?: string;
 
-  grade: string;
+  grade?: string;
+  section?: string;
   admissionDate?: string;
   feeDiscount?: string;
   previousSchool?: string;
@@ -65,16 +66,65 @@ type FormData = {
 // Be careful with optional fields and type conversions
 // we use it in file frontend/ska-frontend/src/pages/AdmissionForm.tsx
 
-export function mapFormDataToStudent(formData: FormData): Student {
-  return {
-    id: crypto.randomUUID(),
+export function mapFormDataToStudent(
+  formData: FormData
+): Omit<Student, "id"> {
 
+  const address =
+    formData.address || formData.city || formData.state || formData.pinCode
+      ? {
+          addressLine: formData.address,
+          city: formData.city,
+          state: formData.state,
+          pinCode: formData.pinCode,
+        }
+      : undefined;
+
+  const father =
+    formData.fatherName || formData.fatherPhone
+      ? {
+          name: formData.fatherName,
+          phone: formData.fatherPhone,
+          occupation: formData.fatherOccupation || undefined,
+          education: formData.fatherEducation || undefined,
+          aadhaar: formData.fatherAadhaar || undefined,
+          income: formData.fatherIncome
+            ? Number(formData.fatherIncome)
+            : undefined,
+        }
+      : undefined;
+
+  const mother =
+    formData.motherName || formData.motherPhone
+      ? {
+          name: formData.motherName,
+          phone: formData.motherPhone || undefined,
+          occupation: formData.motherOccupation || undefined,
+          education: formData.motherEducation || undefined,
+          aadhaar: formData.motherAadhaar || undefined,
+          income: formData.motherIncome
+            ? Number(formData.motherIncome)
+            : undefined,
+        }
+      : undefined;
+
+  const academic =
+    formData.admissionDate || formData.previousSchool || formData.feeDiscount
+      ? {
+          dateOfAdmission: formData.admissionDate,
+          discountFeePercent: formData.feeDiscount
+            ? Number(formData.feeDiscount)
+            : undefined,
+          previousSchool: formData.previousSchool || undefined,
+        }
+      : undefined;
+
+  return {
     firstName: formData.firstName.trim(),
     lastName: formData.lastName.trim(),
     gender: formData.gender,
     dateOfBirth: formData.dob,
-
-    status : "Active",
+    status: "Active",
 
     email: formData.email || undefined,
     aadhaarNumber: formData.aadhaar,
@@ -93,44 +143,13 @@ export function mapFormDataToStudent(formData: FormData): Student {
     guardianName: formData.guardianName || undefined,
     transportationNeeds: formData.transport || undefined,
 
-    address: {
-      addressLine: formData.address,
-      city: formData.city,
-      state: formData.state,
-      pinCode: formData.pinCode,
-    },
+    classID: formData.grade || undefined,
+    sectionID: formData.section || undefined,
 
-    father: {
-      name: formData.fatherName,
-      phone: formData.fatherPhone,
-      occupation: formData.fatherOccupation || undefined,
-      education: formData.fatherEducation || undefined,
-      aadhaar: formData.fatherAadhaar || undefined,
-      income: formData.fatherIncome
-        ? Number(formData.fatherIncome)
-        : undefined,
-    },
-
-    mother: {
-      name: formData.motherName,
-      phone: formData.motherPhone || undefined,
-      occupation: formData.motherOccupation || undefined,
-      education: formData.motherEducation || undefined,
-      aadhaar: formData.motherAadhaar || undefined,
-      income: formData.motherIncome
-        ? Number(formData.motherIncome)
-        : undefined,
-    },
-
-    academic: {
-      grade: formData.grade,
-      section: "", // fill later or make optional in model
-      dateOfAdmission: formData.admissionDate,
-      discountFeePercent: formData.feeDiscount
-        ? Number(formData.feeDiscount)
-        : undefined,
-      previousSchool: formData.previousSchool || undefined,
-    },
+    address,
+    father,
+    mother,
+    academic,
 
     totalSiblings: formData.siblings
       ? Number(formData.siblings)

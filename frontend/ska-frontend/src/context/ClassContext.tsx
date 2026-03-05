@@ -1,6 +1,11 @@
-import { createContext, useContext, useEffect } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import type { Class as SchoolClass } from "../types/Class";
-import { usePersistentState } from "../hooks/UsePersistentState";
+import { API_BASE_URL } from "../config/api";
 
 const FIXED_CLASSES = [
   "Playgroup",
@@ -25,68 +30,80 @@ const ORDER_MAP = new Map(
   FIXED_CLASSES.map((name, index) => [name, index])
 );
 
-
 type ClassContextType = {
   classes: SchoolClass[];
   orderedClasses: SchoolClass[];
-  addClass: (newClass: SchoolClass) => void;
+  loading: boolean;
+  error: string | null;
+  addClass: (className: string) => Promise<void>;
 };
 
+const ClassContext =
+  createContext<ClassContextType | null>(null);
 
+const BASE_URL = API_BASE_URL;
 
-const ClassContext = createContext<ClassContextType | null>(null);
+export function ClassProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const [classes, setClasses] = useState<SchoolClass[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-export function ClassProvider({ children }: { children: React.ReactNode }) {
-  const [classes, setClasses] = usePersistentState<SchoolClass[]>("classes", []);
+  /* 🔹 LOAD CLASSES FROM BACKEND */
+  useEffect(() => {
+    const loadClasses = async () => {
+      try {
+        const res = await fetch(`${BASE_URL}/api/classes`);
+        if (!res.ok) throw new Error("Failed to fetch classes");
 
+        const data = await res.json();
+        setClasses(data);
+      } catch (err) {
+        setError("Unable to load classes");
+      } finally {
+        setLoading(false);
+      }
+    };
 
+    loadClasses();
+  }, []);
+
+  /* 🔹 ORDERED VIEW (UI CONCERN ONLY) */
   const orderedClasses = [...classes].sort((a, b) => {
     const orderA = ORDER_MAP.get(a.ClassName) ?? 999;
     const orderB = ORDER_MAP.get(b.ClassName) ?? 999;
     return orderA - orderB;
   });
 
+  /* 🔹 CREATE CLASS */
+  const addClass = async (className: string) => {
+    const res = await fetch(`${BASE_URL}/api/classes`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ClassName: className }),
+    });
 
+    if (!res.ok) {
+      throw new Error("Failed to create class");
+    }
 
-
-  const addClass = (newClass: SchoolClass) => {
-    setClasses((prev) => [...prev, newClass]);
+    const created = await res.json();
+    setClasses((prev) => [...prev, created]);
   };
 
-  useEffect(() => {
-  setClasses(prev => {
-    const map = new Map<string, SchoolClass>();
-
-    // Deduplicate
-    prev.forEach(cls => {
-      if (!map.has(cls.ClassName)) {
-        map.set(cls.ClassName, cls);
-      }
-    });
-
-    // Ensure all FIXED_CLASSES exist
-    FIXED_CLASSES.forEach(name => {
-      if (!map.has(name)) {
-        map.set(name, {
-          id: crypto.randomUUID(),
-          ClassName: name,
-        });
-      }
-    });
-
-    // 🔑 RETURN IN FIXED ORDER
-    return FIXED_CLASSES
-      .map(name => map.get(name))
-      .filter(Boolean) as SchoolClass[];
-  });
-}, []);
-
-
-
-
-
   return (
-    <ClassContext.Provider value={{ classes, addClass, orderedClasses }}>
+    <ClassContext.Provider
+      value={{
+        classes,
+        orderedClasses,
+        loading,
+        error,
+        addClass,
+      }}
+    >
       {children}
     </ClassContext.Provider>
   );
@@ -95,7 +112,9 @@ export function ClassProvider({ children }: { children: React.ReactNode }) {
 export function useClasses() {
   const context = useContext(ClassContext);
   if (!context) {
-    throw new Error("useClasses must be used within ClassProvider");
+    throw new Error(
+      "useClasses must be used within ClassProvider"
+    );
   }
   return context;
 }

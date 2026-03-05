@@ -46,11 +46,8 @@ function Students() {
       student.firstName,
       student.lastName,
       student.phoneNumber,
-      student.address.city,
       student.classID,
       student.sectionID,
-      student.father.name,
-      student.mother.name,
     ];
     // Check if any searchable field includes the query
     return searchableFields.some((field) =>

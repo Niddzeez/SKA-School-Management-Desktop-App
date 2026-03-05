@@ -8,24 +8,25 @@ import { useStudents } from "../../context/StudentContext";
 import { useClasses } from "../../context/ClassContext";
 import { useSections } from "../../context/SectionContext";
 import { useAuth } from "../../context/AuthContext";
-import {can} from "../../auth/permissions"
+import { can } from "../../auth/permissions"
 
 function AdmissionForm() {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const {role} = useAuth();
+  const { role } = useAuth();
   const { addStudent } = useStudents();
   const { classes } = useClasses();
   const { sections } = useSections();
 
-  if (!can(role, "ADMIT_STUDENT")) {
-  return (
-    <div className="unauthorized">
-      <h2>Access Denied</h2>
-      <p>You do not have permission to admit new students.</p>
-    </div>
-  );
-}
+  if (!role || !can(role, "ADMIT_STUDENT")) {
+    return (
+      <div className="unauthorized">
+        <h2>Access Denied</h2>
+        <p>You do not have permission to admit new students.</p>
+      </div>
+    );
+  }
   const navigate = useNavigate();
+
 
   const initialFormData = {
     firstName: "",
@@ -73,6 +74,8 @@ function AdmissionForm() {
     motherEducation: "",
     motherIncome: "",
   };
+
+
 
   const [formData, setFormData] = useState(initialFormData);
 
@@ -130,13 +133,13 @@ function AdmissionForm() {
 
 
   // Submit Handler
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    if (!can(role, "ADMIT_STUDENT")) {
-    alert("You do not have permission to admit students.");
-    return;
-  }
+    if (!role || !can(role, "ADMIT_STUDENT")) {
+      alert("You do not have permission to admit students.");
+      return;
+    }
 
     const validationErrors = validateForm();
     setErrors(validationErrors);
@@ -145,15 +148,14 @@ function AdmissionForm() {
       return;
     }
 
-    const student: Student = mapFormDataToStudent(formData);
+    const payload = mapFormDataToStudent(formData);
+    const createdStudent = await addStudent(payload);
 
-    addStudent(student);
-
-    // 👉 Navigate to print page
     navigate("/admission/print", {
       state: {
-        student,
-        academicYear: student.academic.dateOfAdmission?.slice(0, 4) || "",
+        student: createdStudent,
+        academicYear:
+          createdStudent.academic?.dateOfAdmission?.slice(0, 4) ?? "",
       },
     });
 
@@ -173,7 +175,7 @@ function AdmissionForm() {
       value: s.id,
     }));
 
-  
+
 
 
   return (

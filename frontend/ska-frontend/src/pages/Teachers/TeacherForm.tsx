@@ -8,14 +8,14 @@ import { useState } from "react";
 
 function TeacherForm() {
 
-  const [error, setError] = React.useState<{[key : string]: string}>({});
+  const [error, setError] = React.useState<{ [key: string]: string }>({});
   const { addTeacher } = useTeachers();
-  
+
   const initialFormData = {
     firstName: "",
     lastName: "",
     email: "",
-    subjects: [],
+    subjects: "",
     yearsOfExperience: "",
     dateOfJoining: "",
     phone: "",
@@ -53,37 +53,59 @@ function TeacherForm() {
 
 
   function validateForm() {
-    const newErrors: {[key : string]: string} = {};
+    const newErrors: { [key: string]: string } = {};
 
     // Example validation: Check if first name is empty
     if (!formData.firstName.trim()) {
       newErrors.firstName = "First name is required";
     }
 
-    if(!formData.lastName.trim()) {
+    if (!formData.lastName.trim()) {
       newErrors.lastName = "Last name is required";
     }
 
-    if(!formData.dob.trim()) {
+    if (!formData.dob.trim()) {
       newErrors.dob = "Date of Birth is required";
     }
 
-    if(!formData.dob.match(/^\d{4}-\d{2}-\d{2}$/)) {
+    if (!formData.dob.match(/^\d{4}-\d{2}-\d{2}$/)) {
       newErrors.dob = "Date of Birth must be in YYYY-MM-DD format";
     }
 
-    if(!formData.phone.trim()) {
+    if (!formData.phone.trim()) {
       newErrors.phone = "Phone number is required";
-    }else if (!formData.phone.match(/^[6-9]\d{9}$/)) {
+    } else if (!formData.phone.match(/^[6-9]\d{9}$/)) {
       newErrors.phone = "Phone number must be a valid 10-digit Indian number";
     }
-    
 
-    if(!formData.aadhar.trim()){
+
+    if (!formData.aadhar.trim()) {
       newErrors.aadhar = "Aadhar number is required";
-    }else if (!formData.aadhar.match(/^\d{12}$/)) {
+    } else if (!formData.aadhar.match(/^\d{12}$/)) {
       newErrors.aadhar = "Aadhar number must be a valid 12-digit number";
     }
+
+    if (!formData.dateOfJoining.trim()) {
+      newErrors.dateOfJoining = "Date of Joining is required";
+    }
+
+    if (!formData.subjects.trim()) {
+  newErrors.subjects = "At least one subject is required";
+}
+
+if (!formData.address.trim()) {
+  newErrors.address = "Address is required";
+}
+
+if (!formData.emergencyContact.trim()) {
+  newErrors.emergencyContact = "Emergency contact is required";
+}
+
+if (!formData.qualification.trim()) {
+  newErrors.qualification = "Qualification is required";
+}
+
+
 
     return newErrors;
   }
@@ -93,238 +115,242 @@ function TeacherForm() {
 
 
   // Submit Handler
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
 
-    const validateErrors = validateForm();
+  const validationErrors = validateForm();
+  setError(validationErrors);
 
-    setError(validateErrors);
-
-    if(Object.keys(validateErrors).length > 0){
-      return;
-    }
-
-    const teacher: Teacher = mapFormDataToTeacher(formData);
-    addTeacher(teacher);
-    setFormData(initialFormData);
-
-    setError({});
-    setSuccessMessage("Teacher added successfully!");
-
-    setTimeout(() => setSuccessMessage(""), 3000);
-
+  if (Object.keys(validationErrors).length > 0) {
+    return; // 🚫 STOP here
   }
+
+  try {
+    const payload = mapFormDataToTeacher(formData);
+    console.log("FINAL PAYLOAD →", payload);
+
+    await addTeacher(payload);
+
+    setFormData(initialFormData);
+    setSuccessMessage("Teacher added successfully!");
+    setTimeout(() => setSuccessMessage(""), 3000);
+  } catch (err) {
+    console.error("Failed to add teacher", err);
+  }
+};
+
+
 
   return (
     <form className="teacher-form-page" onSubmit={handleSubmit}>
-  <h1>Add New Teacher</h1>
+      <h1>Add New Teacher</h1>
 
-  {successMessage && (
-    <div className="success-message">{successMessage}</div>
-  )}
+      {successMessage && (
+        <div className="success-message">{successMessage}</div>
+      )}
 
-  {/* Personal Information */}
-  <div className="form-section">
-    <h2 className="section-heading">Personal Information</h2>
+      {/* Personal Information */}
+      <div className="form-section">
+        <h2 className="section-heading">Personal Information</h2>
 
-    <div className="form-grid">
-      <InputBox
-        label="First Name"
-        name="firstName"
-        type="text"
-        value={formData.firstName}
-        onChange={handleChange}
-        error={error.firstName}
-        required
-      />
+        <div className="form-grid">
+          <InputBox
+            label="First Name"
+            name="firstName"
+            type="text"
+            value={formData.firstName}
+            onChange={handleChange}
+            error={error.firstName}
+            required
+          />
 
-      <InputBox
-        label="Last Name"
-        name="lastName"
-        type="text"
-        value={formData.lastName}
-        onChange={handleChange}
-        error={error.lastName}
-        required
-      />
+          <InputBox
+            label="Last Name"
+            name="lastName"
+            type="text"
+            value={formData.lastName}
+            onChange={handleChange}
+            error={error.lastName}
+            required
+          />
 
-      <InputBox
-        label="Gender"
-        name="gender"
-        type="select"
-        options={["Male", "Female", "Other"]}
-        value={formData.gender}
-        onChange={handleChange}
-        required
-      />
+          <InputBox
+            label="Gender"
+            name="gender"
+            type="select"
+            options={["Male", "Female", "Other"]}
+            value={formData.gender}
+            onChange={handleChange}
+            required
+          />
 
-      <InputBox
-        label="Date of Birth"
-        name="dob"
-        type="date"
-        value={formData.dob}
-        onChange={handleChange}
-        error={error.dob}
-        required
-      />
-    </div>
-  </div>
+          <InputBox
+            label="Date of Birth"
+            name="dob"
+            type="date"
+            value={formData.dob}
+            onChange={handleChange}
+            error={error.dob}
+            required
+          />
+        </div>
+      </div>
 
-  <hr />
+      <hr />
 
-  {/* Professional Information */}
-  <div className="form-section">
-    <h2 className="section-heading">Professional Information</h2>
+      {/* Professional Information */}
+      <div className="form-section">
+        <h2 className="section-heading">Professional Information</h2>
 
-    <div className="form-grid">
-      <InputBox
-        label="Subjects"
-        name="subjects"
-        type="text"
-        value={Array.isArray(formData.subjects) ? formData.subjects.join(", ") : formData.subjects}
-        onChange={handleChange}
-      />
+        <div className="form-grid">
+          <InputBox
+            label="Subjects"
+            name="subjects"
+            type="text"
+            value={Array.isArray(formData.subjects) ? formData.subjects.join(", ") : formData.subjects}
+            onChange={handleChange}
+          />
 
-      <InputBox
-        label="Years of Experience"
-        name="yearsOfExperience"
-        type="text"
-        numericOnly
-        value={formData.yearsOfExperience}
-        onChange={handleChange}
-      />
+          <InputBox
+            label="Years of Experience"
+            name="yearsOfExperience"
+            type="text"
+            numericOnly
+            value={formData.yearsOfExperience}
+            onChange={handleChange}
+          />
 
-      <InputBox
-        label="Date of Joining"
-        name="dateOfJoining"
-        type="date"
-        value={formData.dateOfJoining}
-        onChange={handleChange}
-      />
+          <InputBox
+            label="Date of Joining"
+            name="dateOfJoining"
+            type="date"
+            value={formData.dateOfJoining}
+            onChange={handleChange}
+          />
 
-      <InputBox
-        label="Qualification"
-        name="qualification"
-        type="text"
-        value={formData.qualification}
-        onChange={handleChange}
-      />
+          <InputBox
+            label="Qualification"
+            name="qualification"
+            type="text"
+            value={formData.qualification}
+            onChange={handleChange}
+          />
 
-    </div>
+        </div>
 
-  </div>
+      </div>
 
-  <hr />
+      <hr />
 
-  {/* Contact Information */}
-  <div className="form-section">
-    <h2 className="section-heading">Contact Information</h2>
+      {/* Contact Information */}
+      <div className="form-section">
+        <h2 className="section-heading">Contact Information</h2>
 
-    <div className="form-grid">
-      <InputBox
-        label="Phone Number"
-        name="phone"
-        type="text"
-        numericOnly
-        maxLength={10}
-        value={formData.phone}
-        onChange={handleChange}
-        error={error.phone}
-        required
-      />
+        <div className="form-grid">
+          <InputBox
+            label="Phone Number"
+            name="phone"
+            type="text"
+            numericOnly
+            maxLength={10}
+            value={formData.phone}
+            onChange={handleChange}
+            error={error.phone}
+            required
+          />
 
-      <InputBox
-        label="Email"
-        name="email"
-        type="email"
-        value={formData.email}
-        onChange={handleChange}
-      />
+          <InputBox
+            label="Email"
+            name="email"
+            type="email"
+            value={formData.email}
+            onChange={handleChange}
+          />
 
-      <InputBox
-        label="Address"
-        name="address"
-        type="textarea"
-        value={formData.address}
-        onChange={handleChange}
-      />
+          <InputBox
+            label="Address"
+            name="address"
+            type="textarea"
+            value={formData.address}
+            onChange={handleChange}
+          />
 
-      <InputBox
-        label="Emergency Contact"
-        name="emergencyContact"
-        type="text"
-        value={formData.emergencyContact}
-        onChange={handleChange}
-      />
-    </div>
-  </div>
+          <InputBox
+            label="Emergency Contact"
+            name="emergencyContact"
+            type="text"
+            value={formData.emergencyContact}
+            onChange={handleChange}
+          />
+        </div>
+      </div>
 
-  <hr />
+      <hr />
 
-  {/* Additional Information */}
-  <div className="form-section">
-    <h2 className="section-heading">Additional Information</h2>
+      {/* Additional Information */}
+      <div className="form-section">
+        <h2 className="section-heading">Additional Information</h2>
 
-    <div className="form-grid">
-      <InputBox
-        label="Aadhaar Number"
-        name="aadhar"
-        type="text"
-        numericOnly
-        maxLength={12}
-        value={formData.aadhar}
-        onChange={handleChange}
-        error={error.aadhar}
-        required
-      />
+        <div className="form-grid">
+          <InputBox
+            label="Aadhaar Number"
+            name="aadhar"
+            type="text"
+            numericOnly
+            maxLength={12}
+            value={formData.aadhar}
+            onChange={handleChange}
+            error={error.aadhar}
+            required
+          />
 
-      <InputBox
-        label="Blood Group"
-        name="bloodGroup"
-        type="select"
-        options={["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"]}
-        value={formData.bloodGroup}
-        onChange={handleChange}
-      />
+          <InputBox
+            label="Blood Group"
+            name="bloodGroup"
+            type="select"
+            options={["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"]}
+            value={formData.bloodGroup}
+            onChange={handleChange}
+          />
 
-      <InputBox
-        label="Religion"
-        name="religion"
-        type="text"
-        value={formData.religion}
-        onChange={handleChange}
-      />
+          <InputBox
+            label="Religion"
+            name="religion"
+            type="text"
+            value={formData.religion}
+            onChange={handleChange}
+          />
 
-      <InputBox
-        label="Father's/Spouse's Name"
-        name="guardian"
-        type="text"
-        value={formData.guardian}
-        onChange={handleChange}
-      />
-    </div>
-  </div>
+          <InputBox
+            label="Father's/Spouse's Name"
+            name="guardian"
+            type="text"
+            value={formData.guardian}
+            onChange={handleChange}
+          />
+        </div>
+      </div>
 
 
-  {/* Actions */}
-  <div className="form-actions">
-    <button type="submit" className="primary-btn" disabled={!isFormValid}>
-      Add Teacher
-    </button>
+      {/* Actions */}
+      <div className="form-actions">
+        <button type="submit" className="primary-btn" disabled={!isFormValid}>
+          Add Teacher
+        </button>
 
-    <button
-      type="button"
-      className="secondary-btn"
-      onClick={() => setFormData(initialFormData)}
-    >
-      Cancel
-    </button>
-  </div>
-</form>
+        <button
+          type="button"
+          className="secondary-btn"
+          onClick={() => setFormData(initialFormData)}
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
 
   );
 }
 
 export default TeacherForm;
-  
-  
+
+

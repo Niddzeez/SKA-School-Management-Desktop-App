@@ -186,3 +186,21 @@ hr {
   grid-template-columns: 140px 1fr;
   margin: 2px 0;
 }
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  .print-page,
+  .print-page * {
+    visibility: visible;
+  }
+
+  .print-page {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+}

@@ -2,9 +2,10 @@ import "./admissionPrint.css";
 import SchoolLogo from "../assets/logo.svg?react";
 import PrintLayout from "../components/print/PrintLayout";
 import PrintHeader from "../components/print/PrintHeader";
+import type { Student } from "../types/Student";
 
 type Props = {
-  student: any;
+  student: Student;
   academicYear: string;
 };
 
@@ -40,10 +41,10 @@ export default function AdmissionPrintView({ student, academicYear }: Props) {
           <div><strong>Gender:</strong></div><div>{student.gender}</div>
           <div><strong>Blood Group:</strong></div><div>{student.bloodGroup}</div>
 
-          <div><strong>Class:</strong></div><div>{student.grade}</div>
+          <div><strong>Class:</strong></div><div>{student.classID}</div>
           <div><strong>Aadhaar:</strong></div><div>{student.aadhaarNumber || "-"}</div>
 
-          <div><strong>Admission Date:</strong></div><div>{student.academic.dateOfAdmission}</div>
+          <div><strong>Admission Date:</strong></div><div>{student.academic?.dateOfAdmission || "-"}</div>
         </div>
 
       </section>
@@ -53,8 +54,8 @@ export default function AdmissionPrintView({ student, academicYear }: Props) {
       <section className="card">
         <h3>Address</h3>
         <p className="address-line">
-          {student.address.addressLine}, {student.address.city},
-          {student.address.state} – {student.address.pinCode}
+          {student.address?.addressLine || "-"}, {student.address?.city || "-"},
+          {student.address?.state || "-"} – {student.address?.pinCode || "-"}
         </p>
 
       </section>
@@ -95,23 +96,23 @@ export default function AdmissionPrintView({ student, academicYear }: Props) {
           {/* Father */}
           <div className="parent-col">
             <h4>Father</h4>
-            <p><strong>Name:</strong> {student.father.name}</p>
-            <p><strong>Phone:</strong> {student.father.phone}</p>
-            <p><strong>Occupation:</strong> {student.father.occupation}</p>
-            <p><strong>Education:</strong> {student.father.education}</p>
-            <p><strong>Income:</strong> {student.father.income}</p>
-            <p><strong>Aadhar Number:</strong> {student.father.aadhaar}</p>
+            <p><strong>Name:</strong> {student.father?.name}</p>
+            <p><strong>Phone:</strong> {student.father?.phone}</p>
+            <p><strong>Occupation:</strong> {student.father?.occupation}</p>
+            <p><strong>Education:</strong> {student.father?.education}</p>
+            <p><strong>Income:</strong> {student.father?.income}</p>
+            <p><strong>Aadhar Number:</strong> {student.father?.aadhaar}</p>
           </div>
 
           {/* Mother */}
           <div className="parent-col">
             <h4>Mother</h4>
-            <p><strong>Name:</strong> {student.mother.name}</p>
-            <p><strong>Phone:</strong> {student.mother.phone}</p>
-            <p><strong>Occupation:</strong> {student.mother.occupation}</p>
-            <p><strong>Education:</strong> {student.mother.education}</p>
-            <p><strong>Income:</strong> {student.mother.income}</p>
-            <p><strong>Aadhar Number:</strong> {student.mother.aadhaar}</p>
+            <p><strong>Name:</strong> {student.mother?.name}</p>
+            <p><strong>Phone:</strong> {student.mother?.phone}</p>
+            <p><strong>Occupation:</strong> {student.mother?.occupation}</p>
+            <p><strong>Education:</strong> {student.mother?.education}</p>
+            <p><strong>Income:</strong> {student.mother?.income}</p>
+            <p><strong>Aadhar Number:</strong> {student.mother?.aadhaar}</p>
           </div>
         </div>
       </section>

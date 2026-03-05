@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useClasses } from "../../context/ClassContext";
 import { useSections } from "../../context/SectionContext";
 import { useTeachers } from "../../context/TeacherContext";
@@ -12,8 +12,8 @@ import ClassRegisterModal from "./ClassRegisterModal";
 
 
 function Classes() {
-  const { classes } = useClasses();
-  const { sections, addSection, assignClassTeacher } = useSections();
+  const { orderedClasses } = useClasses();
+  const { sections, addSection, assignClassTeacher, loadAllSections} = useSections();
   const { teachers } = useTeachers();
 
   const [newSectionNames, setNewSectionNames] = useState<
@@ -27,21 +27,27 @@ function Classes() {
      Add Section
   ========================= */
 
-  const handleAddSection = (classID: string) => {
+  const handleAddSection = async (classID: string) => {
     const sectionName = newSectionNames[classID];
     if (!sectionName?.trim()) return;
 
-    addSection({
-      id: crypto.randomUUID(),
-      classID,
-      name: sectionName.trim(),
-    });
+    try {
+      await addSection(classID, sectionName.trim());
+    } catch (err: any) {
+      alert(err.message); // or toast
+    }
+
 
     setNewSectionNames((prev) => ({
       ...prev,
       [classID]: "",
     }));
   };
+
+  useEffect(() => {
+    loadAllSections();
+  }, []);
+
 
 
 
@@ -62,7 +68,7 @@ function Classes() {
 
       {/* Class Cards */}
       <div className="class-list">
-        {classes.map((cls) => {
+        {orderedClasses.map((cls) => {
           const classSections = sections.filter(
             (sec) => sec.classID === cls.id
           );

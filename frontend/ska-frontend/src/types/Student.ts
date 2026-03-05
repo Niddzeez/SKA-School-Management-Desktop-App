@@ -53,12 +53,12 @@ export type Student = {
   status: StudentStatus;
 
 
-  address: Address;
+  address?: Address;
 
-  father: ParentInfo;
-  mother: ParentInfo;
+  father?: ParentInfo;
+  mother?: ParentInfo;
 
-  academic: AcademicInfo;
+  academic?: AcademicInfo;
 
   totalSiblings?: number;
   pictureUrl?: string;

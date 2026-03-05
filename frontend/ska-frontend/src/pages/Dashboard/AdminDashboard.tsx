@@ -8,7 +8,7 @@ import { Navigate } from "react-router-dom";
 function AdminDashboard() {
     const {role} = useAuth();
 
-    if(!can(role, "VIEW_REPORTS"))
+    if(!role || !can(role, "VIEW_REPORTS"))
     {
         return <Navigate to="/dashboard" replace />
     }

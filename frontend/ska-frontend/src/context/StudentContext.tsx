@@ -1,66 +1,191 @@
-import { createContext, useContext, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import type { Student, StudentStatus } from "../types/Student";
-import { usePersistentState } from "../hooks/UsePersistentState";
+import { API_BASE_URL } from "../config/api";
+
+type StudentUpdate = Partial<Omit<Student, "id">>;
 
 type StudentContextType = {
   students: Student[];
-  addStudent: (student: Student) => void;
-  UpdateStudentStatus: (id: string, status: StudentStatus) => void;
-  assignStudenttoSection: (studentID: string, classID: string, sectionID: string) => void;
-  updateStudent: (studentId: string, updates: StudentUpdate) => void;
+  loading: boolean;
+  error: string | null;
+
+  addStudent: (student: Omit<Student, "id">) => Promise<Student>;
+  UpdateStudentStatus: (
+    id: string,
+    status: StudentStatus
+  ) => Promise<void>;
+  assignStudenttoSection: (
+    studentID: string,
+    classID: string,
+    sectionID: string
+  ) => Promise<void>;
+  updateStudent: (
+    studentId: string,
+    updates: StudentUpdate
+  ) => Promise<void>;
+  getStudentById: (
+    id: string
+  ) => Promise<Student>;
 };
 
-const StudentContext = createContext<StudentContextType | null>(null);
-type StudentUpdate = Partial<Omit<Student, "id">>;
+const StudentContext =
+  createContext<StudentContextType | null>(null);
+
+const BASE_URL = API_BASE_URL;
+
+export function StudentProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const [students, setStudents] = useState<Student[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  /* 🔹 INITIAL LOAD */
+  useEffect(() => {
+    const loadStudents = async () => {
+      try {
+        const res = await fetch(`${BASE_URL}/api/students`);
+        if (!res.ok) throw new Error("Failed to fetch students");
+
+        const data = await res.json();
+        setStudents(data);
+      } catch (err) {
+        setError("Unable to load students");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadStudents();
+  }, []);
+
+  const addStudent = async (
+  student: Omit<Student, "id">
+): Promise<Student> => {
+  const res = await fetch(`${BASE_URL}/api/students`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(student),
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to create student");
+  }
+
+  const created = await res.json();
+  setStudents((prev) => [...prev, created]);
+  return created;
+};
 
 
-export function StudentProvider({ children }: { children: React.ReactNode }) {
-  const [students, setStudents] =
-    usePersistentState<Student[]>("students", []);
-  console.log("StudentContext mounted, students:", students);
+  /* 🔹 UPDATE STATUS */
+  const UpdateStudentStatus = async (
+    id: string,
+    status: StudentStatus
+  ) => {
+    const res = await fetch(
+      `${BASE_URL}/api/students/${id}/status`,
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status }),
+      }
+    );
 
-  const addStudent = (student: Student) => {
-    setStudents((prev) => [...prev, student]);
-  };
+    if (!res.ok) {
+      throw new Error("Failed to update status");
+    }
 
-  const updateStudentStatus = (id: string, status: StudentStatus) => {
+    const updated = await res.json();
     setStudents((prev) =>
-      prev.map((student) =>
-        student.id === id
-          ? { ...student, status }
-          : student
-      )
+      prev.map((s) => (s.id === id ? updated : s))
     );
   };
 
+  const getStudentById = async (id: string): Promise<Student> => {
+  const res = await fetch(`${BASE_URL}/api/students/${id}`);
 
-  const assignStudenttoSection = (
-    studentId: string,
+  if (!res.ok) {
+    throw new Error("Failed to fetch student");
+  }
+
+  return res.json();
+};
+
+
+  /* 🔹 ASSIGN CLASS + SECTION */
+  const assignStudenttoSection = async (
+    studentID: string,
     classID: string,
     sectionID: string
   ) => {
-    setStudents((prev) =>
-      prev.map((student) =>
-        student.id == studentId
-          ? { ...student, classID, sectionID }
-          : student
-      )
+    const res = await fetch(
+      `${BASE_URL}/api/students/${studentID}/assignment`,
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ classID, sectionID }),
+      }
     );
 
+    if (!res.ok) {
+      throw new Error("Failed to assign section");
+    }
 
+    const updated = await res.json();
+    setStudents((prev) =>
+      prev.map((s) =>
+        s.id === studentID ? updated : s
+      )
+    );
   };
 
-  const updateStudent = (studentId: string, updates: StudentUpdate) => {
-  setStudents((prev) =>
-    prev.map((s) =>
-      s.id === studentId ? { ...s, ...updates } : s
-    )
-  );
-};
+  /* 🔹 GENERIC UPDATE (soft support) */
+  const updateStudent = async (
+    studentId: string,
+    updates: StudentUpdate
+  ) => {
+    const res = await fetch(
+      `${BASE_URL}/api/students/${studentId}`,
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updates),
+      }
+    );
 
+    if (!res.ok) {
+      throw new Error("Failed to update student");
+    }
+
+    const updated = await res.json();
+    setStudents((prev) =>
+      prev.map((s) =>
+        s.id === studentId ? updated : s
+      )
+    );
+  };
 
   return (
-    <StudentContext.Provider value={{ students, addStudent, UpdateStudentStatus: updateStudentStatus, assignStudenttoSection , updateStudent}}>
+    <StudentContext.Provider
+      value={{
+        students,
+        loading,
+        error,
+        addStudent,
+        UpdateStudentStatus,
+        assignStudenttoSection,
+        updateStudent,
+        getStudentById
+      }}
+    >
       {children}
     </StudentContext.Provider>
   );
@@ -69,7 +194,9 @@ export function StudentProvider({ children }: { children: React.ReactNode }) {
 export function useStudents() {
   const context = useContext(StudentContext);
   if (!context) {
-    throw new Error("useStudents must be used within StudentProvider");
+    throw new Error(
+      "useStudents must be used within StudentProvider"
+    );
   }
   return context;
 }

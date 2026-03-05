@@ -17,10 +17,10 @@ function StudentDetails() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
 
-  const { students, UpdateStudentStatus, assignStudenttoSection } =
+  const { students, UpdateStudentStatus, assignStudenttoSection, getStudentById } =
     useStudents();
-  const { classes } = useClasses();
-  const { sections } = useSections();
+  const { orderedClasses } = useClasses();
+  const { sections, loadAllSections } = useSections();
 
   const {role} = useAuth();
 
@@ -51,6 +51,7 @@ function StudentDetails() {
   /* =========================
      Local UI State
   ========================= */
+
 
   const [tempClassID, setTempClassID] = useState("");
   const [tempSectionID, setTempSectionID] = useState("");
@@ -122,8 +123,19 @@ function StudentDetails() {
         amount: c.amount,
       }))
     );
-  }, [student, academicYear, getActiveFeeStructure, upsertLedgerFromFeeStructure]);
 
+    
+
+    if(student.classID){
+      loadAllSections();
+    }
+  }, [student?.id,
+  student?.classID,
+  student?.status,
+  academicYear,
+  getActiveFeeStructure,
+  upsertLedgerFromFeeStructure,
+  loadAllSections,]);
   /* =========================
      Status Handlers
   ========================= */
@@ -147,7 +159,7 @@ function StudentDetails() {
   };
 
   const getNextClassId = (currentClassId: string) => {
-    const sortedClasses = [...classes].sort(
+    const sortedClasses = [...orderedClasses].sort(
       (a, b) => Number(a.ClassName) - Number(b.ClassName)
     );
 
@@ -293,11 +305,11 @@ function StudentDetails() {
 
         {student.dateOfBirth && (
           <p>
-            <strong>Date of Birth:</strong> {student.dateOfBirth}
+            <strong>Date of Birth:</strong> {student.dateOfBirth.slice(0, 10)}
           </p>
         )}
 
-        {student.academic.dateOfAdmission && (
+        {student.academic && (
           <p>
             <strong>Admission Date:</strong> {student.academic.dateOfAdmission}
           </p>
@@ -337,18 +349,18 @@ function StudentDetails() {
 
       <h4>Father</h4>
       <div className="admission-card">
-        <p><strong>Name:</strong> {student.father.name}</p>
-        <p><strong>Phone:</strong> {student.father.phone}</p>
-        <p><strong>Occupation:</strong> {student.father.occupation}</p>
-        <p><strong>Education:</strong> {student.father.education}</p>
+        <p><strong>Name:</strong> {student.father?.name || "-"}</p>
+        <p><strong>Phone:</strong> {student.father?.phone|| "-"}</p>
+        <p><strong>Occupation:</strong> {student.father?.occupation|| "-"}</p>
+        <p><strong>Education:</strong> {student.father?.education|| "-"}</p>
       </div>
 
       <h4>Mother</h4>
       <div className="admission-card">
-        <p><strong>Name:</strong> {student.mother.name}</p>
-        <p><strong>Phone:</strong> {student.mother.phone}</p>
-        <p><strong>Occupation:</strong> {student.mother.occupation}</p>
-        <p><strong>Education:</strong> {student.mother.education}</p>
+        <p><strong>Name:</strong> {student.mother?.name|| "-"}</p>
+        <p><strong>Phone:</strong> {student.mother?.phone|| "-"}</p>
+        <p><strong>Occupation:</strong> {student.mother?.occupation|| "-"}</p>
+        <p><strong>Education:</strong> {student.mother?.education|| "-"}</p>
       </div>
 
       {/* =========================
@@ -360,7 +372,7 @@ function StudentDetails() {
       <strong>Assigned:</strong>{" "}
       {student.classID ? (
         <>
-          Class {classes.find(c => c.id === student.classID)?.ClassName}
+          Class {orderedClasses.find(c => c.id === student.classID)?.ClassName}
           {student.sectionID
             ? ` - Section ${sections.find(s => s.id === student.sectionID)?.name}`
             : " - Section not assigned"}
@@ -380,7 +392,7 @@ function StudentDetails() {
           }}
         >
           <option value="">Select Class</option>
-          {classes.map((cls) => (
+          {orderedClasses.map((cls) => (
             <option key={cls.id} value={cls.id}>
               Class {cls.ClassName}
             </option>
