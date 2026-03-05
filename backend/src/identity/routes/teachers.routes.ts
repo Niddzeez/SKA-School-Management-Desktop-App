@@ -1,92 +1,83 @@
-import { Router } from "express";
+import { Router, Request, Response } from "express";
 import { TeacherModel } from "../models/Teacher.model";
 import { mapTeacher } from "../models/teacher.mapper";
+import { toErrorResponse, NotFoundError } from "../../shared/error";
+import { validateTeacherStatus, requireFields } from "../../shared/validators";
 
 const router = Router();
 
-// CREATE teacher
-router.post("/", async (req, res) => {
-  if (!req.body) {
-    return res.status(400).json({ error: "Request body missing" });
-  }
-
+// ---------------------------------------------------------------------------
+// GET /api/teachers
+// List all teachers
+// ---------------------------------------------------------------------------
+router.get("/", async (_req: Request, res: Response) => {
   try {
+    const teachers = await TeacherModel.find().lean();
+    res.json(teachers.map(mapTeacher));
+  } catch (err) {
+    const { status, body } = toErrorResponse(err);
+    res.status(status).json(body);
+  }
+});
+
+// ---------------------------------------------------------------------------
+// GET /api/teachers/:id
+// Get a single teacher by ID
+// ---------------------------------------------------------------------------
+router.get("/:id", async (req: Request, res: Response) => {
+  try {
+    const teacher = await TeacherModel.findById(req.params.id).lean();
+    if (!teacher) throw new NotFoundError("Teacher", req.params.id);
+    res.json(mapTeacher(teacher));
+  } catch (err) {
+    const { status, body } = toErrorResponse(err);
+    res.status(status).json(body);
+  }
+});
+
+// ---------------------------------------------------------------------------
+// POST /api/teachers
+// Register a new teacher
+// ---------------------------------------------------------------------------
+router.post("/", async (req: Request, res: Response) => {
+  try {
+    requireFields(req.body, [
+      "firstName", "lastName", "phone", "dob",
+      "dateOfJoining", "gender", "information",
+    ]);
     const teacher = await TeacherModel.create(req.body);
     res.status(201).json(mapTeacher(teacher.toObject()));
   } catch (err) {
-    res.status(400).json({ error: "Invalid teacher data" });
+    const { status, body } = toErrorResponse(err);
+    res.status(status).json(body);
   }
 });
 
-// LIST teachers
-router.get("/", async (_req, res) => {
-  const teachers = await TeacherModel.find().lean();
-  res.json(teachers.map(mapTeacher));
+// ---------------------------------------------------------------------------
+// PATCH /api/teachers/:id/status
+// Update employment status
+// Fix 8: status is validated against the CurrentStatus enum before DB write
+// ---------------------------------------------------------------------------
+router.patch("/:id/status", async (req: Request, res: Response) => {
+  try {
+    const status = validateTeacherStatus(req.body.status);
+
+    const teacher = await TeacherModel.findByIdAndUpdate(
+      req.params.id,
+      { status },
+      { new: true, runValidators: true }
+    ).lean();
+
+    if (!teacher) throw new NotFoundError("Teacher", req.params.id);
+    res.json(mapTeacher(teacher));
+  } catch (err) {
+    const { status, body } = toErrorResponse(err);
+    res.status(status).json(body);
+  }
 });
 
-// GET teacher by ID
-router.get("/:id", async (req, res) => {
-  const teacher = await TeacherModel.findById(req.params.id).lean();
-
-  if (!teacher) {
-    return res.status(404).json({ error: "Teacher not found" });
-  }
-
-  res.json(mapTeacher(teacher));
-});
-
-// UPDATE status
-router.patch("/:id/status", async (req, res) => {
-  if (!req.body) {
-    return res.status(400).json({ error: "Request body missing" });
-  }
-
-  const { status } = req.body;
-
-  if (!status) {
-    return res.status(400).json({ error: "status required" });
-  }
-
-  const teacher = await TeacherModel.findByIdAndUpdate(
-    req.params.id,
-    { status },
-    { new: true }
-  ).lean();
-
-  if (!teacher) {
-    return res.status(404).json({ error: "Teacher not found" });
-  }
-
-  res.json(mapTeacher(teacher));
-});
-
-// ASSIGN current class
-router.patch("/:id/assignment", async (req, res) => {
-  if (!req.body) {
-    return res.status(400).json({ error: "Request body missing" });
-  }
-
-  const { className, section } = req.body;
-
-  if (!className || !section) {
-    return res
-      .status(400)
-      .json({ error: "className and section required" });
-  }
-
-  const teacher = await TeacherModel.findByIdAndUpdate(
-    req.params.id,
-    {
-      currentClass: { className, section },
-    },
-    { new: true }
-  ).lean();
-
-  if (!teacher) {
-    return res.status(404).json({ error: "Teacher not found" });
-  }
-
-  res.json(mapTeacher(teacher));
-});
+// NOTE: PATCH /teachers/:id/assignment has been intentionally removed.
+// Teacher-to-section assignment is performed via PATCH /sections/:id/teacher
+// as defined in the API specification (backend-API-derivation.md §7).
 
 export default router;
