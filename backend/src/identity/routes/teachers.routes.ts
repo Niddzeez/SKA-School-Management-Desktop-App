@@ -3,6 +3,7 @@ import { TeacherModel } from "../models/Teacher.model";
 import { mapTeacher } from "../models/teacher.mapper";
 import { toErrorResponse, NotFoundError } from "../../shared/error";
 import { validateTeacherStatus, requireFields } from "../../shared/validators";
+import { requireRole } from "../../auth/middleware/requireRole";
 
 const router = Router();
 
@@ -39,7 +40,7 @@ router.get("/:id", async (req: Request, res: Response) => {
 // POST /api/teachers
 // Register a new teacher
 // ---------------------------------------------------------------------------
-router.post("/", async (req: Request, res: Response) => {
+router.post("/", requireRole("ADMIN") as any, async (req: Request, res: Response) => {
   try {
     requireFields(req.body, [
       "firstName", "lastName", "phone", "dob",
@@ -58,7 +59,7 @@ router.post("/", async (req: Request, res: Response) => {
 // Update employment status
 // Fix 8: status is validated against the CurrentStatus enum before DB write
 // ---------------------------------------------------------------------------
-router.patch("/:id/status", async (req: Request, res: Response) => {
+router.patch("/:id/status", requireRole("ADMIN") as any, async (req: Request, res: Response) => {
   try {
     const status = validateTeacherStatus(req.body.status);
 

@@ -3,6 +3,7 @@ import { ClassModel } from "../models/Class.model";
 import { mapClass } from "../models/class.mapper";
 import { toErrorResponse, ConflictError } from "../../shared/error";
 import { requireFields } from "../../shared/validators";
+import { requireRole } from "../../auth/middleware/requireRole";
 
 const router = Router();
 
@@ -25,7 +26,7 @@ router.get("/", async (_req: Request, res: Response) => {
 // Create a new class
 // Returns 409 if the ClassName already exists (unique index on ClassModel)
 // ---------------------------------------------------------------------------
-router.post("/", async (req: Request, res: Response) => {
+router.post("/", requireRole("ADMIN") as any, async (req: Request, res: Response) => {
   try {
     requireFields(req.body, ["ClassName"]);
 
