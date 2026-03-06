@@ -125,7 +125,7 @@ router.post("/", requireRole("ADMIN") as any, async (req: Request, res: Response
             mode: validatedMode,
             recordedBy: recordedBy.trim(),
             reference: ref,
-        });
+        }, (req as any).user?.userId || "UNKNOWN_USER");
 
         res.status(201).json(mapExpense(row));
     } catch (err) {

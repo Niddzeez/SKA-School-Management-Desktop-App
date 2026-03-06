@@ -8,6 +8,9 @@
  *   422  Unprocessable      – UnprocessableError (enum / schema failures)
  */
 
+import { Request } from "express";
+import { logger } from "./observability/logger";
+
 export class AppError extends Error {
     public readonly statusCode: number;
 
@@ -51,12 +54,38 @@ export class UnprocessableError extends AppError {
 /**
  * Express error-response helper.
  * Converts any AppError into a consistent JSON response shape.
- * For unknown errors it returns 500 without leaking internals.
+ * Logs the error through the structured logger.
  */
-export function toErrorResponse(err: unknown): { status: number; body: { error: string } } {
+export function toErrorResponse(
+    err: unknown,
+    req?: Request
+): { status: number; body: { error: string } } {
+    let status = 500;
+    let message = "Internal server error";
+    let isAppError = false;
+
     if (err instanceof AppError) {
-        return { status: err.statusCode, body: { error: err.message } };
+        status = err.statusCode;
+        message = err.message;
+        isAppError = true;
     }
-    console.error("[UnhandledError]", err);
-    return { status: 500, body: { error: "Internal server error" } };
+
+    const payload = {
+        requestId: req?.id,
+        route: req ? `${req.method} ${req.originalUrl}` : undefined,
+        statusCode: status,
+        userId: req && (req as any).user ? (req as any).user.id : undefined,
+    };
+
+    if (isAppError && status < 500) {
+        // AppError <500 are expected invariant violations / user mistakes
+        logger.warn(message, payload);
+    } else {
+        // 500s or native Node errors are unexpected crashes
+        const finalError = err instanceof Error ? err : new Error(String(err));
+        logger.error(finalError.message, finalError, payload);
+    }
+
+    // Always sanitize outside API responses
+    return { status, body: { error: message } };
 }

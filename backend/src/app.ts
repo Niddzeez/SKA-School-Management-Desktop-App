@@ -6,6 +6,10 @@ import authRoutes from "./auth/routes/auth.routes";
 import { requireAuth } from "./auth/middleware/requireAuth";
 import { requireRole } from "./auth/middleware/requireRole";
 
+// Observability (Phase 12)
+import { requestIdMiddleware } from "./shared/observability/request-id";
+import { requestLoggerMiddleware } from "./shared/observability/request-logger";
+
 // Identity subsystem routes (MongoDB)
 import studentRoutes from "./identity/routes/students.routes";
 import classRoutes from "./identity/routes/classes.routes";
@@ -22,6 +26,9 @@ import receiptRoutes from "./finance/routes/receipts.routes";
 import reportsRoutes from "./finance/routes/reports.routes";
 import receiptDetailRoutes from "./finance/routes/receipt-detail.routes";
 
+// Activity Feed (Phase 10)
+import activityRoutes from "./system/routes/activity.routes";
+
 const app = express();
 
 app.use(
@@ -33,10 +40,9 @@ app.use(
 
 app.use(express.json());
 
-app.use((req, _res, next) => {
-  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
-  next();
-});
+// ── Observability Middleware (Phase 12) ─────────────────────────────────────────
+app.use(requestIdMiddleware);
+app.use(requestLoggerMiddleware);
 
 // ── Auth routes (unprotected) ────────────────────────────────────────────────
 app.use("/api/auth", authRoutes);
@@ -73,9 +79,15 @@ app.use("/api/students/:studentId/receipts", auth, anyRole, receiptRoutes);
 app.use("/api/reports", auth, anyRole, reportsRoutes);
 app.use("/api/receipts", auth, anyRole, receiptDetailRoutes);
 
-// ── Health check (unprotected) ───────────────────────────────────────────────
-app.get("/health", (_req, res) => {
-  res.json({ status: "ok", timestamp: new Date().toISOString() });
-});
+// ── Admin Activity Feed (Phase 10)  ──────────────────────────────────────────
+app.use("/api/system/activity", activityRoutes);
+
+// ── Admin Dashboard (Phase 11)  ──────────────────────────────────────────────
+import dashboardRoutes from "./system/routes/dashboard.routes";
+app.use("/api/dashboard", auth, adminOnly, dashboardRoutes);
+
+// ── Health check (Phase 12) ───────────────────────────────────────────────
+import healthRoutes from "./system/routes/health.routes";
+app.use("/health", healthRoutes);
 
 export default app;

@@ -171,7 +171,8 @@ router.post("/", requireRole("ADMIN") as any, async (req: Request, res: Response
             amount: c.amount,
         }));
 
-        const row = await createLedger(studentId, classId, academicSessionId, sanitised);
+        const performedBy = (req as any).user?.userId || "UNKNOWN_USER";
+        const row = await createLedger(studentId, classId, academicSessionId, sanitised, performedBy);
         res.status(201).json(mapLedger(row));
     } catch (err) {
         const { status, body } = toErrorResponse(err);
@@ -214,7 +215,8 @@ router.post("/:ledgerId/payments", requireRole("ADMIN") as any, async (req: Requ
             ? reference.trim()
             : undefined;
 
-        const row = await addPayment(ledgerId, amount, validatedMode, collectedBy.trim(), ref);
+        const performedBy = (req as any).user?.userId || "UNKNOWN_USER";
+        const row = await addPayment(ledgerId, amount, validatedMode, collectedBy.trim(), performedBy, ref);
         res.status(201).json(mapPayment(row));
     } catch (err) {
         const { status, body } = toErrorResponse(err);
@@ -274,8 +276,9 @@ router.post("/:ledgerId/adjustments", requireRole("ADMIN") as any, async (req: R
             throw new ValidationError("'approvedBy' is required");
         }
 
+        const performedBy = (req as any).user?.userId || "UNKNOWN_USER";
         const row = await addAdjustment(
-            ledgerId, validatedType, amount, reason.trim(), approvedBy.trim()
+            ledgerId, validatedType, amount, reason.trim(), approvedBy.trim(), performedBy
         );
         res.status(201).json(mapAdjustment(row));
     } catch (err) {

@@ -13,6 +13,7 @@ import {
     UnprocessableError,
 } from "../../shared/error";
 import type { AdjustmentType, PaymentMode } from "../../shared/validators";
+import { logFinancialEvent } from "../audit/audit.service";
 
 // ===========================================================================
 // READ OPERATIONS (Phase 4)
@@ -245,9 +246,10 @@ export async function createLedger(
     studentId: string,
     classId: string,
     academicSessionId: string,
-    baseComponents: FeeComponentSnapshotRow[]
+    baseComponents: FeeComponentSnapshotRow[],
+    performedBy: string
 ): Promise<LedgerRow> {
-    return withTransaction(async (client) => {
+    const result = await withTransaction(async (client) => {
         // Verify the academic session exists and is open
         const { rows: sessions } = await client.query<AcademicSessionRow>(
             `SELECT id, name, is_closed
@@ -289,6 +291,16 @@ export async function createLedger(
             throw err;
         }
     });
+
+    await logFinancialEvent(
+        "LEDGER_CREATED",
+        "STUDENT_FEE_LEDGER",
+        result.id,
+        performedBy,
+        { studentId, classId, academicSessionId }
+    );
+
+    return result;
 }
 
 // ---------------------------------------------------------------------------
@@ -308,9 +320,10 @@ export async function addPayment(
     amount: number,
     mode: PaymentMode,
     collectedBy: string,
+    performedBy: string,
     reference?: string
 ): Promise<PaymentRow> {
-    return withTransaction(async (client) => {
+    const result = await withTransaction(async (client) => {
         // Lock the ledger row and read student_id
         const { rows: ledgers } = await client.query<LedgerRow>(
             `SELECT id, student_id
@@ -336,6 +349,16 @@ export async function addPayment(
         );
         return rows[0];
     });
+
+    await logFinancialEvent(
+        "PAYMENT_RECORDED",
+        "PAYMENT",
+        result.id,
+        performedBy,
+        { ledgerId, studentId: result.student_id, amount, mode, collectedBy, reference }
+    );
+
+    return result;
 }
 
 // ---------------------------------------------------------------------------
@@ -355,9 +378,10 @@ export async function addAdjustment(
     type: AdjustmentType,
     amount: number,
     reason: string,
-    approvedBy: string
+    approvedBy: string,
+    performedBy: string
 ): Promise<AdjustmentRow> {
-    return withTransaction(async (client) => {
+    const result = await withTransaction(async (client) => {
         // Verify ledger exists and academic year is open
         const { rows: ledgers } = await client.query<{
             id: string;
@@ -392,4 +416,14 @@ export async function addAdjustment(
         );
         return rows[0];
     });
+
+    await logFinancialEvent(
+        "ADJUSTMENT_ADDED",
+        "LEDGER_ADJUSTMENT",
+        result.id,
+        performedBy,
+        { ledgerId, type, amount, reason, approvedBy }
+    );
+
+    return result;
 }

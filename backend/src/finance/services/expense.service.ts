@@ -2,6 +2,7 @@ import { getPool, withTransaction } from "../../config/postgres";
 import type { ExpenseRow } from "../types";
 import { ValidationError } from "../../shared/error";
 import type { ExpenseCategory, ExpenseMode } from "../../shared/validators";
+import { logFinancialEvent } from "../audit/audit.service";
 
 const VALID_CATEGORIES = [
     "SALARY", "UTILITY", "MAINTENANCE", "PURCHASE", "OTHER",
@@ -101,8 +102,8 @@ export interface CreateExpenseData {
  * Creates a new expense record.
  * All validation is expected to be done before calling this function.
  */
-export async function createExpense(data: CreateExpenseData): Promise<ExpenseRow> {
-    return withTransaction(async (client) => {
+export async function createExpense(data: CreateExpenseData, performedBy: string): Promise<ExpenseRow> {
+    const result = await withTransaction(async (client) => {
         const { rows } = await client.query<ExpenseRow>(
             `INSERT INTO expenses
                  (category, description, amount, expense_date,
@@ -123,4 +124,19 @@ export async function createExpense(data: CreateExpenseData): Promise<ExpenseRow
         );
         return rows[0];
     });
+
+    await logFinancialEvent(
+        "EXPENSE_CREATED",
+        "EXPENSE",
+        result.id,
+        performedBy,
+        {
+            category: data.category,
+            amount: data.amount,
+            expenseDate: data.expenseDate,
+            mode: data.mode
+        }
+    );
+
+    return result;
 }

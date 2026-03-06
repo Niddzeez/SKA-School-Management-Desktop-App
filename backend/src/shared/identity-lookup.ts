@@ -9,6 +9,7 @@
  * these functions to compose final API responses.
  */
 
+import { Types } from "mongoose";
 import { ClassModel } from "../identity/models/Class.model";
 import { Student } from "../identity/models/Student.model";
 
@@ -30,8 +31,11 @@ export async function getClassNameMap(
 ): Promise<Map<string, string>> {
     if (classIds.length === 0) return new Map();
 
+    const validIds = classIds.filter(id => Types.ObjectId.isValid(id));
+    if (validIds.length === 0) return new Map();
+
     const docs = await ClassModel.find(
-        { _id: { $in: classIds } },
+        { _id: { $in: validIds } },
         { ClassName: 1 }
     ).lean();
 
@@ -62,8 +66,11 @@ export async function getStudentBasicInfoMap(
 ): Promise<Map<string, StudentBasicInfo>> {
     if (studentIds.length === 0) return new Map();
 
+    const validIds = studentIds.filter(id => Types.ObjectId.isValid(id));
+    if (validIds.length === 0) return new Map();
+
     const docs = await Student.find(
-        { _id: { $in: studentIds } },
+        { _id: { $in: validIds } },
         { firstName: 1, lastName: 1, classID: 1 }
     ).lean();
 
