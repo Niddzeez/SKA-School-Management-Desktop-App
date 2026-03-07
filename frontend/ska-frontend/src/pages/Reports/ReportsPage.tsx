@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { CURRENT_YEAR } from "../../context/AcademicYearContext";
+import { useState, useEffect } from "react";
+import { useAcademicYear } from "../../context/AcademicYearContext";
 import { useAuth } from "../../context/AuthContext";
-import {can} from "../../auth/permissions"
+import { can } from "../../auth/permissions"
 import { Navigate } from "react-router-dom";
 
 /* Filters */
@@ -9,35 +9,23 @@ import ReportTypeSelector from "./Filters/ReportTypeSelector";
 import TimeRangeSelector from "./Filters/TimeRangeSelector";
 import AcademicYearSelector from "./Filters/AcademicYearSelector";
 
-/* Income Reports */
-import DailyIncomeReport from "./Income/DailyIncomeReport";
-import MonthlyIncomeReport from "./Income/MonthlyIncomeReport";
-import HalfYearlyIncomeReport from "./Income/HalfYearlyIncomeReport";
-import YearlyIncomeReport from "./Income/YearlyIncomeReport";
-
-/* Expense Reports */
-import DailyExpenseReport from "./expenses/DailyExpenseReport";
-import MonthlyExpenseReport from "./expenses/MonthlyExpenseReport";
-import HalfYearlyExpenseReport from "./expenses/HalfYearlyExpenseReport";
-import YearlyExpenseReport from "./expenses/YearlyExpenseReport";
-
-/* Combined Reports */
-import DailyIncomeVsExpense from "./combined/DailyIncomeVsExpenseReport";
-import MonthlyIncomeVsExpense from "./combined/MonthlyIncomevsExpenseReport";
-import HalfYearlyIncomeVsExpense from "./combined/HalfYearlyIncomeVsExpenseReport";
-import YearlyIncomeVsExpense from "./combined/YearlyIncomeVsExpense";
+/* Unified Reports */
+import IncomeReport from "./Income/IncomeReport";
+import ExpenseReport from "./expenses/ExpenseReport";
+import CombinedReport from "./combined/CombinedReport";
 
 import "./ReportsPage.css";
 import YearEndStatement from "./Statements/YearEndStatement";
+import { getAcademicYearRange } from "./Utils/reportDateUtils";
 
 type ReportGranularity = "DAILY" | "MONTHLY" | "HALF_YEARLY" | "YEARLY";
 type ReportCategory = "INCOME" | "EXPENSE" | "COMBINED";
 
 function ReportsPage() {
 
-    const {role} = useAuth();
+    const { role } = useAuth();
 
-    if(!role || !can(role, "VIEW_REPORTS")){
+    if (!role || !can(role, "VIEW_REPORTS")) {
         return <Navigate to="/students" replace />;
     }
 
@@ -47,8 +35,16 @@ function ReportsPage() {
     const [category, setCategory] =
         useState<ReportCategory>("EXPENSE");
 
+    const { activeYear } = useAcademicYear();
+
     const [academicYear, setAcademicYear] =
-        useState<string>(CURRENT_YEAR);
+        useState<string>("");
+
+    useEffect(() => {
+        if (activeYear?.id && !academicYear) {
+            setAcademicYear(activeYear.id);
+        }
+    }, [activeYear?.id, academicYear]);
 
     const [selectedDate, setSelectedDate] =
         useState<string | null>(null);
@@ -58,6 +54,62 @@ function ReportsPage() {
 
     const [half, setHalf] =
         useState<"H1" | "H2" | null>(null);
+
+    // Compute Date Boundaries based on selections
+    const computeDateBoundaries = () => {
+        const { start, end } = getAcademicYearRange(academicYear);
+        let fromDateStr: string | undefined;
+        let toDateStr: string | undefined;
+        let periodLabel = academicYear;
+
+        if (granularity === "DAILY") {
+            if (selectedDate) {
+                fromDateStr = selectedDate;
+                toDateStr = selectedDate;
+                periodLabel = new Date(selectedDate).toLocaleDateString();
+            } else {
+                return null;
+            }
+        } else if (granularity === "MONTHLY") {
+            if (selectedMonth !== null) {
+                // Approximate monthly bounds; since backend queries map strictly < interval + 1 Day, calculating the precise bounds explicitly saves SQL complexity.
+                const startYear = start.getFullYear();
+                const actualYear = selectedMonth >= 3 ? startYear : startYear + 1; // Apending offset assuming Indian academic scale, April to March
+
+                const fm = new Date(actualYear, selectedMonth, 1);
+                const tm = new Date(actualYear, selectedMonth + 1, 0); // Last day of month
+
+                fromDateStr = fm.toISOString().split("T")[0];
+                toDateStr = tm.toISOString().split("T")[0];
+                periodLabel = fm.toLocaleString("default", { month: "long", year: "numeric" });
+            } else {
+                return null; // Awaiting month selection
+            }
+        } else if (granularity === "HALF_YEARLY") {
+            if (half) {
+                if (half === "H1") {
+                    fromDateStr = start.toISOString().split("T")[0];
+                    const endH1 = new Date(start.getFullYear(), 8, 30); // End September
+                    toDateStr = endH1.toISOString().split("T")[0];
+                    periodLabel = "First Half (H1)";
+                } else {
+                    const startH2 = new Date(start.getFullYear(), 9, 1); // Start October
+                    fromDateStr = startH2.toISOString().split("T")[0];
+                    toDateStr = end.toISOString().split("T")[0];
+                    periodLabel = "Second Half (H2)";
+                }
+            } else {
+                return null;
+            }
+        } else if (granularity === "YEARLY") {
+            // Leave fromDate / toDate empty to span the entire academic year dynamically inside the backend
+            periodLabel = `Academic Year ${academicYear}`;
+        }
+
+        return { fromDateStr, toDateStr, periodLabel };
+    };
+
+    const boundaries = computeDateBoundaries();
 
     return (
         <div className="reports-page">
@@ -97,104 +149,39 @@ function ReportsPage() {
                     {category} · {granularity} · {academicYear}
                 </p>
 
-                {/* ===== DAILY ===== */}
-
-                {granularity === "DAILY" && category === "INCOME" && selectedDate && (
-                    <DailyIncomeReport
-                        academicYear={academicYear}
-                        selectedDate={selectedDate}
-                    />
-                )}
-
-                {granularity === "DAILY" && category === "EXPENSE" && selectedDate && (
-                    <DailyExpenseReport
-                        academicYear={academicYear}
-                        selectedDate={selectedDate}
-                    />
-                )}
-
-                {granularity === "DAILY" && category === "COMBINED" && selectedDate && (
-                    <DailyIncomeVsExpense
-                        academicYear={academicYear}
-                        selectedDate={selectedDate}
-                    />
-                )}
-
-                {/* ===== MONTHLY ===== */}
-
-                {granularity === "MONTHLY" &&
-                    category === "INCOME" &&
-                    selectedMonth !== null && (
-                        <MonthlyIncomeReport
-                            academicYear={academicYear}
-                            selectedMonth={selectedMonth}
-                        />
-                    )}
-
-
-                {granularity === "MONTHLY" &&
-                    category === "EXPENSE" &&
-                    selectedMonth !== null && (
-                        <MonthlyExpenseReport
-                            academicYear={academicYear}
-                            selectedMonth={selectedMonth}
-                        />
-                    )}
-
-                {granularity === "MONTHLY" &&
-                    category === "COMBINED" &&
-                    selectedMonth !== null && (
-                        <MonthlyIncomeVsExpense
-                            academicYear={academicYear}
-                            selectedMonth={selectedMonth}
-                        />
-                    )}
-
-                {/* ===== HALF YEARLY ===== */}
-
-                {granularity === "HALF_YEARLY" &&
-                    category === "INCOME" &&
-                    half && (
-                        <HalfYearlyIncomeReport
-                            academicYear={academicYear}
-                            half={half}
-                        />
-                    )}
-
-                {granularity === "HALF_YEARLY" &&
-                    category === "EXPENSE" &&
-                    half && (
-                        <HalfYearlyExpenseReport
-                            academicYear={academicYear}
-                            half={half}
-                        />
-                    )}
-
-                {granularity === "HALF_YEARLY" &&
-                    category === "COMBINED" &&
-                    half && (
-                        <HalfYearlyIncomeVsExpense
-                            academicYear={academicYear}
-                            half={half}
-                        />
-                    )}
-
-                {/* ===== YEARLY ===== */}
-
-                {granularity === "YEARLY" && category === "INCOME" && (
-                    <YearlyIncomeReport academicYear={academicYear} />
-                )}
-
-                {granularity === "YEARLY" && category === "EXPENSE" && (
-                    <YearlyExpenseReport academicYear={academicYear} />
-                )}
-
-                {granularity === "YEARLY" && category === "COMBINED" && (
-                    <YearlyIncomeVsExpense academicYear={academicYear} />
+                {boundaries ? (
+                    <>
+                        {category === "INCOME" && (
+                            <IncomeReport
+                                academicYear={academicYear}
+                                fromDate={boundaries.fromDateStr}
+                                toDate={boundaries.toDateStr}
+                                periodLabel={boundaries.periodLabel}
+                            />
+                        )}
+                        {category === "EXPENSE" && (
+                            <ExpenseReport
+                                academicYear={academicYear}
+                                fromDate={boundaries.fromDateStr}
+                                toDate={boundaries.toDateStr}
+                                periodLabel={boundaries.periodLabel}
+                            />
+                        )}
+                        {category === "COMBINED" && (
+                            <CombinedReport
+                                academicYear={academicYear}
+                                fromDate={boundaries.fromDateStr}
+                                toDate={boundaries.toDateStr}
+                                periodLabel={boundaries.periodLabel}
+                            />
+                        )}
+                    </>
+                ) : (
+                    <p>Please select the required time parameter to view the report.</p>
                 )}
             </div>
 
-            {!role || can(role, "VIEW_REPORTS")&&<YearEndStatement />}
+            {!role || can(role, "VIEW_REPORTS") && <YearEndStatement />}
         </div>
     );
 }

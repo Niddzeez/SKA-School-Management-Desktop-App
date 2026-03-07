@@ -3,12 +3,14 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
 import { AcademicYearProvider } from './context/AcademicYearContext.tsx'
+import ErrorBoundary from './components/ErrorBoundary.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    
-    <AcademicYearProvider>
-    <App />
-    </AcademicYearProvider>
+    <ErrorBoundary>
+      <AcademicYearProvider>
+        <App />
+      </AcademicYearProvider>
+    </ErrorBoundary>
   </StrictMode>,
 )

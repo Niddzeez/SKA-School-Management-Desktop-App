@@ -5,8 +5,7 @@ import {
   useState,
 } from "react";
 import type { Teacher, CurrentStatus } from "../types/Teachers";
-import { API_BASE_URL } from "../config/api";
-
+import { apiClient } from "../services/apiClient";
 
 type TeacherContextType = {
   teachers: Teacher[];
@@ -23,8 +22,6 @@ type TeacherContextType = {
 const TeacherContext =
   createContext<TeacherContextType | null>(null);
 
-const BASE_URL = API_BASE_URL;
-
 export function TeacherProvider({
   children,
 }: {
@@ -38,13 +35,10 @@ export function TeacherProvider({
   useEffect(() => {
     const loadTeachers = async () => {
       try {
-        const res = await fetch(`${BASE_URL}/api/teachers`);
-        if (!res.ok) throw new Error("Failed to fetch teachers");
-
-        const data = await res.json();
+        const data = await apiClient.get<Teacher[]>("/api/teachers");
         setTeachers(data);
-      } catch (err) {
-        setError("Unable to load teachers");
+      } catch (err: any) {
+        setError(err.message || "Unable to load teachers");
       } finally {
         setLoading(false);
       }
@@ -57,18 +51,12 @@ export function TeacherProvider({
   const addTeacher = async (
     teacher: Omit<Teacher, "id">
   ) => {
-    const res = await fetch(`${BASE_URL}/api/teachers`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(teacher),
-    });
-
-    if (!res.ok) {
-      throw new Error("Failed to create teacher");
+    try {
+      const created = await apiClient.post<Teacher>("/api/teachers", teacher);
+      setTeachers((prev) => [...prev, created]);
+    } catch (err: any) {
+      throw new Error(err.message || "Failed to create teacher");
     }
-
-    const created = await res.json();
-    setTeachers((prev) => [...prev, created]);
   };
 
   /* 🔹 UPDATE STATUS */
@@ -76,23 +64,17 @@ export function TeacherProvider({
     id: string,
     status: CurrentStatus
   ) => {
-    const res = await fetch(
-      `${BASE_URL}/api/teachers/${id}/status`,
-      {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status }),
-      }
-    );
-
-    if (!res.ok) {
-      throw new Error("Failed to update teacher status");
+    try {
+      const updated = await apiClient.patch<Teacher>(
+        `/api/teachers/${id}/status`,
+        { status }
+      );
+      setTeachers((prev) =>
+        prev.map((t) => (t.id === id ? updated : t))
+      );
+    } catch (err: any) {
+      throw new Error(err.message || "Failed to update teacher status");
     }
-
-    const updated = await res.json();
-    setTeachers((prev) =>
-      prev.map((t) => (t.id === id ? updated : t))
-    );
   };
 
   return (

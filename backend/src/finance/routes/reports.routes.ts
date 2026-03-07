@@ -3,9 +3,12 @@ import {
     getCollectionSummary,
     getClassWiseDues,
     getPaymentHistory,
+    getIncomeReport,
+    getExpenseReport,
+    getCombinedReport
 } from "../services/report.service";
 import { toErrorResponse, ValidationError } from "../../shared/error";
-import { getClassNameMap } from "../../shared/identity-lookup";
+import { getClassNameMap, getStudentBasicInfoMap } from "../../shared/identity-lookup";
 
 const router = Router();
 
@@ -128,6 +131,95 @@ router.get("/payment-history", async (req: Request, res: Response) => {
                     : String(row.created_at),
             }))
         );
+    } catch (err) {
+        const { status, body } = toErrorResponse(err);
+        res.status(status).json(body);
+    }
+});
+
+// ---------------------------------------------------------------------------
+// GET /api/reports/income
+// ---------------------------------------------------------------------------
+router.get("/income", async (req: Request, res: Response) => {
+    try {
+        const { year, fromDate, toDate } = req.query;
+        if (!year || typeof year !== "string" || !YEAR_RE.test(year)) {
+            throw new ValidationError("Query parameter 'year' is required and must match YYYY-YY (e.g. '2025-26')");
+        }
+
+        const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+        const from = typeof fromDate === "string" ? fromDate : undefined;
+        const to = typeof toDate === "string" ? toDate : undefined;
+
+        if (from && !ISO_DATE.test(from)) throw new ValidationError("'fromDate' must be in YYYY-MM-DD format");
+        if (to && !ISO_DATE.test(to)) throw new ValidationError("'toDate' must be in YYYY-MM-DD format");
+
+        const report = await getIncomeReport(year, from, to);
+
+        // Resolve student names for the nested payments payload if possible
+        if (report.payments.length > 0) {
+            const studentIds = report.payments.map(p => p.student_id);
+            const studentMap = await getStudentBasicInfoMap(studentIds);
+
+            report.payments = report.payments.map((p: any) => ({
+                ...p,
+                studentName: studentMap.has(p.student_id)
+                    ? `${studentMap.get(p.student_id)!.firstName} ${studentMap.get(p.student_id)!.lastName}`
+                    : "Unknown"
+            })) as any;
+        }
+
+        res.json(report);
+    } catch (err) {
+        const { status, body } = toErrorResponse(err);
+        res.status(status).json(body);
+    }
+});
+
+// ---------------------------------------------------------------------------
+// GET /api/reports/expenses
+// ---------------------------------------------------------------------------
+router.get("/expenses", async (req: Request, res: Response) => {
+    try {
+        const { year, fromDate, toDate } = req.query;
+        if (!year || typeof year !== "string" || !YEAR_RE.test(year)) {
+            throw new ValidationError("Query parameter 'year' is required and must match YYYY-YY (e.g. '2025-26')");
+        }
+
+        const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+        const from = typeof fromDate === "string" ? fromDate : undefined;
+        const to = typeof toDate === "string" ? toDate : undefined;
+
+        if (from && !ISO_DATE.test(from)) throw new ValidationError("'fromDate' must be in YYYY-MM-DD format");
+        if (to && !ISO_DATE.test(to)) throw new ValidationError("'toDate' must be in YYYY-MM-DD format");
+
+        const report = await getExpenseReport(year, from, to);
+        res.json(report);
+    } catch (err) {
+        const { status, body } = toErrorResponse(err);
+        res.status(status).json(body);
+    }
+});
+
+// ---------------------------------------------------------------------------
+// GET /api/reports/combined
+// ---------------------------------------------------------------------------
+router.get("/combined", async (req: Request, res: Response) => {
+    try {
+        const { year, fromDate, toDate } = req.query;
+        if (!year || typeof year !== "string" || !YEAR_RE.test(year)) {
+            throw new ValidationError("Query parameter 'year' is required and must match YYYY-YY (e.g. '2025-26')");
+        }
+
+        const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+        const from = typeof fromDate === "string" ? fromDate : undefined;
+        const to = typeof toDate === "string" ? toDate : undefined;
+
+        if (from && !ISO_DATE.test(from)) throw new ValidationError("'fromDate' must be in YYYY-MM-DD format");
+        if (to && !ISO_DATE.test(to)) throw new ValidationError("'toDate' must be in YYYY-MM-DD format");
+
+        const report = await getCombinedReport(year, from, to);
+        res.json(report);
     } catch (err) {
         const { status, body } = toErrorResponse(err);
         res.status(status).json(body);

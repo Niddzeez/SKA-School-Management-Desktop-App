@@ -1,31 +1,15 @@
 import DashboardKPIs from "./DashboardKPI";
-import { exportBackup, importBackup } from "../../utils/Backup";
 import { useAuth } from "../../context/AuthContext";
 import "./dashboard.css";
-import {can} from "../../auth/permissions"
+import { can } from "../../auth/permissions"
 import { Navigate } from "react-router-dom";
 
 function AdminDashboard() {
-    const {role} = useAuth();
+    const { role } = useAuth();
 
-    if(!role || !can(role, "VIEW_REPORTS"))
-    {
+    if (!role || !can(role, "VIEW_REPORTS")) {
         return <Navigate to="/dashboard" replace />
     }
-
-    const handleImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
-
-        try {
-            await importBackup(file);
-            alert("Backup restored successfully. Reloading…");
-            window.location.reload();
-        } catch {
-            alert("Invalid backup file.");
-        }
-    };
-
 
     return (
         <div className="dashboard-page">
@@ -35,7 +19,7 @@ function AdminDashboard() {
             <div className="dashboard-header">
                 <h1>Dashboard</h1>
 
-                
+
             </div>
 
             {/* =========================
@@ -53,18 +37,6 @@ function AdminDashboard() {
         </div>
       */}
 
-
-            <div>
-                <button onClick={exportBackup}>
-                    Export Full Backup
-                </button>
-
-                <input
-                    type="file"
-                    accept="application/json"
-                    onChange={handleImport}
-                />
-            </div>
         </div>
     );
 }

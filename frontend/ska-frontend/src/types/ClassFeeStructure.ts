@@ -10,12 +10,12 @@ export type FeeStructureStatus = "DRAFT" | "ACTIVE";
 export type FeeStructure = {
   id: string;
 
-  classID: string;
-  academicYear: string;
+  classId: string;
+  academicSessionId: string;
 
   components: FeeComponent[];
 
-  status: FeeStructureStatus;   
+  status: FeeStructureStatus;
   createdAt: string;
 };
 

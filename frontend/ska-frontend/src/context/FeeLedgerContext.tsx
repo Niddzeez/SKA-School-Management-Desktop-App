@@ -1,6 +1,7 @@
-import { createContext, useContext } from "react";
-import { usePersistentState } from "../hooks/UsePersistentState";
+import { createContext, useContext, useEffect, useState } from "react";
 import { useAcademicYear } from "./AcademicYearContext";
+import { apiClient } from "../services/apiClient";
+import { toBackendComponents, toFrontendComponents } from "../mappers/feeComponentMapper";
 
 import type { StudentFeeLedger } from "../types/StudentFeeLedger";
 import type { LedgerAdjustment } from "../types/LedgerAdjustments";
@@ -15,10 +16,8 @@ type LedgerSummary = {
   baseTotal: number;
   adjustmentsTotal: number;
   finalFee: number;
-
   paid: number;
-  paidTotal: number; // backward compatibility
-
+  paidTotal: number;
   pending: number;
   status: "PAID" | "PARTIAL" | "PENDING";
 };
@@ -28,38 +27,46 @@ type FeeLedgerContextType = {
   adjustments: LedgerAdjustment[];
   payments: Payment[];
   expenses: Expense[];
+  loading: boolean;
+  error: string | null;
 
   createLedger: (
     studentId: string,
     classId: string,
-    academicYear: string,
-    baseComponents: StudentFeeLedger["baseComponents"]
-  ) => void;
+    academicSessionId: string,
+    baseComponents: Record<string, { name: string; amount: number }>
+  ) => Promise<void>;
 
   upsertLedgerFromFeeStructure: (
     studentId: string,
     classId: string,
-    academicYear: string,
-    baseComponents: StudentFeeLedger["baseComponents"]
-  ) => void;
+    academicSessionId: string,
+    baseComponents: Record<string, { name: string; amount: number }>
+  ) => Promise<void>;
 
   addAdjustment: (
-    adjustment: Omit<LedgerAdjustment, "id" | "createdAt">
-  ) => void;
+    adjustment: Omit<LedgerAdjustment, "id" | "createdAt"> & {
+      type: "DISCOUNT" | "CONCESSION" | "WAIVER";
+    }
+  ) => Promise<void>;
 
   addPayment: (
-    payment: Omit<Payment, "id" | "createdAt">
-  ) => void;
+    payment: Omit<Payment, "id" | "createdAt"> & {
+      mode: "CASH" | "UPI" | "BANK";
+      collectedBy: string;
+      reference?: string;
+    }
+  ) => Promise<void>;
 
   addExpense: (
     expense: Omit<Expense, "id" | "recordedAt">
-  ) => void;
+  ) => Promise<void>;
 
-  getLedgerSummary: (ledgerId: string) => LedgerSummary;
+  getLedgerSummary: (ledgerId: string) => Promise<LedgerSummary>;
   getLedgerByStudentYear: (
     studentId: string,
-    academicYear: string
-  ) => StudentFeeLedger | undefined;
+    academicSessionId: string
+  ) => Promise<StudentFeeLedger | undefined>;
 
   getReceiptNumber: (paymentId: string) => string;
 };
@@ -68,23 +75,7 @@ type FeeLedgerContextType = {
    Context
 ========================= */
 
-const FeeLedgerContext =
-  createContext<FeeLedgerContextType | null>(null);
-
-/* =========================
-   Helpers
-========================= */
-
-function getAcademicYearFromDate(date: Date): string {
-  const year = date.getFullYear();
-  const month = date.getMonth(); // 0 = Jan
-
-  if (month >= 3) {
-    return `${year}-${String(year + 1).slice(-2)}`;
-  } else {
-    return `${year - 1}-${String(year).slice(-2)}`;
-  }
-}
+const FeeLedgerContext = createContext<FeeLedgerContextType | null>(null);
 
 /* =========================
    Provider
@@ -95,266 +86,254 @@ export function FeeLedgerProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const { academicYear, isYearClosed } = useAcademicYear();
+  const { activeYear } = useAcademicYear();
 
   /* -------------------------
-     Persistent State
+     State
   ------------------------- */
+  const [ledgers, setLedgers] = useState<StudentFeeLedger[]>([]);
+  const [adjustments, setAdjustments] = useState<LedgerAdjustment[]>([]);
+  const [payments, setPayments] = useState<Payment[]>([]);
+  const [expenses, setExpenses] = useState<Expense[]>([]);
 
-  const [ledgers, setLedgers] =
-    usePersistentState<StudentFeeLedger[]>("ledgers", []);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const [adjustments, setAdjustments] =
-    usePersistentState<LedgerAdjustment[]>("adjustments", []);
+  /* -------------------------
+     Boot Check
+  ------------------------- */
+  const loadInitialData = async () => {
+    if (!activeYear?.id) {
+      setLoading(false);
+      return;
+    }
 
-  const [payments, setPayments] =
-    usePersistentState<Payment[]>("payments", []);
+    try {
+      setLoading(true);
+      setError(null);
+      // Fetch constraints targeting current year context only to save memory
+      const [ledgersData, expensesData] = await Promise.all([
+        apiClient.get<StudentFeeLedger[]>(`/api/ledgers?year=${activeYear.id}`),
+        apiClient.get<Expense[]>("/api/expenses")
+      ]);
 
-  const [expenses, setExpenses] =
-    usePersistentState<Expense[]>("expenses", []);
+      // Remap the arrays into the frontend dictionary model if the frontend relies on them strongly
+      const mappedLedgers = ledgersData.map((l: StudentFeeLedger) => ({
+        ...l,
+        baseComponents: Array.isArray(l.baseComponents)
+          ? toFrontendComponents(l.baseComponents) as any
+          : l.baseComponents
+      }));
+
+      setLedgers(mappedLedgers);
+      setExpenses(expensesData);
+    } catch (err: any) {
+      setError(err.message || "Failed to load initial fee data");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadInitialData();
+  }, [activeYear?.id]);
+
 
   /* =========================
-     Ledger Creation
+     Transactions
   ========================= */
 
-  const createLedger = (
+  const createLedger = async (
     studentId: string,
     classId: string,
-    academicYear: string,
-    baseComponents: StudentFeeLedger["baseComponents"]
+    academicSessionId: string,
+    baseComponents: Record<string, { name: string; amount: number }>
   ) => {
-    if (isYearClosed(academicYear)) {
-      throw new Error(
-        "Cannot create ledger for a closed academic year"
-      );
-    }
-
-    const exists = ledgers.find(
-      (l) =>
-        l.studentId === studentId &&
-        l.academicYear === academicYear
-    );
-
-    if (exists) {
-      throw new Error("Ledger already exists");
-    }
-
-    setLedgers((prev) => [
-      ...prev,
-      {
-        id: crypto.randomUUID(),
+    try {
+      setError(null);
+      const created = await apiClient.post<StudentFeeLedger>("/api/ledgers", {
         studentId,
         classId,
-        academicYear,
-        baseComponents,
-        createdAt: new Date().toISOString(),
-      },
-    ]);
+        academicSessionId,
+        baseComponents: toBackendComponents(baseComponents),
+      });
+
+      // Maintain legacy interface shapes locally 
+      const mappedLedger = {
+        ...created,
+        baseComponents: toFrontendComponents(created.baseComponents) as any
+      };
+
+      setLedgers((prev) => [...prev, mappedLedger]);
+    } catch (err: any) {
+      setError(err.message || "Failed to create ledger");
+      throw err;
+    }
   };
 
-  /* =========================
-     Ledger Upsert (Promotion / Fee Activation)
-  ========================= */
 
-  const upsertLedgerFromFeeStructure = (
+  const upsertLedgerFromFeeStructure = async (
     studentId: string,
     classId: string,
-    academicYear: string,
-    baseComponents: StudentFeeLedger["baseComponents"]
+    academicSessionId: string,
+    baseComponents: Record<string, { name: string; amount: number }>
   ) => {
-    if (isYearClosed(academicYear)) return;
+    try {
+      setError(null);
+      if (!academicSessionId) return;
 
-    setLedgers((prev) => {
-      const existing = prev.find(
-        (l) =>
-          l.studentId === studentId &&
-          l.academicYear === academicYear
-      );
+      const results = await apiClient.get<StudentFeeLedger[]>(`/api/ledgers?studentId=${studentId}&year=${academicSessionId}`);
 
-      if (!existing) {
-        return [
-          ...prev,
-          {
-            id: crypto.randomUUID(),
-            studentId,
-            classId,
-            academicYear,
-            baseComponents,
-            createdAt: new Date().toISOString(),
-          },
-        ];
+      if (results.length === 0) {
+        // No ledger exists, perform creation
+        await createLedger(studentId, classId, academicSessionId, baseComponents);
+      } else {
+        const existing = results[0];
+
+        // Safety constraint block: only PATCH if no payments are made
+        try {
+          const summary = await getLedgerSummary(existing.id);
+          if (summary.paidTotal === 0) {
+            // Let PATCH fail softly if not natively wired on API side yet
+            await apiClient.patch(`/api/ledgers/${existing.id}`, {
+              baseComponents: toBackendComponents(baseComponents)
+            });
+
+            setLedgers((prev) =>
+              prev.map((l) =>
+                l.id === existing.id
+                  ? {
+                    ...l,
+                    baseComponents: toFrontendComponents(
+                      toBackendComponents(baseComponents)
+                    ) as any,
+                  }
+                  : l
+              )
+            );
+          }
+        } catch (noop) {
+          // Skip softly 
+        }
       }
-
-      const hasPayments = payments.some(
-        (p) => p.ledgerId === existing.id
-      );
-
-      if (!hasPayments) {
-        return prev.map((l) =>
-          l.id === existing.id
-            ? { ...l, baseComponents }
-            : l
-        );
-      }
-
-      return prev;
-    });
-  };
-
-  /* =========================
-     Adjustments (BLOCKED if closed)
-  ========================= */
-
-  const addAdjustment = (
-    adjustment: Omit<LedgerAdjustment, "id" | "createdAt">
-  ) => {
-    const ledger = ledgers.find(
-      (l) => l.id === adjustment.ledgerId
-    );
-
-    if (!ledger) throw new Error("Ledger not found");
-
-    if (isYearClosed(ledger.academicYear)) {
-      throw new Error(
-        "Cannot add adjustment to a closed academic year"
-      );
+    } catch (err: any) {
+      setError(err.message || "Failed to upsert ledger");
+      throw err;
     }
-
-    setAdjustments((prev) => [
-      ...prev,
-      {
-        ...adjustment,
-        id: crypto.randomUUID(),
-        createdAt: new Date().toISOString(),
-      },
-    ]);
   };
 
-  /* =========================
-     Payments (ALLOWED if closed)
-  ========================= */
 
-  const addPayment = (
-    payment: Omit<Payment, "id" | "createdAt">
-  ) => {
-    if (payment.amount <= 0) {
-      throw new Error("Payment amount must be positive");
+  const addAdjustment = async (
+    adjustment: Omit<LedgerAdjustment, "id" | "createdAt"> & {
+      type: "DISCOUNT" | "CONCESSION" | "WAIVER";
     }
-
-    const ledger = ledgers.find(
-      (l) => l.id === payment.ledgerId
-    );
-
-    if (!ledger) throw new Error("Ledger not found");
-
-    const closed = isYearClosed(ledger.academicYear);
-
-    
-
-    setPayments((prev) => [
-      ...prev,
-      {
-        ...payment,
-        id: crypto.randomUUID(),
-        createdAt: new Date().toISOString(),
-        isLateSettlement: closed ? true : false,
-        settledInYear: closed ? academicYear : undefined,
-      },
-    ]);
+  ) => {
+    try {
+      setError(null);
+      const created = await apiClient.post<LedgerAdjustment>(
+        `/api/ledgers/${adjustment.ledgerId}/adjustments`,
+        adjustment
+      );
+      setAdjustments((prev) => [...prev, created]);
+    } catch (err: any) {
+      setError(err.message || "Failed to add adjustment");
+      throw err;
+    }
   };
 
-  /* =========================
-     Expenses (BLOCKED if closed)
-  ========================= */
 
-  const addExpense = (
+  const addPayment = async (
+    payment: Omit<Payment, "id" | "createdAt"> & {
+      mode: "CASH" | "UPI" | "BANK";
+      collectedBy: string;
+      reference?: string;
+    }
+  ) => {
+    try {
+      setError(null);
+      const created = await apiClient.post<Payment>(
+        `/api/ledgers/${payment.ledgerId}/payments`,
+        {
+          amount: payment.amount,
+          mode: payment.mode,
+          collectedBy: payment.collectedBy,
+          reference: payment.reference
+        }
+      );
+      setPayments((prev) => [...prev, created]);
+    } catch (err: any) {
+      setError(err.message || "Failed to record payment");
+      throw err;
+    }
+  };
+
+
+  const addExpense = async (
     expense: Omit<Expense, "id" | "recordedAt">
   ) => {
-    if (expense.amount <= 0) {
-      throw new Error("Expense amount must be positive");
+    try {
+      setError(null);
+      const created = await apiClient.post<Expense>("/api/expenses", expense);
+      setExpenses((prev) => [...prev, created]);
+    } catch (err: any) {
+      setError(err.message || "Failed to add expense");
+      throw err;
     }
-
-    const expenseYear = getAcademicYearFromDate(
-      new Date(expense.expenseDate)
-    );
-
-    if (isYearClosed(expenseYear)) {
-      throw new Error(
-        "Cannot add expense to a closed academic year"
-      );
-    }
-
-    setExpenses((prev) => [
-      ...prev,
-      {
-        ...expense,
-        id: crypto.randomUUID(),
-        recordedAt: new Date().toISOString(),
-      },
-    ]);
   };
 
+
   /* =========================
-     Ledger Summary
+     Read Calculations
   ========================= */
 
-  const getLedgerSummary = (ledgerId: string): LedgerSummary => {
-    const ledger = ledgers.find((l) => l.id === ledgerId);
-    if (!ledger) throw new Error("Ledger not found");
+  const getLedgerSummary = async (ledgerId: string): Promise<LedgerSummary> => {
+    try {
+      setError(null);
+      return await apiClient.get<LedgerSummary>(`/api/ledgers/${ledgerId}/summary`);
+    } catch (err: any) {
+      setError(err.message || "Failed to calculate summary");
+      throw err;
+    }
+  };
 
-    const baseTotal = Object.values(
-      ledger.baseComponents
-    ).reduce((sum, c) => sum + c.amount, 0);
+  const getLedgerByStudentYear = async (
+    studentId: string,
+    academicSessionId: string
+  ): Promise<StudentFeeLedger | undefined> => {
+    try {
+      setError(null);
+      // 1. Search cached array 
+      const existing = ledgers.find((l) => l.studentId === studentId && l.academicSessionId === academicSessionId);
+      if (existing) return existing;
 
-    const adjustmentsTotal = adjustments
-      .filter((a) => a.ledgerId === ledgerId)
-      .reduce((sum, a) => sum + a.amount, 0);
-
-    const paid = payments
-      .filter((p) => p.ledgerId === ledgerId)
-      .reduce((sum, p) => sum + p.amount, 0);
-
-    const finalFee = baseTotal + adjustmentsTotal;
-    const pending = finalFee - paid;
-
-    let status: LedgerSummary["status"] = "PENDING";
-    if (pending <= 0) status = "PAID";
-    else if (paid > 0) status = "PARTIAL";
-
-    return {
-      baseTotal,
-      adjustmentsTotal,
-      finalFee,
-      paid,
-      paidTotal: paid, // compatibility
-      pending,
-      status,
-    };
+      // 2. Fetch if un-cached
+      const results = await apiClient.get<StudentFeeLedger[]>(`/api/ledgers?studentId=${studentId}&year=${academicSessionId}`);
+      if (results.length > 0) {
+        const remote = results[0];
+        return {
+          ...remote,
+          baseComponents: Array.isArray(remote.baseComponents)
+            ? toFrontendComponents(remote.baseComponents) as any
+            : remote.baseComponents
+        };
+      }
+      return undefined;
+    } catch (err: any) {
+      setError(err.message || "Failed to retrieve specific ledger");
+      throw err;
+    }
   };
 
   /* =========================
      Compatibility Helpers
   ========================= */
 
-  const getLedgerByStudentYear = (
-    studentId: string,
-    academicYear: string
-  ) => {
-    return ledgers.find(
-      (l) =>
-        l.studentId === studentId &&
-        l.academicYear === academicYear
-    );
-  };
-
   const getReceiptNumber = (paymentId: string) => {
-    return `REC-${paymentId
-      .slice(0, 8)
-      .toUpperCase()}`;
+    return `REC-${paymentId.slice(0, 8).toUpperCase()}`;
   };
 
   /* =========================
-     Provider
+     Provider Payload
   ========================= */
 
   return (
@@ -364,11 +343,15 @@ export function FeeLedgerProvider({
         adjustments,
         payments,
         expenses,
+        loading,
+        error,
+
         createLedger,
         upsertLedgerFromFeeStructure,
         addAdjustment,
         addPayment,
         addExpense,
+
         getLedgerSummary,
         getLedgerByStudentYear,
         getReceiptNumber,

@@ -29,6 +29,11 @@ import receiptDetailRoutes from "./finance/routes/receipt-detail.routes";
 // Activity Feed (Phase 10)
 import activityRoutes from "./system/routes/activity.routes";
 
+// Finance Checker
+import financeConsistencyRoutes from "./system/routes/financeConsistency.routes";
+import ledgerReplayRoutes from "./system/routes/ledgerReplay.routes";
+import ledgerTimelineRoutes from "./system/routes/ledgerTimeline.routes";
+
 const app = express();
 
 app.use(
@@ -81,6 +86,9 @@ app.use("/api/receipts", auth, anyRole, receiptDetailRoutes);
 
 // ── Admin Activity Feed (Phase 10)  ──────────────────────────────────────────
 app.use("/api/system/activity", activityRoutes);
+app.use("/api/system", financeConsistencyRoutes);
+app.use("/api/system", ledgerReplayRoutes);
+app.use("/api/system", ledgerTimelineRoutes);
 
 // ── Admin Dashboard (Phase 11)  ──────────────────────────────────────────────
 import dashboardRoutes from "./system/routes/dashboard.routes";

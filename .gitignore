@@ -1,15 +1,18 @@
-# Ignore reference / junk files
+# Dependencies
+node_modules/
+
+# Environment files
+.env
+
+# Build output
+dist/
+build/
+
+# IDE / downloaded junk
 Icons/
 eSkooly - Free School Management System.html
 eSkooly - Free School Management System_files/
 
-node_modules/
-backend/node_modules/
-.env
-dist/
-build/
-
-# Ignore frontend junk
+# Frontend
 frontend/**/node_modules
 frontend/**/dist
-.env

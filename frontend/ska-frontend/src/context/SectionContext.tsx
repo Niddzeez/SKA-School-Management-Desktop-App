@@ -5,7 +5,7 @@ import {
   useState,
 } from "react";
 import type { Section } from "../types/Section";
-import { API_BASE_URL } from "../config/api";
+import { apiClient } from "../services/apiClient";
 
 type SectionContextType = {
   sections: Section[];
@@ -26,7 +26,6 @@ type SectionContextType = {
 const SectionContext =
   createContext<SectionContextType | null>(null);
 
-const BASE_URL = API_BASE_URL;
 
 export function SectionProvider({
   children,
@@ -39,45 +38,34 @@ export function SectionProvider({
 
   /* 🔹 LOAD SECTIONS FOR A CLASS */
   const loadAllSections = async () => {
-  setLoading(true);
-  setError(null);
+    setLoading(true);
+    setError(null);
 
-  try {
-    const res = await fetch(`${BASE_URL}/api/sections`);
-    if (!res.ok) throw new Error("Failed to fetch sections");
+    try {
+      const data = await apiClient.get<Section[]>("/api/sections");
+      setSections(data);
+    } catch (err: any) {
+      setError(err.message || "Unable to load sections");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    const data = await res.json();
-    setSections(data);
-  } catch (err) {
-    setError("Unable to load sections");
-  } finally {
-    setLoading(false);
-  }
-};
-
-useEffect(()=>{
-  loadAllSections();
-},[]);
+  useEffect(() => {
+    loadAllSections();
+  }, []);
 
   /* 🔹 CREATE SECTION */
   const addSection = async (
     classID: string,
     name: string
   ) => {
-    const res = await fetch(`${BASE_URL}/api/sections`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ classID, name }),
-    });
-
-    if (!res.ok) {
-      const data = await res.json();
-      throw new Error(data.error || "Failed to create section");
+    try {
+      const created = await apiClient.post<Section>("/api/sections", { classID, name });
+      setSections((prev) => [...prev, created]);
+    } catch (err: any) {
+      throw new Error(err.message || "Failed to create section");
     }
-
-
-    const created = await res.json();
-    setSections((prev) => [...prev, created]);
   };
 
   /* 🔹 ASSIGN CLASS TEACHER */
@@ -85,27 +73,19 @@ useEffect(()=>{
     sectionId: string,
     teacherId: string
   ) => {
-    const res = await fetch(
-      `${BASE_URL}/api/sections/${sectionId}/teacher`,
-      {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          classTeacherID: teacherId,
-        }),
-      }
-    );
-
-    if (!res.ok) {
-      throw new Error("Failed to assign class teacher");
+    try {
+      const updated = await apiClient.patch<Section>(
+        `/api/sections/${sectionId}/teacher`,
+        { classTeacherID: teacherId }
+      );
+      setSections((prev) =>
+        prev.map((s) =>
+          s.id === sectionId ? updated : s
+        )
+      );
+    } catch (err: any) {
+      throw new Error(err.message || "Failed to assign class teacher");
     }
-
-    const updated = await res.json();
-    setSections((prev) =>
-      prev.map((s) =>
-        s.id === sectionId ? updated : s
-      )
-    );
   };
 
   return (

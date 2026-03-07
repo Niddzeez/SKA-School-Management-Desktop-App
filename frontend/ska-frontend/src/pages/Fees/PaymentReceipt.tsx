@@ -1,95 +1,99 @@
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useStudents } from "../../context/StudentContext";
-import { useClasses } from "../../context/ClassContext";
-import { useSections } from "../../context/SectionContext";
-import { useFeeLedger } from "../../context/FeeLedgerContext";
-import { useAcademicYear } from "../../context/AcademicYearContext";
+import { apiClient } from "../../services/apiClient";
 import { printReport } from "../Reports/Utils/PrintUtils";
+import { useAcademicYear } from "../../context/AcademicYearContext";
+
+interface ReceiptData {
+  receiptNumber: string;
+  paymentId: string;
+  studentId: string;
+  studentName: string;
+  className: string;
+  amount: number;
+  mode: string;
+  reference?: string;
+  collectedBy: string;
+  date: string;
+}
 
 function PaymentReceipt() {
   const { paymentId } = useParams<{ paymentId: string }>();
+  const { activeYear } = useAcademicYear();
 
-  const { students } = useStudents();
-  const { classes } = useClasses();
-  const { sections } = useSections();
-  const { payments, ledgers, getReceiptNumber } = useFeeLedger();
-  const { academicYear } = useAcademicYear();
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [receipt, setReceipt] = useState<ReceiptData | null>(null);
 
-  const payment = payments.find(p => p.id === paymentId);
-  if (!payment) return <p>Payment not found.</p>;
+  useEffect(() => {
+    async function fetchReceipt() {
+      if (!paymentId) {
+        setError("No payment ID provided in URL");
+        setLoading(false);
+        return;
+      }
 
-  const ledger = ledgers.find(l => l.id === payment.ledgerId);
-  if (!ledger) return <p>Ledger not found.</p>;
+      try {
+        setLoading(true);
+        setError(null);
+        const data = await apiClient.get<ReceiptData>(`/api/receipts/${paymentId}`);
+        setReceipt(data);
+      } catch (err: any) {
+        setError(err.message || "Failed to load receipt");
+      } finally {
+        setLoading(false);
+      }
+    }
 
-  const student = students.find(s => s.id === payment.studentId);
-  if (!student) return <p>Student not found.</p>;
+    fetchReceipt();
+  }, [paymentId]);
 
-  const cls = classes.find(c => c.id === ledger.classId);
-  const sec = sections.find(s => s.id === student.sectionID);
-
-  const receiptNo = getReceiptNumber(payment.id);
+  if (loading) return <p style={{ padding: "20px" }}>Loading receipt...</p>;
+  if (error) return <p style={{ padding: "20px", color: "red" }}>{error}</p>;
+  if (!receipt) return <p style={{ padding: "20px" }}>Receipt not found.</p>;
 
   /* =========================
      PRINT HANDLER
   ========================= */
-
   const handlePrint = () => {
     printReport({
-      title: `Receipt_${receiptNo}_${student.firstName}_${student.lastName}`,
+      title: `Receipt_${receipt.receiptNumber}_${receipt.studentName}`,
       meta: {
-        studentName: `${student.firstName} ${student.lastName}`,
-        academicYear,
+        studentName: receipt.studentName,
+        academicYear: activeYear?.name || "Unknown Year",
         reportType: "PAYMENT_RECEIPT",
-        periodLabel: new Date(payment.createdAt).toLocaleDateString(),
+        periodLabel: new Date(receipt.date).toLocaleDateString(),
       },
       sections: [
         {
           title: "Receipt Details",
           headers: ["Field", "Value"],
           rows: [
-            { columns: ["Receipt No", receiptNo] },
-            { columns: ["Date", new Date(payment.createdAt).toLocaleDateString()] },
-            { columns: ["Academic Year", academicYear] },
+            { columns: ["Receipt No", receipt.receiptNumber] },
+            { columns: ["Date", new Date(receipt.date).toLocaleDateString()] },
+            { columns: ["Academic Year", activeYear?.name || "Unknown Year"] },
           ],
         },
         {
           title: "Student Information",
           headers: ["Field", "Value"],
           rows: [
-            {
-              columns: [
-                "Student Name",
-                `${student.firstName} ${student.lastName}`,
-              ],
-            },
-            {
-              columns: ["Class", `Class ${cls?.ClassName ?? "-"}`],
-            },
-            {
-              columns: ["Section", sec?.name ?? "—"],
-            },
+            { columns: ["Student Name", receipt.studentName] },
+            { columns: ["Class", `Class ${receipt.className}`] },
           ],
         },
         {
           title: "Payment Details",
           headers: ["Description", "Amount"],
-          rows: [
-            {
-              columns: ["Fee Payment", `₹${payment.amount}`],
-            },
-          ],
+          rows: [{ columns: ["Fee Payment", `₹${receipt.amount}`] }],
         },
         {
           title: "Transaction Info",
           headers: ["Field", "Value"],
           rows: [
-            { columns: ["Mode", payment.mode] },
-            {
-              columns: ["Reference", payment.reference ?? "-"],
-            },
-            {
-              columns: ["Collected By", payment.collectedBy],
-            },
+            { columns: ["Mode", receipt.mode] },
+            { columns: ["Reference", receipt.reference || "-"] },
+            { columns: ["Collected By", receipt.collectedBy] },
           ],
         },
       ],
@@ -99,21 +103,19 @@ function PaymentReceipt() {
   /* =========================
      RENDER (PREVIEW ONLY)
   ========================= */
-
   return (
     <div style={{ padding: "20px" }}>
       <h2>Receipt Preview</h2>
 
-      <p><strong>Receipt No:</strong> {receiptNo}</p>
-      <p>
-        <strong>Student:</strong> {student.firstName} {student.lastName}
-      </p>
-      <p><strong>Amount:</strong> ₹{payment.amount}</p>
-      <p><strong>Mode:</strong> {payment.mode}</p>
+      <p><strong>Receipt No:</strong> {receipt.receiptNumber}</p>
+      <p><strong>Student:</strong> {receipt.studentName}</p>
+      <p><strong>Class:</strong> {receipt.className}</p>
+      <p><strong>Amount:</strong> ₹{receipt.amount}</p>
+      <p><strong>Mode:</strong> {receipt.mode}</p>
+      {receipt.reference && <p><strong>Reference:</strong> {receipt.reference}</p>}
+      <p><strong>Date:</strong> {new Date(receipt.date).toLocaleString()}</p>
 
-      <button onClick={handlePrint}>
-        Print / Save as PDF
-      </button>
+      <button onClick={handlePrint}>Print / Save as PDF</button>
     </div>
   );
 }

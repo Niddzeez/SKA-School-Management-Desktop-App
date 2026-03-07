@@ -184,3 +184,104 @@ export async function getReceiptData(
     );
     return rows[0] ?? null;
 }
+
+// ---------------------------------------------------------------------------
+// Phase 6: Direct Reporting APIs
+// ---------------------------------------------------------------------------
+
+export async function getIncomeReport(year: string, fromDate?: string, toDate?: string) {
+    const conditions: string[] = ["ls.academic_year = $1"];
+    const params: unknown[] = [year];
+
+    if (fromDate) {
+        params.push(fromDate);
+        conditions.push(`p.created_at >= $${params.length}::date`);
+    }
+    if (toDate) {
+        params.push(toDate);
+        conditions.push(`p.created_at < ($${params.length}::date + interval '1 day')`);
+    }
+
+    const { rows: countRows } = await getPool().query(
+        `SELECT COUNT(*) as count, COALESCE(SUM(p.amount), 0) as total
+         FROM payments p
+         JOIN ledger_summary ls ON ls.ledger_id = p.ledger_id
+         WHERE ${conditions.join(" AND ")}`,
+        params
+    );
+
+    const { rows: dataRows } = await getPool().query(
+        `SELECT p.id, p.ledger_id, p.student_id, p.amount, p.mode, p.collected_by, p.reference, p.created_at
+         FROM payments p
+         JOIN ledger_summary ls ON ls.ledger_id = p.ledger_id
+         WHERE ${conditions.join(" AND ")}
+         ORDER BY p.created_at DESC`,
+        params
+    );
+
+    return {
+        totalCollected: Number(countRows[0].total),
+        paymentCount: Number(countRows[0].count),
+        payments: dataRows
+    };
+}
+
+export async function getExpenseReport(year: string, fromDate?: string, toDate?: string) {
+    const { rows: sessionRows } = await getPool().query(
+        `SELECT start_date, end_date FROM academic_sessions WHERE name = $1`,
+        [year]
+    );
+
+    if (sessionRows.length === 0) {
+        return { totalExpenses: 0, expenses: [] };
+    }
+    const session = sessionRows[0];
+
+    const conditions: string[] = [
+        "expense_date >= $1",
+        "expense_date <= $2"
+    ];
+    const params: unknown[] = [session.start_date, session.end_date];
+
+    if (fromDate) {
+        params.push(fromDate);
+        conditions.push(`expense_date >= $${params.length}::date`);
+    }
+    if (toDate) {
+        params.push(toDate);
+        conditions.push(`expense_date <= $${params.length}::date`);
+    }
+
+    const { rows: countRows } = await getPool().query(
+        `SELECT COALESCE(SUM(amount), 0) as total
+         FROM expenses
+         WHERE ${conditions.join(" AND ")}`,
+        params
+    );
+
+    const { rows: dataRows } = await getPool().query(
+        `SELECT *
+         FROM expenses
+         WHERE ${conditions.join(" AND ")}
+         ORDER BY expense_date DESC`,
+        params
+    );
+
+    return {
+        totalExpenses: Number(countRows[0].total),
+        expenses: dataRows
+    };
+}
+
+export async function getCombinedReport(year: string, fromDate?: string, toDate?: string) {
+    const [inc, exp] = await Promise.all([
+        getIncomeReport(year, fromDate, toDate),
+        getExpenseReport(year, fromDate, toDate)
+    ]);
+
+    return {
+        incomeTotal: inc.totalCollected,
+        expenseTotal: exp.totalExpenses,
+        netBalance: inc.totalCollected - exp.totalExpenses
+    };
+}

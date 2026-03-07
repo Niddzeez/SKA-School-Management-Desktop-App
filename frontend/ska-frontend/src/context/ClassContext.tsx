@@ -5,7 +5,7 @@ import {
   useState,
 } from "react";
 import type { Class as SchoolClass } from "../types/Class";
-import { API_BASE_URL } from "../config/api";
+import { apiClient } from "../services/apiClient";
 
 const FIXED_CLASSES = [
   "Playgroup",
@@ -41,8 +41,6 @@ type ClassContextType = {
 const ClassContext =
   createContext<ClassContextType | null>(null);
 
-const BASE_URL = API_BASE_URL;
-
 export function ClassProvider({
   children,
 }: {
@@ -56,13 +54,10 @@ export function ClassProvider({
   useEffect(() => {
     const loadClasses = async () => {
       try {
-        const res = await fetch(`${BASE_URL}/api/classes`);
-        if (!res.ok) throw new Error("Failed to fetch classes");
-
-        const data = await res.json();
+        const data = await apiClient.get<SchoolClass[]>("/api/classes");
         setClasses(data);
-      } catch (err) {
-        setError("Unable to load classes");
+      } catch (err: any) {
+        setError(err.message || "Unable to load classes");
       } finally {
         setLoading(false);
       }
@@ -80,18 +75,12 @@ export function ClassProvider({
 
   /* 🔹 CREATE CLASS */
   const addClass = async (className: string) => {
-    const res = await fetch(`${BASE_URL}/api/classes`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ClassName: className }),
-    });
-
-    if (!res.ok) {
-      throw new Error("Failed to create class");
+    try {
+      const created = await apiClient.post<SchoolClass>("/api/classes", { ClassName: className });
+      setClasses((prev) => [...prev, created]);
+    } catch (err: any) {
+      throw new Error(err.message || "Failed to create class");
     }
-
-    const created = await res.json();
-    setClasses((prev) => [...prev, created]);
   };
 
   return (

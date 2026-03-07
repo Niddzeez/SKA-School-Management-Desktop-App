@@ -5,7 +5,7 @@ import {
   useState,
 } from "react";
 import type { Student, StudentStatus } from "../types/Student";
-import { API_BASE_URL } from "../config/api";
+import { apiClient } from "../services/apiClient";
 
 type StudentUpdate = Partial<Omit<Student, "id">>;
 
@@ -36,8 +36,6 @@ type StudentContextType = {
 const StudentContext =
   createContext<StudentContextType | null>(null);
 
-const BASE_URL = API_BASE_URL;
-
 export function StudentProvider({
   children,
 }: {
@@ -51,13 +49,10 @@ export function StudentProvider({
   useEffect(() => {
     const loadStudents = async () => {
       try {
-        const res = await fetch(`${BASE_URL}/api/students`);
-        if (!res.ok) throw new Error("Failed to fetch students");
-
-        const data = await res.json();
+        const data = await apiClient.get<Student[]>("/api/students");
         setStudents(data);
-      } catch (err) {
-        setError("Unable to load students");
+      } catch (err: any) {
+        setError(err.message || "Unable to load students");
       } finally {
         setLoading(false);
       }
@@ -67,58 +62,39 @@ export function StudentProvider({
   }, []);
 
   const addStudent = async (
-  student: Omit<Student, "id">
-): Promise<Student> => {
-  const res = await fetch(`${BASE_URL}/api/students`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(student),
-  });
-
-  if (!res.ok) {
-    throw new Error("Failed to create student");
-  }
-
-  const created = await res.json();
-  setStudents((prev) => [...prev, created]);
-  return created;
-};
-
+    student: Omit<Student, "id">
+  ): Promise<Student> => {
+    try {
+      const created = await apiClient.post<Student>("/api/students", student);
+      setStudents((prev) => [...prev, created]);
+      return created;
+    } catch (err: any) {
+      throw new Error(err.message || "Failed to create student");
+    }
+  };
 
   /* 🔹 UPDATE STATUS */
   const UpdateStudentStatus = async (
     id: string,
     status: StudentStatus
   ) => {
-    const res = await fetch(
-      `${BASE_URL}/api/students/${id}/status`,
-      {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status }),
-      }
-    );
-
-    if (!res.ok) {
-      throw new Error("Failed to update status");
+    try {
+      const updated = await apiClient.patch<Student>(`/api/students/${id}/status`, { status });
+      setStudents((prev) =>
+        prev.map((s) => (s.id === id ? updated : s))
+      );
+    } catch (err: any) {
+      throw new Error(err.message || "Failed to update status");
     }
-
-    const updated = await res.json();
-    setStudents((prev) =>
-      prev.map((s) => (s.id === id ? updated : s))
-    );
   };
 
   const getStudentById = async (id: string): Promise<Student> => {
-  const res = await fetch(`${BASE_URL}/api/students/${id}`);
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch student");
-  }
-
-  return res.json();
-};
-
+    try {
+      return await apiClient.get<Student>(`/api/students/${id}`);
+    } catch (err: any) {
+      throw new Error(err.message || "Failed to fetch student");
+    }
+  };
 
   /* 🔹 ASSIGN CLASS + SECTION */
   const assignStudenttoSection = async (
@@ -126,25 +102,17 @@ export function StudentProvider({
     classID: string,
     sectionID: string
   ) => {
-    const res = await fetch(
-      `${BASE_URL}/api/students/${studentID}/assignment`,
-      {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ classID, sectionID }),
-      }
-    );
-
-    if (!res.ok) {
-      throw new Error("Failed to assign section");
+    try {
+      const updated = await apiClient.patch<Student>(
+        `/api/students/${studentID}/assignment`,
+        { classID, sectionID }
+      );
+      setStudents((prev) =>
+        prev.map((s) => (s.id === studentID ? updated : s))
+      );
+    } catch (err: any) {
+      throw new Error(err.message || "Failed to assign section");
     }
-
-    const updated = await res.json();
-    setStudents((prev) =>
-      prev.map((s) =>
-        s.id === studentID ? updated : s
-      )
-    );
   };
 
   /* 🔹 GENERIC UPDATE (soft support) */
@@ -152,25 +120,17 @@ export function StudentProvider({
     studentId: string,
     updates: StudentUpdate
   ) => {
-    const res = await fetch(
-      `${BASE_URL}/api/students/${studentId}`,
-      {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updates),
-      }
-    );
-
-    if (!res.ok) {
-      throw new Error("Failed to update student");
+    try {
+      const updated = await apiClient.patch<Student>(
+        `/api/students/${studentId}`,
+        updates
+      );
+      setStudents((prev) =>
+        prev.map((s) => (s.id === studentId ? updated : s))
+      );
+    } catch (err: any) {
+      throw new Error(err.message || "Failed to update student");
     }
-
-    const updated = await res.json();
-    setStudents((prev) =>
-      prev.map((s) =>
-        s.id === studentId ? updated : s
-      )
-    );
   };
 
   return (

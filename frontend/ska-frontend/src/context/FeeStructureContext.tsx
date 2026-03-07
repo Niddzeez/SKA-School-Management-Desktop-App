@@ -1,19 +1,26 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import type { FeeStructure, FeeComponent } from "../types/ClassFeeStructure";
-import { usePersistentState } from "../hooks/UsePersistentState";
+import { apiClient } from "../services/apiClient";
 
 type FeeStructureContextType = {
   feeStructures: FeeStructure[];
+  loading: boolean;
+  error: string | null;
 
-  createFeeStructure: (classID: string, academicYear: string) => void;
+  createFeeStructure: (classId: string, academicSessionId: string) => Promise<FeeStructure>;
   addFeeComponent: (
     feeStructureID: string,
-    component: FeeComponent
-  ) => void;
-  activateFeeStructure: (feeStructureID: string) => void;
-  removeFeeComponent: (feeStructureID: string,
-    componentID: string) => void;
-  getActiveFeeStructure: (classID: string, academicYear: string) => FeeStructure | undefined;
+    component: Omit<FeeComponent, 'id'>
+  ) => Promise<void>;
+  activateFeeStructure: (feeStructureID: string) => Promise<void>;
+  removeFeeComponent: (
+    feeStructureID: string,
+    componentID: string
+  ) => Promise<void>;
+  getActiveFeeStructure: (
+    classId: string,
+    academicSessionId: string
+  ) => FeeStructure | undefined;
 };
 
 const FeeStructureContext = createContext<FeeStructureContextType | null>(null);
@@ -23,92 +30,154 @@ export function FeeStructureProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [feeStructures, setFeeStructures] = usePersistentState<FeeStructure[]>("feeStructures", []);
+  const [feeStructures, setFeeStructures] = useState<FeeStructure[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const createFeeStructure = (classID: string, academicYear: string) => {
-    setFeeStructures((prev) => [
-      ...prev,
-      {
-        id: crypto.randomUUID(),
-        classID,
-        academicYear,
-        components: [],
-        status: "DRAFT",
-        createdAt: new Date().toISOString(),
-      },
-    ]);
+  /* -------------------------
+     LOAD DATA
+  ------------------------- */
+  const loadFeeStructures = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const data = await apiClient.get<FeeStructure[]>("/api/fee-structures");
+      setFeeStructures(data);
+    } catch (err: any) {
+      setError(err.message || "Failed to load fee structures");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const activateFeeStructure = (feeStructureID: string) => {
-  setFeeStructures(prev =>
-    prev.map(fs => {
-      const target = prev.find(f => f.id === feeStructureID);
-      if (!target) return fs;
+  useEffect(() => {
+    loadFeeStructures();
+  }, []);
 
-      if (
-        fs.classID === target.classID &&
-        fs.academicYear === target.academicYear
-      ) {
-        return fs.id === feeStructureID
-          ? { ...fs, status: "ACTIVE" }
-          : { ...fs, status: "DRAFT" };
-      }
+  /* -------------------------
+     CREATE
+  ------------------------- */
+  const createFeeStructure = async (classId: string, academicSessionId: string): Promise<FeeStructure> => {
+    try {
+      setError(null);
+      const created = await apiClient.post<FeeStructure>("/api/fee-structures", {
+        classId,
+        academicSessionId,
+      });
+      setFeeStructures((prev) => [...prev, created]);
+      return created;
+    } catch (err: any) {
+      setError(err.message || "Failed to create fee structure");
+      throw err;
+    }
+  };
 
-      return fs;
-    })
-  );
-};
+  /* -------------------------
+     ACTIVATE
+  ------------------------- */
+  const activateFeeStructure = async (feeStructureID: string): Promise<void> => {
+    try {
+      await apiClient.post(`/api/fee-structures/${feeStructureID}/activate`);
+      // Reload from backend to assure integrity 
+      await loadFeeStructures();
+    } catch (err: any) {
+      setError(err.message || "Failed to activate fee structure");
+      throw err;
+    }
+  };
 
-
+  /* -------------------------
+     ACTIVE SELECTOR (Offline)
+  ------------------------- */
   const getActiveFeeStructure = (
-    classID: string,
-    academicYear: string
-  ) => {
+    classId: string,
+    academicSessionId: string
+  ): FeeStructure | undefined => {
     return feeStructures.find(
       (fs) =>
-        fs.classID === classID &&
-        fs.academicYear === academicYear &&
+        fs.classId === classId &&
+        fs.academicSessionId === academicSessionId &&
         fs.status === "ACTIVE"
     );
   };
 
-
-
-  const addFeeComponent = (
+  /* -------------------------
+     COMPONENTS
+  ------------------------- */
+  const addFeeComponent = async (
     feeStructureID: string,
-    component: FeeComponent
-  ) => {
-    setFeeStructures((prev) =>
-      prev.map((fs) =>
-        fs.id === feeStructureID
-          ? { ...fs, components: [...fs.components, component] }
-          : fs
-      )
-    );
+    component: Omit<FeeComponent, 'id'>
+  ): Promise<void> => {
+    const target = feeStructures.find((fs) => fs.id === feeStructureID);
+    if (!target) {
+      throw new Error("Fee structure not found");
+    }
+    if (target.status !== "DRAFT") {
+      throw new Error("Cannot modify an active fee structure");
+    }
+
+    try {
+      const addedComponent = await apiClient.post<FeeComponent>(
+        `/api/fee-structures/${feeStructureID}/components`,
+        component
+      );
+
+      setFeeStructures((prev) =>
+        prev.map((fs) =>
+          fs.id === feeStructureID
+            ? { ...fs, components: [...fs.components, addedComponent] }
+            : fs
+        )
+      );
+    } catch (err: any) {
+      setError(err.message || "Failed to add fee component");
+      throw err;
+    }
   };
 
-  const removeFeeComponent = (
+  const removeFeeComponent = async (
     feeStructureID: string,
     componentID: string
-  ) => {
-    setFeeStructures((prev) =>
-      prev.map((fs) =>
-        fs.id === feeStructureID && fs.status === "DRAFT"
-          ? {
-            ...fs,
-            components: fs.components.filter(
-              (c) => c.id !== componentID
-            ),
-          }
-          : fs
-      )
-    );
-  };
+  ): Promise<void> => {
+    const target = feeStructures.find((fs) => fs.id === feeStructureID);
+    if (!target) {
+      throw new Error("Fee structure not found");
+    }
+    if (target.status !== "DRAFT") {
+      throw new Error("Cannot modify an active fee structure");
+    }
 
+    try {
+      await apiClient.delete(`/api/fee-structures/${feeStructureID}/components/${componentID}`);
+
+      setFeeStructures((prev) =>
+        prev.map((fs) =>
+          fs.id === feeStructureID
+            ? {
+              ...fs,
+              components: fs.components.filter((c) => c.id !== componentID),
+            }
+            : fs
+        )
+      );
+    } catch (err: any) {
+      setError(err.message || "Failed to remove fee component");
+      throw err;
+    }
+  };
 
   return (
     <FeeStructureContext.Provider
-      value={{ feeStructures, createFeeStructure, addFeeComponent, activateFeeStructure, removeFeeComponent, getActiveFeeStructure}}
+      value={{
+        feeStructures,
+        loading,
+        error,
+        createFeeStructure,
+        addFeeComponent,
+        activateFeeStructure,
+        removeFeeComponent,
+        getActiveFeeStructure,
+      }}
     >
       {children}
     </FeeStructureContext.Provider>

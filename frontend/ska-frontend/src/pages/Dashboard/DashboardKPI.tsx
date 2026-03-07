@@ -1,192 +1,129 @@
-import { useFeeLedger } from "../../context/FeeLedgerContext";
+import { useEffect, useState } from "react";
 import { useAcademicYear } from "../../context/AcademicYearContext";
-import { getAcademicYearRange } from "../Reports/Utils/reportDateUtils";
+import { apiClient } from "../../services/apiClient";
 import "./dashboard.css";
 import { useNavigate } from "react-router-dom";
 
+interface DashboardOverview {
+    totalStudents: number;
+    totalCollected: number;
+    totalPending: number;
+    totalAdjustments: number;
+    totalExpenses: number;
+    netBalance: number;
+}
+
+interface MonthlyCollection {
+    month: string;
+    total: number;
+}
 
 function DashboardKPIs() {
-    const { payments, expenses, ledgers, getLedgerSummary } = useFeeLedger();
-    const { academicYear } = useAcademicYear();
+    const { activeYear } = useAcademicYear();
     const navigate = useNavigate();
 
-    /* =========================
-       Academic Year Range
-       (same helper as reports)
-    ========================= */
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
 
-    const { start, end } = getAcademicYearRange(academicYear);
+    const [overview, setOverview] = useState<DashboardOverview | null>(null);
+    const [collections, setCollections] = useState<MonthlyCollection[]>([]);
 
-    /* =========================
-       TOTALS (YEARLY)
-       EXACT SAME PATTERN AS REPORTS
-    ========================= */
+    useEffect(() => {
+        async function fetchDashboard() {
+            if (!activeYear?.id) return;
+            try {
+                setLoading(true);
+                setError(null);
 
-    let totalIncome = 0;
-    let totalExpense = 0;
+                const [overviewRes, collectionsRes] = await Promise.all([
+                    apiClient.get<DashboardOverview>(`/api/dashboard/overview?year=${activeYear.id}`),
+                    apiClient.get<MonthlyCollection[]>(`/api/dashboard/monthly-collections?year=${activeYear.id}`)
+                ]);
 
-    payments.forEach((p) => {
-        const d = new Date(p.createdAt);
-        if (d >= start && d <= end) {
-            totalIncome += p.amount;
-        }
-    });
-
-    expenses.forEach((e) => {
-        const d = new Date(e.expenseDate);
-        if (d >= start && d <= end) {
-            totalExpense += e.amount;
-        }
-    });
-
-    const netBalance = totalIncome - totalExpense;
-
-    /* =========================
-       MONTH LOGIC — COPY REPORT THINKING
-       Pick latest month WITH DATA inside AY
-    ========================= */
-
-    let referenceMonth: number | null = null;
-
-    payments.forEach((p) => {
-        const d = new Date(p.createdAt);
-        if (d >= start && d <= end) {
-            referenceMonth = d.getMonth();
-        }
-    });
-
-    expenses.forEach((e) => {
-        const d = new Date(e.expenseDate);
-        if (d >= start && d <= end) {
-            referenceMonth = d.getMonth();
-        }
-    });
-
-    let monthIncome = 0;
-    let monthExpense = 0;
-
-    if (referenceMonth !== null) {
-        payments.forEach((p) => {
-            const d = new Date(p.createdAt);
-            if (
-                d >= start &&
-                d <= end &&
-                d.getMonth() === referenceMonth
-            ) {
-                monthIncome += p.amount;
+                setOverview(overviewRes);
+                setCollections(collectionsRes);
+            } catch (err: any) {
+                setError(err.message || "Failed to load dashboard data");
+            } finally {
+                setLoading(false);
             }
-        });
-
-        expenses.forEach((e) => {
-            const d = new Date(e.expenseDate);
-            if (
-                d >= start &&
-                d <= end &&
-                d.getMonth() === referenceMonth
-            ) {
-                monthExpense += e.amount;
-            }
-        });
-    }
-
-    /* =========================
-       Pending Fees KPIs
-    ========================= */
-
-    let totalPending = 0;
-    let studentsWithPending = 0;
-
-    ledgers.forEach((ledger) => {
-        if (ledger.academicYear !== academicYear) return;
-
-        const summary = getLedgerSummary(ledger.id);
-
-        if (summary.pending > 0) {
-            totalPending += summary.pending;
-            studentsWithPending += 1;
         }
-    });
+        fetchDashboard();
+    }, [activeYear?.id]);
 
-
-
-    console.log("AY:", academicYear);
-    console.log("Payments:", payments.length, payments[0]);
-    console.log("Expenses:", expenses.length, expenses[0]);
-    console.log("AY Range:", start, end);
-
-
-    /* =========================
-       Render
-    ========================= */
+    if (loading) return <div className="kpi-loading">Loading Dashboard Data...</div>;
+    if (error) return <div className="error">Error loading dashboard: {error}</div>;
+    if (!overview) return null;
 
     return (
-        <div className="dashboard-kpis">
-            <div className="kpi-row">
-                <div className="kpi-card income">
-                    <h4>Total Income</h4>
-                    <p className="kpi-value">₹{totalIncome}</p>
-                    <span className="kpi-sub">
-                        Academic Year {academicYear}
-                    </span>
+        <div className="dashboard-content">
+            <div className="dashboard-kpis">
+                <div className="kpi-row">
+                    <div className="kpi-card income">
+                        <h4>Total Income</h4>
+                        <p className="kpi-value">₹{overview.totalCollected}</p>
+                        <span className="kpi-sub">Academic Year {activeYear?.name}</span>
+                    </div>
+
+                    <div className="kpi-card expense">
+                        <h4>Total Expense</h4>
+                        <p className="kpi-value">₹{overview.totalExpenses}</p>
+                        <span className="kpi-sub">Academic Year {activeYear?.name}</span>
+                    </div>
+
+                    <div className="kpi-card balance">
+                        <h4>Net Balance</h4>
+                        <p className={`kpi-value ${overview.netBalance >= 0 ? "positive" : "negative"}`}>
+                            ₹{overview.netBalance}
+                        </p>
+                        <span className="kpi-sub">Income − Expense</span>
+                    </div>
                 </div>
 
-                <div className="kpi-card expense">
-                    <h4>Total Expense</h4>
-                    <p className="kpi-value">₹{totalExpense}</p>
-                    <span className="kpi-sub">
-                        Academic Year {academicYear}
-                    </span>
-                </div>
+                <div className="kpi-row">
+                    <div className="kpi-card default-stat">
+                        <h4>Total Students</h4>
+                        <p className="kpi-value">{overview.totalStudents}</p>
+                        <span className="kpi-sub">In Active Ledgers</span>
+                    </div>
 
-                <div className="kpi-card balance">
-                    <h4>Net Balance</h4>
-                    <p
-                        className={`kpi-value ${netBalance >= 0 ? "positive" : "negative"
-                            }`}
-                    >
-                        ₹{netBalance}
-                    </p>
-                    <span className="kpi-sub">
-                        Income − Expense
-                    </span>
+                    <div className="kpi-card warning">
+                        <h4>Total Pending Fees</h4>
+                        <p className="kpi-value">₹{overview.totalPending}</p>
+                        <span className="kpi-sub">Academic Year {activeYear?.name}</span>
+                    </div>
+
+                    <div className="kpi-card warning cursor-pointer" onClick={() => navigate("/dashboard/pending-fees")}>
+                        <h4>Total Adjustments</h4>
+                        <p className="kpi-value">₹{overview.totalAdjustments}</p>
+                        <span className="kpi-sub">Concessions / Waivers / Additions</span>
+                    </div>
                 </div>
             </div>
 
-            <div className="kpi-row">
-                <div className="kpi-card income">
-                    <h4>Latest Month’s Income</h4>
-                    <p className="kpi-value">₹{monthIncome}</p>
-                    <span className="kpi-sub">
-                        Derived from academic year data
-                    </span>
-                </div>
-
-                <div className="kpi-card expense">
-                    <h4>Latest Month’s Expense</h4>
-                    <p className="kpi-value">₹{monthExpense}</p>
-                    <span className="kpi-sub">
-                        Derived from academic year data
-                    </span>
-                </div>
+            <div className="dashboard-section monthly-collections">
+                <h3>Monthly Collections</h3>
+                {collections.length === 0 ? (
+                    <p>No collections recorded for this year.</p>
+                ) : (
+                    <table className="report-table">
+                        <thead>
+                            <tr>
+                                <th>Month</th>
+                                <th>Collected Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {collections.map((m) => (
+                                <tr key={m.month}>
+                                    <td>{m.month}</td>
+                                    <td className="amount">₹{m.total}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                )}
             </div>
-            <div className="kpi-row">
-                <div className="kpi-card warning">
-                    <h4>Total Pending Fees</h4>
-                    <p className="kpi-value">₹{totalPending}</p>
-                    <span className="kpi-sub">
-                        Academic Year {academicYear}
-                    </span>
-                </div>
-
-                <div className="kpi-card warning"   onClick={() => navigate("/dashboard/pending-fees")}>
-                    <h4>Students with Dues</h4>
-                    <p className="kpi-value">{studentsWithPending}</p>
-                    <span className="kpi-sub">
-                        Pending fee ledgers
-                    </span>
-                </div>
-            </div>
-
         </div>
     );
 }

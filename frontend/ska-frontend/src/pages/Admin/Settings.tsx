@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useAcademicYear } from "../../context/AcademicYearContext";
 import { useFeeStructures } from "../../context/FeeStructureContext";
-import { exportBackup, importBackup } from "../../utils/Backup";
 import { useSystemLogs } from "../../context/SystemLogContext";
 import AcademicYearTimeline from "./AcademicYearTimeline";
 
@@ -13,7 +12,7 @@ function SettingsPage() {
   ========================= */
 
   const {
-    academicYear,
+    activeYear,
     closeYear,
     isYearClosed,
     isPromotionLocked,
@@ -22,21 +21,24 @@ function SettingsPage() {
     requestAutoPromotion,
   } = useAcademicYear();
 
+  const academicYearId = activeYear?.id || "";
+  const academicYearName = activeYear?.name || "";
+
   const { feeStructures } = useFeeStructures();
 
-  const { logs, addLog } = useSystemLogs();
+  const { logs, addLog, loadMoreLogs, hasMore, loading } = useSystemLogs();
   console.log("SYSTEM LOGS:", logs);
   /* =========================
      Derived State
   ========================= */
 
-  const yearClosed = isYearClosed(academicYear);
-  const promotionLocked = isPromotionLocked(academicYear);
-  const promotionSummary = getPromotionSummary(academicYear);
+  const yearClosed = isYearClosed(academicYearId);
+  const promotionLocked = isPromotionLocked(academicYearId);
+  const promotionSummary = getPromotionSummary(academicYearId);
 
   const activeFeeStructure = feeStructures.find(
     (fs) =>
-      fs.academicYear === academicYear &&
+      fs.academicSessionId === academicYearId && // Updated to academicSessionId matches UUID instead of string name
       fs.status === "ACTIVE"
   );
 
@@ -56,17 +58,17 @@ This action CANNOT be undone.\n\nContinue?`
     if (!confirmed) return;
 
     if (!promotionLocked) {
-      requestAutoPromotion(academicYear);
-      lockPromotion(academicYear);
+      requestAutoPromotion(academicYearId);
+      lockPromotion(academicYearId);
     }
 
     addLog(
       "ACADEMIC_YEAR_CLOSED",
-      academicYear,
+      academicYearName,
       "Academic year closed from Settings"
     );
 
-    closeYear(academicYear);
+    closeYear(academicYearId);
   };
 
   const handleRunBulkPromotion = () => {
@@ -80,44 +82,16 @@ This action CANNOT be undone.\n\nContinue?`
 
     if (!confirmed) return;
 
-    requestAutoPromotion(academicYear);
-    lockPromotion(academicYear);
+    requestAutoPromotion(academicYearId);
+    lockPromotion(academicYearId);
 
     addLog(
       "BULK_PROMOTION_RUN",
-      academicYear,
+      academicYearName,
       "Bulk promotion executed from Settings"
     );
 
     navigate("/bulkpromotion");
-  };
-
-  const handleImportBackup = async (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    const confirmed = window.confirm(
-      "Importing a backup will OVERWRITE all existing data.\n\nContinue?"
-    );
-
-    if (!confirmed) return;
-
-    // 🔒 Log BEFORE reload
-    addLog(
-      "BACKUP_RESTORED",
-      academicYear,
-      "System restored from backup"
-    );
-
-    try {
-      await importBackup(file);
-      alert("Backup restored successfully. Reloading…");
-      window.location.reload();
-    } catch {
-      alert("Invalid backup file.");
-    }
   };
 
   /* =========================
@@ -138,7 +112,7 @@ This action CANNOT be undone.\n\nContinue?`
         <h2>System Status</h2>
 
         <div className="settings-grid">
-          <div><strong>Academic Year:</strong> {academicYear}</div>
+          <div><strong>Academic Year:</strong> {academicYearName}</div>
           <div>
             <strong>Academic Year Status:</strong>{" "}
             {yearClosed ? "CLOSED" : "OPEN"}
@@ -229,7 +203,7 @@ This action CANNOT be undone.\n\nContinue?`
             {activeFeeStructure ? "Active" : "Not Active"}
           </div>
           <div>
-            <strong>Academic Year:</strong> {academicYear}
+            <strong>Academic Year:</strong> {academicYearName}
           </div>
         </div>
 
@@ -258,36 +232,6 @@ This action CANNOT be undone.\n\nContinue?`
       <hr style={{ margin: "32px 0", borderColor: "#e5e7eb" }} />
 
       {/* =========================
-          Backup & Restore
-      ========================= */}
-      <section className="settings-section settings-critical">
-        <h2>Backup & Restore</h2>
-
-        <p className="settings-description">
-          It is recommended to take a full backup weekly.
-        </p>
-
-        <div className="settings-actions">
-          <button
-            className="primary-btn"
-            onClick={exportBackup}
-          >
-            Download Full Backup
-          </button>
-
-          <label className="danger-btn file-upload">
-            Restore From Backup
-            <input
-              type="file"
-              accept="application/json"
-              hidden
-              onChange={handleImportBackup}
-            />
-          </label>
-        </div>
-      </section>
-
-      {/* =========================
           Recent System Activity
       ========================= */}
       <section className="settings-section">
@@ -299,14 +243,24 @@ This action CANNOT be undone.\n\nContinue?`
           </p>
         )}
 
-        {logs.slice(-5).reverse().map(log => (
+        {logs.map(log => (
           <div key={log.id} style={{ fontSize: "0.9rem", marginBottom: "6px" }}>
             <strong>
-              {new Date(log.timestamp).toLocaleString()}
+              {new Date(log.createdAt).toLocaleString()}
             </strong>{" "}
-            — {log.event.replaceAll("_", " ")} ({log.academicYear})
+            — {log.event.replaceAll("_", " ")} ({log.entityType})
           </div>
         ))}
+        {hasMore && (
+          <button
+            className="secondary-btn"
+            style={{ marginTop: "12px", width: "100%" }}
+            onClick={() => loadMoreLogs()}
+            disabled={loading}
+          >
+            {loading ? "Loading..." : "Load Older Logs"}
+          </button>
+        )}
       </section>
 
       {/* =========================
@@ -316,8 +270,8 @@ This action CANNOT be undone.\n\nContinue?`
         <h2>System Information</h2>
 
         <div className="settings-grid">
-          <div><strong>Environment:</strong> Local</div>
-          <div><strong>Storage:</strong> Persistent Browser Storage</div>
+          <div><strong>Environment:</strong> Cloud (PostgreSQL)</div>
+          <div><strong>Storage:</strong> Remote Backend</div>
         </div>
       </section>
 

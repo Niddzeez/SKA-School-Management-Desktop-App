@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import type { Student } from "../../types/Student";
-//import { students } from "../data/students";
+import type { StudentFeeLedger } from "../../types/StudentFeeLedger";
 import "../../styles/studentDetails.css";
 import { useStudents } from "../../context/StudentContext";
 import { useClasses } from "../../context/ClassContext";
@@ -8,9 +8,9 @@ import { useSections } from "../../context/SectionContext";
 import { useState, useEffect } from "react";
 import { useFeeLedger } from "../../context/FeeLedgerContext";
 import { useFeeStructures } from "../../context/FeeStructureContext";
-import { useAcademicYear, CURRENT_YEAR } from "../../context/AcademicYearContext";
-import { useAuth} from "../../context/AuthContext"
-import  {can} from "../../auth/permissions";
+import { useAcademicYear } from "../../context/AcademicYearContext";
+import { useAuth } from "../../context/AuthContext"
+import { can } from "../../auth/permissions";
 
 
 function StudentDetails() {
@@ -22,7 +22,7 @@ function StudentDetails() {
   const { orderedClasses } = useClasses();
   const { sections, loadAllSections } = useSections();
 
-  const {role} = useAuth();
+  const { role } = useAuth();
 
   const {
     getLedgerByStudentYear,
@@ -35,11 +35,19 @@ function StudentDetails() {
   } = useFeeLedger();
 
   const {
-    academicYear,
-    setAcademicYear,
-    availableYears,
+    activeYear,
+    academicYears,
+    setActiveYear,
     isYearClosed,
   } = useAcademicYear();
+
+  const academicYear = activeYear?.name || "";
+  const availableYears = academicYears.map((y) => y.name);
+
+  const setAcademicYear = (name: string) => {
+    const yearId = academicYears.find((y) => y.name === name)?.id;
+    if (yearId) setActiveYear(yearId);
+  };
 
 
   const { getActiveFeeStructure } = useFeeStructures();
@@ -80,8 +88,33 @@ function StudentDetails() {
   };
 
 
-  const ledger = getLedgerByStudentYear(student.id, academicYear);
-  const summary = ledger ? getLedgerSummary(ledger.id) : null;
+  const [ledger, setLedger] = useState<StudentFeeLedger | null>(null);
+  const [summary, setSummary] = useState<any>(null);
+
+  useEffect(() => {
+    if (!student || !activeYear?.id) return;
+
+    let isActive = true;
+
+    async function fetchData(studentId: string, yearId: string) {
+      try {
+        const l = await getLedgerByStudentYear(studentId, yearId);
+        if (isActive && l) {
+          setLedger(l);
+          const s = await getLedgerSummary(l.id);
+          if (isActive) setSummary(s);
+        } else if (isActive) {
+          setLedger(null);
+          setSummary(null);
+        }
+      } catch (e) {
+        console.error("Failed to fetch ledger details:", e);
+      }
+    }
+    fetchData(student.id, activeYear.id);
+
+    return () => { isActive = false; };
+  }, [student?.id, activeYear?.id, getLedgerByStudentYear, getLedgerSummary]);
 
   const studentPayments = ledger
     ? payments.filter((p) => p.ledgerId === ledger.id)
@@ -94,7 +127,7 @@ function StudentDetails() {
   const pendingAmount = summary?.pending ?? 0;
 
   const isReadOnly =
-    academicYear !== CURRENT_YEAR || isYearClosed(academicYear);
+    academicYear !== activeYear?.name || isYearClosed(academicYear);
 
 
 
@@ -118,42 +151,42 @@ function StudentDetails() {
       student.id,
       student.classID,
       academicYear,
-      activeFeeStructure.components.map((c) => ({
-        name: c.name,
-        amount: c.amount,
-      }))
+      activeFeeStructure.components.reduce((acc, c) => {
+        acc[c.name] = { name: c.name, amount: c.amount };
+        return acc;
+      }, {} as Record<string, { name: string; amount: number; }>)
     );
 
-    
 
-    if(student.classID){
+
+    if (student.classID) {
       loadAllSections();
     }
   }, [student?.id,
   student?.classID,
   student?.status,
-  academicYear,
-  getActiveFeeStructure,
-  upsertLedgerFromFeeStructure,
-  loadAllSections,]);
+    academicYear,
+    getActiveFeeStructure,
+    upsertLedgerFromFeeStructure,
+    loadAllSections,]);
   /* =========================
      Status Handlers
   ========================= */
 
   const handleDeactivate = () => {
     if (!role || !can(role, "WITHDRAW_STUDENT")) {
-    alert("You do not have permission to perform this action.");
-    return;
-  }
+      alert("You do not have permission to perform this action.");
+      return;
+    }
     UpdateStudentStatus(student.id, "Inactive");
     navigate("/students");
   };
 
   const handleActivate = () => {
     if (!role || !can(role, "WITHDRAW_STUDENT")) {
-    alert("You do not have permission to perform this action.");
-    return;
-  }
+      alert("You do not have permission to perform this action.");
+      return;
+    }
     UpdateStudentStatus(student.id, "Active");
     navigate("/students");
   };
@@ -177,9 +210,9 @@ function StudentDetails() {
 
   const handlePromote = () => {
     if (!role || can(role, "PROMOTE_STUDENT")) {
-    alert("You do not have permission to perform this action.");
-    return;
-  }
+      alert("You do not have permission to perform this action.");
+      return;
+    }
     if (!student.classID || student.status !== "Active") return;
 
 
@@ -207,22 +240,24 @@ function StudentDetails() {
       return;
     }
 
+    const baseComponentsRecord = nextFeeStructure.components.reduce((acc, c) => {
+      acc[c.name] = { name: c.name, amount: c.amount };
+      return acc;
+    }, {} as Record<string, { name: string; amount: number; }>);
+
     upsertLedgerFromFeeStructure(
       student.id,
       nextClassId,
       nextAcademicYear,
-      nextFeeStructure.components.map((c) => ({
-        name: c.name,
-        amount: c.amount,
-      }))
+      baseComponentsRecord
     );
   };
 
   const handleWithdraw = () => {
     if (!role || !can(role, "WITHDRAW_STUDENT")) {
-    alert("You do not have permission to perform this action.");
-    return;
-  }
+      alert("You do not have permission to perform this action.");
+      return;
+    }
     const confirmed = window.confirm(
       "This will mark the student as withdrawn. This action cannot be undone. Continue?"
     );
@@ -350,17 +385,17 @@ function StudentDetails() {
       <h4>Father</h4>
       <div className="admission-card">
         <p><strong>Name:</strong> {student.father?.name || "-"}</p>
-        <p><strong>Phone:</strong> {student.father?.phone|| "-"}</p>
-        <p><strong>Occupation:</strong> {student.father?.occupation|| "-"}</p>
-        <p><strong>Education:</strong> {student.father?.education|| "-"}</p>
+        <p><strong>Phone:</strong> {student.father?.phone || "-"}</p>
+        <p><strong>Occupation:</strong> {student.father?.occupation || "-"}</p>
+        <p><strong>Education:</strong> {student.father?.education || "-"}</p>
       </div>
 
       <h4>Mother</h4>
       <div className="admission-card">
-        <p><strong>Name:</strong> {student.mother?.name|| "-"}</p>
-        <p><strong>Phone:</strong> {student.mother?.phone|| "-"}</p>
-        <p><strong>Occupation:</strong> {student.mother?.occupation|| "-"}</p>
-        <p><strong>Education:</strong> {student.mother?.education|| "-"}</p>
+        <p><strong>Name:</strong> {student.mother?.name || "-"}</p>
+        <p><strong>Phone:</strong> {student.mother?.phone || "-"}</p>
+        <p><strong>Occupation:</strong> {student.mother?.occupation || "-"}</p>
+        <p><strong>Education:</strong> {student.mother?.education || "-"}</p>
       </div>
 
       {/* =========================
@@ -415,7 +450,7 @@ function StudentDetails() {
         </select>
 
         <button
-          disabled={!tempClassID || !tempSectionID || !isClassEditable || !role || !can(role, "ASSIGN_CLASS")} 
+          disabled={!tempClassID || !tempSectionID || !isClassEditable || !role || !can(role, "ASSIGN_CLASS")}
           onClick={() => {
             assignStudenttoSection(student.id, tempClassID, tempSectionID);
             setTempClassID("");
@@ -577,7 +612,7 @@ function StudentDetails() {
 
                 addAdjustment({
                   ledgerId: ledger.id,
-                  type: adjType,
+                  type: adjType as any,
                   amount: signed,
                   reason: adjReason,
                   approvedBy: "Admin",
@@ -650,7 +685,7 @@ function StudentDetails() {
       </button>
 
 
-      {ledger && pendingAmount > 0 && role && can(role, "ADD_PAYMENT") &&(
+      {ledger && pendingAmount > 0 && role && can(role, "ADD_PAYMENT") && (
         <div className="payment-form">
           <h4>Add Payment</h4>
 
@@ -680,7 +715,7 @@ function StudentDetails() {
             onChange={(e) => setReference(e.target.value)}
           />
 
-          {isYearClosed(ledger.academicYear) && (
+          {isYearClosed(ledger.academicSessionId) && (
             <p className="warning">
               This payment will be recorded as a late settlement.
             </p>
@@ -699,7 +734,7 @@ function StudentDetails() {
                 ledgerId: ledger.id,
                 studentId: student.id,
                 amount: Number(paymentAmount),
-                mode: paymentMode,
+                mode: paymentMode as any,
                 reference: reference || undefined,
                 collectedBy: "Admin",
               });
