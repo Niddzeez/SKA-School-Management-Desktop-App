@@ -53,9 +53,9 @@ app.use(requestLoggerMiddleware);
 app.use("/api/auth", authRoutes);
 
 // ── Middleware aliases for readability ────────────────────────────────────────
-const auth = requireAuth as any;
-const adminOnly = requireRole("ADMIN") as any;
-const anyRole = requireRole("ADMIN", "TEACHER") as any;
+const auth = requireAuth;
+const adminOnly = requireRole("ADMIN");
+const anyRole = requireRole("ADMIN", "TEACHER");
 
 // ── Identity subsystem (MongoDB) ─────────────────────────────────────────────
 // Read access: ADMIN + TEACHER

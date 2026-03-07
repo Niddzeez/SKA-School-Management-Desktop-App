@@ -110,8 +110,8 @@ router.post("/login", async (req: Request, res: Response) => {
 // ---------------------------------------------------------------------------
 router.get(
     "/me",
-    requireAuth as any,
-    requireRole("ADMIN", "TEACHER") as any,
+    requireAuth,
+    requireRole("ADMIN", "TEACHER"),
     async (req: Request, res: Response) => {
         const authReq = req as AuthenticatedRequest;
         res.json({

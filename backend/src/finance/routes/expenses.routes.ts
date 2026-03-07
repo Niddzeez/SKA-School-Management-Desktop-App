@@ -70,7 +70,7 @@ router.get("/", async (req: Request, res: Response) => {
 //   { category, description, amount, expenseDate, paidTo,
 //     mode, recordedBy, reference? }
 // ---------------------------------------------------------------------------
-router.post("/", requireRole("ADMIN") as any, async (req: Request, res: Response) => {
+router.post("/", requireRole("ADMIN"), async (req: Request, res: Response) => {
     try {
         const {
             category, description, amount, expenseDate,
@@ -125,7 +125,7 @@ router.post("/", requireRole("ADMIN") as any, async (req: Request, res: Response
             mode: validatedMode,
             recordedBy: recordedBy.trim(),
             reference: ref,
-        }, (req as any).user?.userId || "UNKNOWN_USER");
+        }, req.user?.userId || "UNKNOWN_USER");
 
         res.status(201).json(mapExpense(row));
     } catch (err) {

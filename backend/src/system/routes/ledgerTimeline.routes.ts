@@ -12,8 +12,8 @@ const router = Router();
  */
 router.get(
     "/ledger-timeline/:ledgerId",
-    requireAuth as any,
-    requireRole("ADMIN") as any,
+    requireAuth,
+    requireRole("ADMIN"),
     async (req, res, next) => {
         try {
             const report = await buildLedgerTimeline(req.params.ledgerId);

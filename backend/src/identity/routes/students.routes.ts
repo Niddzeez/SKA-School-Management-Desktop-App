@@ -41,7 +41,7 @@ router.get("/:id", async (req: Request, res: Response) => {
 // POST /api/students
 // Admit a new student
 // ---------------------------------------------------------------------------
-router.post("/", requireRole("ADMIN") as any, async (req: Request, res: Response) => {
+router.post("/", requireRole("ADMIN"), async (req: Request, res: Response) => {
   try {
     requireFields(req.body, ["firstName", "lastName", "gender", "dateOfBirth", "phoneNumber", "nationality"]);
     const student = await Student.create(req.body);
@@ -57,7 +57,7 @@ router.post("/", requireRole("ADMIN") as any, async (req: Request, res: Response
 // Update enrollment status
 // Fix 8: status is validated against the StudentStatus enum before DB write
 // ---------------------------------------------------------------------------
-router.patch("/:id/status", requireRole("ADMIN") as any, async (req: Request, res: Response) => {
+router.patch("/:id/status", requireRole("ADMIN"), async (req: Request, res: Response) => {
   try {
     const status = validateStudentStatus(req.body.status);
 
@@ -79,7 +79,7 @@ router.patch("/:id/status", requireRole("ADMIN") as any, async (req: Request, re
 // PATCH /api/students/:id/assignment
 // Assign student to a class and section
 // ---------------------------------------------------------------------------
-router.patch("/:id/assignment", requireRole("ADMIN") as any, async (req: Request, res: Response) => {
+router.patch("/:id/assignment", requireRole("ADMIN"), async (req: Request, res: Response) => {
   try {
     requireFields(req.body, ["classID", "sectionID"]);
     const { classID, sectionID } = req.body;
@@ -107,7 +107,7 @@ router.patch("/:id/assignment", requireRole("ADMIN") as any, async (req: Request
 // and status changes must go through /status to preserve explicit command semantics.
 // This route guards against those fields being set via generic update.
 // ---------------------------------------------------------------------------
-router.patch("/:id", requireRole("ADMIN") as any, async (req: Request, res: Response) => {
+router.patch("/:id", requireRole("ADMIN"), async (req: Request, res: Response) => {
   try {
     // Protect command-specific fields from being set via the generic update path
     const { status, classID, sectionID, ...safeUpdates } = req.body;

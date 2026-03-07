@@ -84,33 +84,85 @@ See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode de
 (Use `node --trace-warnings ...` to show where the warning was created)
 🟦 PostgreSQL connected (finance subsystem)
 🚀 Backend running on port 4000
-{"timestamp":"2026-03-07T10:11:55.796Z","message":"HTTP GET /api/fee-structures","level":"INFO","requestId":"89c9c137-cdaf-4238-8594-c5d9c70d05b5","method":"GET","route":"/api/fee-structures","statusCode":404,"durationMs":2}
-{"timestamp":"2026-03-07T10:11:55.807Z","message":"HTTP GET /api/auth/me","level":"INFO","requestId":"671e8da1-b413-4f19-ab3f-9ae14af8fb38","method":"GET","route":"/api/auth/me","statusCode":200,"durationMs":2}
-{"timestamp":"2026-03-07T10:11:55.822Z","message":"HTTP GET /api/classes","level":"INFO","requestId":"805dca2a-6738-4e72-8f4e-d8f3975dfbfd","method":"GET","route":"/api/classes","statusCode":200,"durationMs":26}
-{"timestamp":"2026-03-07T10:11:55.823Z","message":"HTTP GET /api/sections","level":"INFO","requestId":"1095a7ba-cd9a-4e5e-8bed-01af167d989b","method":"GET","route":"/api/sections","statusCode":200,"durationMs":16}
-{"timestamp":"2026-03-07T10:11:55.825Z","message":"HTTP GET /api/teachers","level":"INFO","requestId":"a570c9d3-6dfe-4a59-a221-6bfa8e97e80b","method":"GET","route":"/api/teachers","statusCode":200,"durationMs":15}
-{"timestamp":"2026-03-07T10:11:55.826Z","message":"HTTP GET /api/students","level":"INFO","requestId":"51857fa0-8750-47a3-9ecf-5e3043561d02","method":"GET","route":"/api/students","statusCode":200,"durationMs":10}
-{"timestamp":"2026-03-07T10:11:55.837Z","message":"HTTP GET /api/students","level":"INFO","requestId":"b1a462e9-78d5-4e6d-b06f-ef3741bb9398","method":"GET","route":"/api/students","statusCode":200,"durationMs":10}
-{"timestamp":"2026-03-07T10:11:55.838Z","message":"HTTP GET /api/teachers","level":"INFO","requestId":"661b7f1b-fa25-4a95-b258-92a0aaed8aab","method":"GET","route":"/api/teachers","statusCode":200,"durationMs":9}
-{"timestamp":"2026-03-07T10:11:55.839Z","message":"HTTP GET /api/sections","level":"INFO","requestId":"bc3c59f9-51ad-4956-b708-c28c7676b952","method":"GET","route":"/api/sections","statusCode":200,"durationMs":7}
-{"timestamp":"2026-03-07T10:11:55.840Z","message":"HTTP GET /api/classes","level":"INFO","requestId":"3ba40a2a-5c8d-4517-9300-f4dd0c4eda91","method":"GET","route":"/api/classes","statusCode":200,"durationMs":5}
-{"timestamp":"2026-03-07T10:11:55.841Z","message":"HTTP GET /api/fee-structures","level":"INFO","requestId":"2ea4734f-272a-4878-aa80-589251242350","method":"GET","route":"/api/fee-structures","statusCode":404,"durationMs":1}
-{"timestamp":"2026-03-07T10:11:55.842Z","message":"HTTP GET /api/auth/me","level":"INFO","requestId":"caa1c8e7-f491-4d62-8dc5-86cbbf8f8cf6","method":"GET","route":"/api/auth/me","statusCode":304,"durationMs":1}
-{"timestamp":"2026-03-07T10:11:58.611Z","message":"HTTP GET /api/students","level":"INFO","requestId":"1c94d768-cce2-4a04-8e2a-fbc664059701","method":"GET","route":"/api/students","statusCode":304,"durationMs":9}
-{"timestamp":"2026-03-07T10:11:58.612Z","message":"HTTP GET /api/teachers","level":"INFO","requestId":"90dfbbe4-5d82-452c-b91a-e1ef576e907c","method":"GET","route":"/api/teachers","statusCode":304,"durationMs":8}
-{"timestamp":"2026-03-07T10:11:58.613Z","message":"HTTP GET /api/sections","level":"INFO","requestId":"06d8a67f-5c5d-4ff2-acc2-391ca373db6e","method":"GET","route":"/api/sections","statusCode":304,"durationMs":7}
-{"timestamp":"2026-03-07T10:11:58.614Z","message":"HTTP GET /api/classes","level":"INFO","requestId":"aa92a66a-bb52-4e5e-a65a-183c9e20a427","method":"GET","route":"/api/classes","statusCode":304,"durationMs":6}
-{"timestamp":"2026-03-07T10:11:58.614Z","message":"HTTP GET /api/fee-structures","level":"INFO","requestId":"c4c71806-8f2a-4fa0-9dd0-9325d89070d8","method":"GET","route":"/api/fee-structures","statusCode":404,"durationMs":0}
-{"timestamp":"2026-03-07T10:11:58.616Z","message":"HTTP GET /api/auth/me","level":"INFO","requestId":"75f53585-bc5f-4236-9b9f-084b9f5ccf97","method":"GET","route":"/api/auth/me","statusCode":304,"durationMs":1}
-{"timestamp":"2026-03-07T10:11:58.617Z","message":"HTTP GET /api/fee-structures","level":"INFO","requestId":"c691f0a3-71d4-425a-a290-1cbd3e9bd784","method":"GET","route":"/api/fee-structures","statusCode":404,"durationMs":1}
-{"timestamp":"2026-03-07T10:11:58.628Z","message":"HTTP GET /api/students","level":"INFO","requestId":"e8f77315-f051-4202-9ade-821a899cb46a","method":"GET","route":"/api/students","statusCode":304,"durationMs":8}
-{"timestamp":"2026-03-07T10:11:58.629Z","message":"HTTP GET /api/teachers","level":"INFO","requestId":"1a15b630-055f-4f63-9c3e-6efccc1ab611","method":"GET","route":"/api/teachers","statusCode":304,"durationMs":7}
-{"timestamp":"2026-03-07T10:11:58.630Z","message":"HTTP GET /api/sections","level":"INFO","requestId":"ed4ca361-4788-4da4-ba03-de9d0c7a04ff","method":"GET","route":"/api/sections","statusCode":304,"durationMs":5}
-{"timestamp":"2026-03-07T10:11:58.631Z","message":"HTTP GET /api/auth/me","level":"INFO","requestId":"84637033-9d56-4c38-88fe-b42bc5859ae2","method":"GET","route":"/api/auth/me","statusCode":304,"durationMs":1}
-{"timestamp":"2026-03-07T10:11:58.632Z","message":"HTTP GET /api/classes","level":"INFO","requestId":"36072c1a-c913-486b-a354-34ef0babf97f","method":"GET","route":"/api/classes","statusCode":304,"durationMs":6}
-{"timestamp":"2026-03-07T10:11:58.909Z","message":"HTTP GET /api/academic-years","level":"INFO","requestId":"d0f44930-6581-4210-b76a-47540e7740d1","method":"GET","route":"/api/academic-years","statusCode":200,"durationMs":203}
-{"timestamp":"2026-03-07T10:11:59.115Z","message":"HTTP GET /api/academic-years","level":"INFO","requestId":"368625f7-bda2-484d-ac3a-1e655d035ea1","method":"GET","route":"/api/academic-years","statusCode":304,"durationMs":204}
-{"timestamp":"2026-03-07T10:11:59.118Z","message":"HTTP GET /api/system/activity?limit=50","level":"INFO","requestId":"5bb4d629-57ca-4fdc-8c20-bbad5944e641","method":"GET","route":"/api/system/activity?limit=50","statusCode":200,"durationMs":413}
+[INFO] 16:04:19 Restarting: /home/nidhi/SKA-School-Management-Desktop-App/backend/src/auth/middleware/requireAuth.ts has been modified
+[dotenv@17.2.4] injecting env (5) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+🟢 MongoDB connected (identity subsystem)
+(node:50875) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[INFO] 16:04:21 Restarting: /home/nidhi/SKA-School-Management-Desktop-App/backend/src/auth/middleware/requireRole.ts has been modified
+[dotenv@17.2.4] injecting env (5) from .env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
+🟢 MongoDB connected (identity subsystem)
+(node:50964) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[INFO] 16:04:23 Restarting: /home/nidhi/SKA-School-Management-Desktop-App/backend/src/app.ts has been modified
+[dotenv@17.2.4] injecting env (5) from .env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+🟢 MongoDB connected (identity subsystem)
+(node:51090) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+🟦 PostgreSQL connected (finance subsystem)
+🚀 Backend running on port 4000
+[INFO] 16:04:50 Restarting: /home/nidhi/SKA-School-Management-Desktop-App/backend/src/auth/routes/auth.routes.ts has been modified
+[dotenv@17.2.4] injecting env (5) from .env -- tip: 📡 add observability to secrets: https://dotenvx.com/ops
+🟢 MongoDB connected (identity subsystem)
+(node:51341) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+🟦 PostgreSQL connected (finance subsystem)
+🚀 Backend running on port 4000
+[INFO] 16:06:57 Restarting: /home/nidhi/SKA-School-Management-Desktop-App/backend/src/finance/services/ledger.service.ts has been modified
+[dotenv@17.2.4] injecting env (5) from .env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+🟢 MongoDB connected (identity subsystem)
+(node:51713) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[INFO] 16:06:58 Restarting: /home/nidhi/SKA-School-Management-Desktop-App/backend/src/finance/services/ledger.service.ts has been modified
+[dotenv@17.2.4] injecting env (5) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+🟢 MongoDB connected (identity subsystem)
+(node:51804) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+🟦 PostgreSQL connected (finance subsystem)
+🚀 Backend running on port 4000
+:200,"durationMs":413}
 {"timestamp":"2026-03-07T10:11:59.332Z","message":"HTTP GET /api/system/activity?limit=50","level":"INFO","requestId":"e03c01a3-d522-465b-9548-c5520971a47a","method":"GET","route":"/api/system/activity?limit=50","statusCode":304,"durationMs":212}
 {"timestamp":"2026-03-07T10:12:34.850Z","message":"HTTP GET /api/fee-structures","level":"INFO","requestId":"037a7055-7427-437a-9a39-8ba532d97b6a","method":"GET","route":"/api/fee-structures","statusCode":404,"durationMs":0}
 {"timestamp":"2026-03-07T10:12:34.854Z","message":"HTTP GET /api/teachers","level":"INFO","requestId":"d84dddbd-9ad1-40bf-8ccd-6dac9af3b3bd","method":"GET","route":"/api/teachers","statusCode":304,"durationMs":4}
@@ -140,3 +192,81 @@ See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode de
 {"timestamp":"2026-03-07T10:12:37.424Z","message":"HTTP GET /api/system/activity?limit=50","level":"INFO","requestId":"e1978027-112c-45c1-9263-20f9a53a3108","method":"GET","route":"/api/system/activity?limit=50","statusCode":304,"durationMs":220}
 {"timestamp":"2026-03-07T10:12:38.191Z","message":"HTTP GET /api/academic-years","level":"INFO","requestId":"4550d601-f3e9-4443-a845-fe6a5dfef0f4","method":"GET","route":"/api/academic-years","statusCode":304,"durationMs":1496}
 {"timestamp":"2026-03-07T10:12:38.407Z","message":"HTTP GET /api/academic-years","level":"INFO","requestId":"45f080dc-685c-4eaf-9b12-f5a390e778dd","method":"GET","route":"/api/academic-years","statusCode":304,"durationMs":215}
+[INFO] 16:04:19 Restarting: /home/nidhi/SKA-School-Management-Desktop-App/backend/src/auth/middleware/requireAuth.ts has been modified
+[dotenv@17.2.4] injecting env (5) from .env -- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops
+🟢 MongoDB connected (identity subsystem)
+(node:50873) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[INFO] 16:04:21 Restarting: /home/nidhi/SKA-School-Management-Desktop-App/backend/src/auth/middleware/requireRole.ts has been modified
+[dotenv@17.2.4] injecting env (5) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+🟢 MongoDB connected (identity subsystem)
+(node:50966) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[INFO] 16:04:23 Restarting: /home/nidhi/SKA-School-Management-Desktop-App/backend/src/app.ts has been modified
+[dotenv@17.2.4] injecting env (5) from .env -- tip: ⚙️  enable debug logging with { debug: true }
+🟢 MongoDB connected (identity subsystem)
+(node:51088) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+🟦 PostgreSQL connected (finance subsystem)
+🚀 Backend running on port 4000
+[INFO] 16:04:50 Restarting: /home/nidhi/SKA-School-Management-Desktop-App/backend/src/auth/routes/auth.routes.ts has been modified
+[dotenv@17.2.4] injecting env (5) from .env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+🟢 MongoDB connected (identity subsystem)
+(node:51342) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+🟦 PostgreSQL connected (finance subsystem)
+🚀 Backend running on port 4000
+[INFO] 16:06:57 Restarting: /home/nidhi/SKA-School-Management-Desktop-App/backend/src/finance/services/ledger.service.ts has been modified
+[dotenv@17.2.4] injecting env (5) from .env -- tip: ✅ audit secrets and track compliance: https://dotenvx.com/ops
+🟢 MongoDB connected (identity subsystem)
+(node:51715) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[INFO] 16:06:58 Restarting: /home/nidhi/SKA-School-Management-Desktop-App/backend/src/finance/services/ledger.service.ts has been modified
+[dotenv@17.2.4] injecting env (5) from .env -- tip: ⚙️  enable debug logging with { debug: true }
+🟢 MongoDB connected (identity subsystem)
+(node:51802) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+🟦 PostgreSQL connected (finance subsystem)
+🚀 Backend running on port 4000

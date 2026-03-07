@@ -1,6 +1,5 @@
-import type { Response, NextFunction } from "express";
+import type { Request, Response, NextFunction } from "express";
 import { verifyToken } from "../services/auth.service";
-import type { AuthenticatedRequest } from "../types";
 
 /**
  * Express middleware that verifies the JWT Bearer token from the
@@ -9,7 +8,7 @@ import type { AuthenticatedRequest } from "../types";
  * Returns 401 if the token is missing or invalid.
  */
 export function requireAuth(
-    req: AuthenticatedRequest,
+    req: Request,
     res: Response,
     next: NextFunction
 ): void {

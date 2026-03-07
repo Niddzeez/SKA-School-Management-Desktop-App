@@ -21,8 +21,8 @@ const router = Router();
 // ===========================================================================
 router.get(
     "/",
-    requireAuth as any,
-    requireRole("ADMIN") as any,
+    requireAuth,
+    requireRole("ADMIN"),
     async (req: Request, res: Response) => {
         const authReq = req as AuthenticatedRequest;
         try {

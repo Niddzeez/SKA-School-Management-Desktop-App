@@ -1,4 +1,4 @@
-import type { Response, NextFunction } from "express";
+import type { Response, NextFunction, RequestHandler } from "express";
 import type { AuthenticatedRequest } from "../types";
 
 /**
@@ -11,8 +11,8 @@ import type { AuthenticatedRequest } from "../types";
  *   router.post("/", requireAuth, requireRole("ADMIN"), handler);
  *   router.get("/",  requireAuth, requireRole("ADMIN", "TEACHER"), handler);
  */
-export function requireRole(...roles: string[]) {
-    return (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
+export function requireRole(...roles: string[]): RequestHandler {
+    return (req, res, next): void => {
         if (!req.user) {
             res.status(401).json({ error: "Authentication required" });
             return;

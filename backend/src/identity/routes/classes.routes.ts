@@ -26,7 +26,7 @@ router.get("/", async (_req: Request, res: Response) => {
 // Create a new class
 // Returns 409 if the ClassName already exists (unique index on ClassModel)
 // ---------------------------------------------------------------------------
-router.post("/", requireRole("ADMIN") as any, async (req: Request, res: Response) => {
+router.post("/", requireRole("ADMIN"), async (req: Request, res: Response) => {
   try {
     requireFields(req.body, ["ClassName"]);
 

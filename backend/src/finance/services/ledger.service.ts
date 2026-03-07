@@ -51,6 +51,25 @@ export async function getSessionByName(
     return rows[0] ?? null;
 }
 
+/**
+ * Closes an academic session by ID.
+ */
+export async function closeAcademicYear(
+    id: string
+): Promise<AcademicSessionRow> {
+    const { rows } = await getPool().query<AcademicSessionRow>(
+        `UPDATE academic_sessions
+         SET is_closed = true, closed_at = NOW()
+         WHERE id = $1
+         RETURNING id, name, start_date, end_date, is_closed, closed_at, created_at`,
+        [id]
+    );
+    if (rows.length === 0) {
+        throw new NotFoundError("Academic session", id);
+    }
+    return rows[0];
+}
+
 // ---------------------------------------------------------------------------
 // Ledgers
 // ---------------------------------------------------------------------------
@@ -423,6 +442,65 @@ export async function addAdjustment(
         result.id,
         performedBy,
         { ledgerId, type, amount, reason, approvedBy }
+    );
+
+    return result;
+}
+
+// ---------------------------------------------------------------------------
+// Update Ledger Base Components
+// ---------------------------------------------------------------------------
+
+/**
+ * Updates the base components of a ledger.
+ *
+ * Business rules:
+ *   - Ledger must exist
+ *   - paid_total must be 0
+ */
+export async function updateLedgerBaseComponents(
+    ledgerId: string,
+    baseComponents: FeeComponentSnapshotRow[],
+    performedBy: string
+): Promise<LedgerRow> {
+    const result = await withTransaction(async (client) => {
+        const { rows: ledgers } = await client.query<{
+            id: string;
+            paid_total: string | number;
+        }>(
+            `SELECT sfl.id, ls.paid_total
+             FROM student_fee_ledgers sfl
+             JOIN ledger_summary ls ON ls.ledger_id = sfl.id
+             WHERE sfl.id = $1
+             FOR UPDATE OF sfl`,
+            [ledgerId]
+        );
+
+        if (ledgers.length === 0) {
+            throw new NotFoundError("Ledger", ledgerId);
+        }
+
+        const paidTotal = typeof ledgers[0].paid_total === 'string' ? parseFloat(ledgers[0].paid_total) : ledgers[0].paid_total;
+        if (paidTotal > 0) {
+            throw new ConflictError("Ledger cannot be modified after payments are recorded");
+        }
+
+        const { rows } = await client.query<LedgerRow>(
+            `UPDATE student_fee_ledgers
+             SET base_components = $1
+             WHERE id = $2
+             RETURNING id, student_id, class_id, academic_session_id, base_components, created_at`,
+            [JSON.stringify(baseComponents), ledgerId]
+        );
+        return rows[0];
+    });
+
+    await logFinancialEvent(
+        "LEDGER_BASE_COMPONENTS_UPDATED",
+        "STUDENT_FEE_LEDGER",
+        result.id,
+        performedBy,
+        { ledgerId, baseComponents }
     );
 
     return result;

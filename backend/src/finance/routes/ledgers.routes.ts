@@ -133,7 +133,7 @@ router.get("/:ledgerId", async (req: Request, res: Response) => {
 //
 // baseComponents: [{ name: string, amount: number }, ...]
 // ---------------------------------------------------------------------------
-router.post("/", requireRole("ADMIN") as any, async (req: Request, res: Response) => {
+router.post("/", requireRole("ADMIN"), async (req: Request, res: Response) => {
     try {
         const { studentId, classId, academicSessionId, baseComponents } = req.body;
 
@@ -171,7 +171,7 @@ router.post("/", requireRole("ADMIN") as any, async (req: Request, res: Response
             amount: c.amount,
         }));
 
-        const performedBy = (req as any).user?.userId || "UNKNOWN_USER";
+        const performedBy = req.user?.userId || "UNKNOWN_USER";
         const row = await createLedger(studentId, classId, academicSessionId, sanitised, performedBy);
         res.status(201).json(mapLedger(row));
     } catch (err) {
@@ -187,7 +187,7 @@ router.post("/", requireRole("ADMIN") as any, async (req: Request, res: Response
 // Body:
 //   { amount, mode, collectedBy, reference? }
 // ---------------------------------------------------------------------------
-router.post("/:ledgerId/payments", requireRole("ADMIN") as any, async (req: Request, res: Response) => {
+router.post("/:ledgerId/payments", requireRole("ADMIN"), async (req: Request, res: Response) => {
     try {
         const ledgerId = String(req.params.ledgerId);
 
@@ -215,7 +215,7 @@ router.post("/:ledgerId/payments", requireRole("ADMIN") as any, async (req: Requ
             ? reference.trim()
             : undefined;
 
-        const performedBy = (req as any).user?.userId || "UNKNOWN_USER";
+        const performedBy = req.user?.userId || "UNKNOWN_USER";
         const row = await addPayment(ledgerId, amount, validatedMode, collectedBy.trim(), performedBy, ref);
         res.status(201).json(mapPayment(row));
     } catch (err) {
@@ -235,7 +235,7 @@ router.post("/:ledgerId/payments", requireRole("ADMIN") as any, async (req: Requ
 //   DISCOUNT, CONCESSION, WAIVER → negative
 //   EXTRA, LATE_FEE             → positive
 // ---------------------------------------------------------------------------
-router.post("/:ledgerId/adjustments", requireRole("ADMIN") as any, async (req: Request, res: Response) => {
+router.post("/:ledgerId/adjustments", requireRole("ADMIN"), async (req: Request, res: Response) => {
     try {
         const ledgerId = String(req.params.ledgerId);
 
@@ -276,7 +276,7 @@ router.post("/:ledgerId/adjustments", requireRole("ADMIN") as any, async (req: R
             throw new ValidationError("'approvedBy' is required");
         }
 
-        const performedBy = (req as any).user?.userId || "UNKNOWN_USER";
+        const performedBy = req.user?.userId || "UNKNOWN_USER";
         const row = await addAdjustment(
             ledgerId, validatedType, amount, reason.trim(), approvedBy.trim(), performedBy
         );

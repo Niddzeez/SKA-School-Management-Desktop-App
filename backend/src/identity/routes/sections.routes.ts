@@ -27,7 +27,7 @@ router.get("/", async (req: Request, res: Response) => {
 // Create a new section within a class
 // Returns 409 if the section name already exists in that class
 // ---------------------------------------------------------------------------
-router.post("/", requireRole("ADMIN") as any, async (req: Request, res: Response) => {
+router.post("/", requireRole("ADMIN"), async (req: Request, res: Response) => {
   try {
     requireFields(req.body, ["classID", "name"]);
 
@@ -62,7 +62,7 @@ router.post("/", requireRole("ADMIN") as any, async (req: Request, res: Response
 // frontend's actual HTTP call to avoid a breaking change.
 // This should be aligned to /assign-teacher when the frontend is updated.
 // ---------------------------------------------------------------------------
-router.patch("/:id/teacher", requireRole("ADMIN") as any, async (req: Request, res: Response) => {
+router.patch("/:id/teacher", requireRole("ADMIN"), async (req: Request, res: Response) => {
   try {
     requireFields(req.body, ["classTeacherID"]);
 

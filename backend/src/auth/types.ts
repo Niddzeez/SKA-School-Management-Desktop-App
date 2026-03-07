@@ -8,6 +8,14 @@ export interface JwtPayload {
     role: "ADMIN" | "TEACHER";
 }
 
+declare global {
+    namespace Express {
+        interface Request {
+            user?: JwtPayload;
+        }
+    }
+}
+
 /**
  * Express Request extended with the authenticated user.
  * Populated by the requireAuth middleware.
