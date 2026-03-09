@@ -12,7 +12,7 @@ import type { Expense } from "../types/Expenses";
    Types
 ========================= */
 
-type LedgerSummary = {
+export type LedgerSummary = {
   baseTotal: number;
   adjustmentsTotal: number;
   finalFee: number;

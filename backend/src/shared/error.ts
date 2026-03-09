@@ -74,7 +74,7 @@ export function toErrorResponse(
         requestId: req?.id,
         route: req ? `${req.method} ${req.originalUrl}` : undefined,
         statusCode: status,
-        userId: req && req.user ? req.user.id : undefined,
+        userId: req && req.user ? req.user.userId : undefined,
     };
 
     if (isAppError && status < 500) {

@@ -13,7 +13,7 @@ It answers one question globally:
 ## 2. Owned State
 
 * `academicYear: string`
-* `availableYears: string[]`
+* `availableYears?: string[]`
 * `closedYears: string[]`
 
 ---

@@ -17,9 +17,11 @@ export const mapLedgerSummary = (row: LedgerSummaryRow) => {
     const pending = finalFee - paidTotal;
 
     return {
+        id: row.ledger_id,         // Added for frontend StudentFeeLedger compatibility
         ledgerId: row.ledger_id,
         studentId: row.student_id,
         classId: row.class_id,
+        academicSessionId: row.academic_year, // Added for frontend StudentFeeLedger compatibility
         academicYear: row.academic_year,
         isClosed: row.is_closed,
         baseTotal,

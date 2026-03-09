@@ -162,104 +162,38 @@ See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode de
 (Use `node --trace-warnings ...` to show where the warning was created)
 🟦 PostgreSQL connected (finance subsystem)
 🚀 Backend running on port 4000
-:200,"durationMs":413}
-{"timestamp":"2026-03-07T10:11:59.332Z","message":"HTTP GET /api/system/activity?limit=50","level":"INFO","requestId":"e03c01a3-d522-465b-9548-c5520971a47a","method":"GET","route":"/api/system/activity?limit=50","statusCode":304,"durationMs":212}
-{"timestamp":"2026-03-07T10:12:34.850Z","message":"HTTP GET /api/fee-structures","level":"INFO","requestId":"037a7055-7427-437a-9a39-8ba532d97b6a","method":"GET","route":"/api/fee-structures","statusCode":404,"durationMs":0}
-{"timestamp":"2026-03-07T10:12:34.854Z","message":"HTTP GET /api/teachers","level":"INFO","requestId":"d84dddbd-9ad1-40bf-8ccd-6dac9af3b3bd","method":"GET","route":"/api/teachers","statusCode":304,"durationMs":4}
-{"timestamp":"2026-03-07T10:12:34.855Z","message":"HTTP GET /api/students","level":"INFO","requestId":"7d9c170e-16fc-4d00-a250-21ffa97c8988","method":"GET","route":"/api/students","statusCode":304,"durationMs":3}
-{"timestamp":"2026-03-07T10:12:34.856Z","message":"HTTP GET /api/fee-structures","level":"INFO","requestId":"e80dd28b-5a74-4208-8a75-160fd773fc19","method":"GET","route":"/api/fee-structures","statusCode":404,"durationMs":0}
-{"timestamp":"2026-03-07T10:12:34.860Z","message":"HTTP GET /api/auth/me","level":"INFO","requestId":"deb22088-bf5d-45d3-84b9-7b2fdb27bb81","method":"GET","route":"/api/auth/me","statusCode":304,"durationMs":1}
-{"timestamp":"2026-03-07T10:12:34.862Z","message":"HTTP GET /api/sections","level":"INFO","requestId":"8a7d4767-8214-48ec-b0d5-b55f5a7f95b4","method":"GET","route":"/api/sections","statusCode":304,"durationMs":5}
-{"timestamp":"2026-03-07T10:12:34.864Z","message":"HTTP GET /api/classes","level":"INFO","requestId":"bd44b26e-0085-4279-95a5-57dc0a634329","method":"GET","route":"/api/classes","statusCode":304,"durationMs":6}
-{"timestamp":"2026-03-07T10:12:34.875Z","message":"HTTP GET /api/teachers","level":"INFO","requestId":"48ca8548-e975-4efe-acfe-8e67709fb051","method":"GET","route":"/api/teachers","statusCode":304,"durationMs":5}
-{"timestamp":"2026-03-07T10:12:34.876Z","message":"HTTP GET /api/auth/me","level":"INFO","requestId":"43573abb-79ad-46b4-9b3e-1590c2676211","method":"GET","route":"/api/auth/me","statusCode":304,"durationMs":1}
-{"timestamp":"2026-03-07T10:12:34.877Z","message":"HTTP GET /api/students","level":"INFO","requestId":"15eb85ea-92a1-4e7c-a491-f8b87d840eaf","method":"GET","route":"/api/students","statusCode":304,"durationMs":5}
-{"timestamp":"2026-03-07T10:12:34.882Z","message":"HTTP GET /api/sections","level":"INFO","requestId":"451658cb-615c-4e99-962e-5bc4b240ba8a","method":"GET","route":"/api/sections","statusCode":304,"durationMs":5}
-{"timestamp":"2026-03-07T10:12:34.882Z","message":"HTTP GET /api/classes","level":"INFO","requestId":"e330a142-0d4a-4524-8e42-6ecbee570740","method":"GET","route":"/api/classes","statusCode":304,"durationMs":4}
-{"timestamp":"2026-03-07T10:12:36.597Z","message":"HTTP GET /api/students","level":"INFO","requestId":"55cf02fe-7fd5-46c9-9ffa-d45216b9fe15","method":"GET","route":"/api/students","statusCode":304,"durationMs":6}
-{"timestamp":"2026-03-07T10:12:36.597Z","message":"HTTP GET /api/teachers","level":"INFO","requestId":"eb7dd758-3cab-4ed4-bb83-2b7595023f19","method":"GET","route":"/api/teachers","statusCode":304,"durationMs":5}
-{"timestamp":"2026-03-07T10:12:36.598Z","message":"HTTP GET /api/sections","level":"INFO","requestId":"8b05747b-f09d-4387-81df-5c3f7e9a27b1","method":"GET","route":"/api/sections","statusCode":304,"durationMs":4}
-{"timestamp":"2026-03-07T10:12:36.600Z","message":"HTTP GET /api/fee-structures","level":"INFO","requestId":"dd103aa4-e434-4438-8e96-53d34a5107ea","method":"GET","route":"/api/fee-structures","statusCode":404,"durationMs":0}
-{"timestamp":"2026-03-07T10:12:36.601Z","message":"HTTP GET /api/auth/me","level":"INFO","requestId":"2c8880c5-c110-4524-ad9b-bb1522459cde","method":"GET","route":"/api/auth/me","statusCode":304,"durationMs":1}
-{"timestamp":"2026-03-07T10:12:36.602Z","message":"HTTP GET /api/classes","level":"INFO","requestId":"61a449ed-cbf1-4d98-b215-a82a3182e9ad","method":"GET","route":"/api/classes","statusCode":304,"durationMs":4}
-{"timestamp":"2026-03-07T10:12:36.603Z","message":"HTTP GET /api/fee-structures","level":"INFO","requestId":"2c8279ca-5789-4daa-b92c-f4bbc5a80ef0","method":"GET","route":"/api/fee-structures","statusCode":404,"durationMs":0}
-{"timestamp":"2026-03-07T10:12:36.620Z","message":"HTTP GET /api/students","level":"INFO","requestId":"bd521559-0936-461a-b4d0-e0697cc61e5b","method":"GET","route":"/api/students","statusCode":304,"durationMs":7}
-{"timestamp":"2026-03-07T10:12:36.621Z","message":"HTTP GET /api/auth/me","level":"INFO","requestId":"781ce17a-75eb-4b11-9715-77664545b4ad","method":"GET","route":"/api/auth/me","statusCode":304,"durationMs":1}
-{"timestamp":"2026-03-07T10:12:36.622Z","message":"HTTP GET /api/teachers","level":"INFO","requestId":"0b9ad13b-c12d-44c7-85c7-62fa25e0add2","method":"GET","route":"/api/teachers","statusCode":304,"durationMs":8}
-{"timestamp":"2026-03-07T10:12:36.623Z","message":"HTTP GET /api/sections","level":"INFO","requestId":"885334ae-ce5e-4626-9dcf-875bf75fa9be","method":"GET","route":"/api/sections","statusCode":304,"durationMs":6}
-{"timestamp":"2026-03-07T10:12:36.626Z","message":"HTTP GET /api/classes","level":"INFO","requestId":"319a3e83-1392-4b02-a1de-32b406578de7","method":"GET","route":"/api/classes","statusCode":304,"durationMs":3}
-{"timestamp":"2026-03-07T10:12:37.200Z","message":"HTTP GET /api/system/activity?limit=50","level":"INFO","requestId":"be07f13f-d1fa-4f00-8aa7-43245457432b","method":"GET","route":"/api/system/activity?limit=50","statusCode":304,"durationMs":506}
-{"timestamp":"2026-03-07T10:12:37.424Z","message":"HTTP GET /api/system/activity?limit=50","level":"INFO","requestId":"e1978027-112c-45c1-9263-20f9a53a3108","method":"GET","route":"/api/system/activity?limit=50","statusCode":304,"durationMs":220}
-{"timestamp":"2026-03-07T10:12:38.191Z","message":"HTTP GET /api/academic-years","level":"INFO","requestId":"4550d601-f3e9-4443-a845-fe6a5dfef0f4","method":"GET","route":"/api/academic-years","statusCode":304,"durationMs":1496}
-{"timestamp":"2026-03-07T10:12:38.407Z","message":"HTTP GET /api/academic-years","level":"INFO","requestId":"45f080dc-685c-4eaf-9b12-f5a390e778dd","method":"GET","route":"/api/academic-years","statusCode":304,"durationMs":215}
-[INFO] 16:04:19 Restarting: /home/nidhi/SKA-School-Management-Desktop-App/backend/src/auth/middleware/requireAuth.ts has been modified
-[dotenv@17.2.4] injecting env (5) from .env -- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops
-🟢 MongoDB connected (identity subsystem)
-(node:50873) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
-In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
-
-To prepare for this change:
-- If you want the current behavior, explicitly use 'sslmode=verify-full'
-- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
-
-See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
-(Use `node --trace-warnings ...` to show where the warning was created)
-[INFO] 16:04:21 Restarting: /home/nidhi/SKA-School-Management-Desktop-App/backend/src/auth/middleware/requireRole.ts has been modified
-[dotenv@17.2.4] injecting env (5) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
-🟢 MongoDB connected (identity subsystem)
-(node:50966) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
-In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
-
-To prepare for this change:
-- If you want the current behavior, explicitly use 'sslmode=verify-full'
-- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
-
-See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
-(Use `node --trace-warnings ...` to show where the warning was created)
-[INFO] 16:04:23 Restarting: /home/nidhi/SKA-School-Management-Desktop-App/backend/src/app.ts has been modified
-[dotenv@17.2.4] injecting env (5) from .env -- tip: ⚙️  enable debug logging with { debug: true }
-🟢 MongoDB connected (identity subsystem)
-(node:51088) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
-In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
-
-To prepare for this change:
-- If you want the current behavior, explicitly use 'sslmode=verify-full'
-- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
-
-See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
-(Use `node --trace-warnings ...` to show where the warning was created)
-🟦 PostgreSQL connected (finance subsystem)
-🚀 Backend running on port 4000
-[INFO] 16:04:50 Restarting: /home/nidhi/SKA-School-Management-Desktop-App/backend/src/auth/routes/auth.routes.ts has been modified
-[dotenv@17.2.4] injecting env (5) from .env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
-🟢 MongoDB connected (identity subsystem)
-(node:51342) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
-In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
-
-To prepare for this change:
-- If you want the current behavior, explicitly use 'sslmode=verify-full'
-- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
-
-See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
-(Use `node --trace-warnings ...` to show where the warning was created)
-🟦 PostgreSQL connected (finance subsystem)
-🚀 Backend running on port 4000
-[INFO] 16:06:57 Restarting: /home/nidhi/SKA-School-Management-Desktop-App/backend/src/finance/services/ledger.service.ts has been modified
+{"timestamp":"2026-03-07T11:14:25.143Z","message":"HTTP GET /api/fee-structures","level":"INFO","requestId":"c64681f5-af5a-43c1-83bf-882251e4eafc","method":"GET","route":"/api/fee-structures","statusCode":404,"durationMs":4}
+{"timestamp":"2026-03-07T11:14:25.161Z","message":"HTTP GET /api/auth/me","level":"INFO","requestId":"789f7b9b-e042-47c7-8441-f5a61c0bd612","method":"GET","route":"/api/auth/me","statusCode":304,"durationMs":3}
+{"timestamp":"2026-03-07T11:14:25.165Z","message":"HTTP GET /api/teachers","level":"INFO","requestId":"6fe9d95f-939f-4834-a708-10771b5921ce","method":"GET","route":"/api/teachers","statusCode":304,"durationMs":22}
+{"timestamp":"2026-03-07T11:14:25.167Z","message":"HTTP GET /api/fee-structures","level":"INFO","requestId":"e988f762-1b23-4cc8-b830-33e58481eab6","method":"GET","route":"/api/fee-structures","statusCode":404,"durationMs":1}
+{"timestamp":"2026-03-07T11:14:25.169Z","message":"HTTP GET /api/students","level":"INFO","requestId":"e38af107-a13b-4350-84d1-c15ffeeea2f9","method":"GET","route":"/api/students","statusCode":304,"durationMs":17}
+{"timestamp":"2026-03-07T11:14:25.171Z","message":"HTTP GET /api/sections","level":"INFO","requestId":"fcd3fc1a-d1ff-494b-b2f6-0b1c0ee96e68","method":"GET","route":"/api/sections","statusCode":304,"durationMs":16}
+{"timestamp":"2026-03-07T11:14:25.172Z","message":"HTTP GET /api/classes","level":"INFO","requestId":"33c24b4c-d3c2-4f23-af67-48f505a98b89","method":"GET","route":"/api/classes","statusCode":304,"durationMs":16}
+{"timestamp":"2026-03-07T11:14:25.176Z","message":"HTTP GET /api/auth/me","level":"INFO","requestId":"3e6e8b74-6beb-433c-94a4-aa4a2a4ddf90","method":"GET","route":"/api/auth/me","statusCode":304,"durationMs":1}
+{"timestamp":"2026-03-07T11:14:25.179Z","message":"HTTP GET /api/teachers","level":"INFO","requestId":"7dbce07b-f8a8-40fc-8901-0c4ba6a63f29","method":"GET","route":"/api/teachers","statusCode":304,"durationMs":3}
+{"timestamp":"2026-03-07T11:14:25.188Z","message":"HTTP GET /api/students","level":"INFO","requestId":"08017e89-3360-4624-8b66-6a9dff2e786e","method":"GET","route":"/api/students","statusCode":304,"durationMs":3}
+{"timestamp":"2026-03-07T11:14:25.201Z","message":"HTTP GET /api/sections","level":"INFO","requestId":"ff3c1813-61ec-486e-85cc-0cbae8d32d96","method":"GET","route":"/api/sections","statusCode":304,"durationMs":5}
+{"timestamp":"2026-03-07T11:14:25.202Z","message":"HTTP GET /api/classes","level":"INFO","requestId":"ec43d951-007a-4269-b0a8-2724480bb157","method":"GET","route":"/api/classes","statusCode":304,"durationMs":4}
+{"timestamp":"2026-03-07T11:14:26.675Z","message":"HTTP GET /api/students","level":"INFO","requestId":"27210d97-226d-4165-8152-5976c65e0450","method":"GET","route":"/api/students","statusCode":304,"durationMs":10}
+{"timestamp":"2026-03-07T11:14:26.677Z","message":"HTTP GET /api/teachers","level":"INFO","requestId":"33dbadf3-7c6a-4612-be33-a85b6526c21a","method":"GET","route":"/api/teachers","statusCode":304,"durationMs":9}
+{"timestamp":"2026-03-07T11:14:26.678Z","message":"HTTP GET /api/sections","level":"INFO","requestId":"8b931257-d0a1-4fe8-85f4-0fcee2f16600","method":"GET","route":"/api/sections","statusCode":304,"durationMs":8}
+{"timestamp":"2026-03-07T11:14:26.678Z","message":"HTTP GET /api/classes","level":"INFO","requestId":"dcb2605d-201d-42dd-b95f-b118cef35e69","method":"GET","route":"/api/classes","statusCode":304,"durationMs":6}
+{"timestamp":"2026-03-07T11:14:26.679Z","message":"HTTP GET /api/fee-structures","level":"INFO","requestId":"424edf06-da40-4d03-9ba6-7bc02208ca52","method":"GET","route":"/api/fee-structures","statusCode":404,"durationMs":0}
+{"timestamp":"2026-03-07T11:14:26.680Z","message":"HTTP GET /api/auth/me","level":"INFO","requestId":"965ad08f-b47a-4504-bbe2-6a6761529223","method":"GET","route":"/api/auth/me","statusCode":304,"durationMs":1}
+{"timestamp":"2026-03-07T11:14:26.681Z","message":"HTTP GET /api/fee-structures","level":"INFO","requestId":"54a6ee5f-ff45-46d0-aaf0-a1ff174f527a","method":"GET","route":"/api/fee-structures","statusCode":404,"durationMs":0}
+{"timestamp":"2026-03-07T11:14:26.692Z","message":"HTTP GET /api/students","level":"INFO","requestId":"38a0f0d5-61aa-4897-8a81-d360aa336c2b","method":"GET","route":"/api/students","statusCode":304,"durationMs":6}
+{"timestamp":"2026-03-07T11:14:26.695Z","message":"HTTP GET /api/teachers","level":"INFO","requestId":"56c0176a-d2bd-4317-a6ed-692c1b74818f","method":"GET","route":"/api/teachers","statusCode":304,"durationMs":7}
+{"timestamp":"2026-03-07T11:14:26.698Z","message":"HTTP GET /api/auth/me","level":"INFO","requestId":"1a116fba-ba64-4b9c-8b9d-935736d2dbbe","method":"GET","route":"/api/auth/me","statusCode":304,"durationMs":1}
+{"timestamp":"2026-03-07T11:14:26.699Z","message":"HTTP GET /api/classes","level":"INFO","requestId":"275b3346-1dc6-4add-aa19-718b7feba299","method":"GET","route":"/api/classes","statusCode":304,"durationMs":3}
+{"timestamp":"2026-03-07T11:14:26.700Z","message":"HTTP GET /api/sections","level":"INFO","requestId":"eab7b599-3221-4fce-8884-198ded55c92b","method":"GET","route":"/api/sections","statusCode":304,"durationMs":8}
+{"timestamp":"2026-03-07T11:14:28.287Z","message":"HTTP GET /api/academic-years","level":"INFO","requestId":"423d48be-e56a-4b5a-9a33-8419cd32a38e","method":"GET","route":"/api/academic-years","statusCode":304,"durationMs":1503}
+{"timestamp":"2026-03-07T11:14:28.299Z","message":"HTTP GET /api/system/activity?limit=50","level":"INFO","requestId":"b992256f-05fe-4b1e-b05c-65efb42cf6ec","method":"GET","route":"/api/system/activity?limit=50","statusCode":304,"durationMs":1516}
+{"timestamp":"2026-03-07T11:14:28.504Z","message":"HTTP GET /api/academic-years","level":"INFO","requestId":"27a72a23-6268-4ee0-aa14-002d416d1d85","method":"GET","route":"/api/academic-years","statusCode":304,"durationMs":214}
+{"timestamp":"2026-03-07T11:14:28.522Z","message":"HTTP GET /api/system/activity?limit=50","level":"INFO","requestId":"bd58c21a-3438-4884-8f6f-7dfce06bc4e5","method":"GET","route":"/api/system/activity?limit=50","statusCode":304,"durationMs":221}
+[INFO] 16:46:16 Restarting: /home/nidhi/SKA-School-Management-Desktop-App/backend/src/app.ts has been modified
 [dotenv@17.2.4] injecting env (5) from .env -- tip: ✅ audit secrets and track compliance: https://dotenvx.com/ops
 🟢 MongoDB connected (identity subsystem)
-(node:51715) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
-In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
-
-To prepare for this change:
-- If you want the current behavior, explicitly use 'sslmode=verify-full'
-- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
-
-See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
-(Use `node --trace-warnings ...` to show where the warning was created)
-[INFO] 16:06:58 Restarting: /home/nidhi/SKA-School-Management-Desktop-App/backend/src/finance/services/ledger.service.ts has been modified
-[dotenv@17.2.4] injecting env (5) from .env -- tip: ⚙️  enable debug logging with { debug: true }
-🟢 MongoDB connected (identity subsystem)
-(node:51802) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+(node:55823) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
 In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
 
 To prepare for this change:
@@ -270,3 +204,697 @@ See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode de
 (Use `node --trace-warnings ...` to show where the warning was created)
 🟦 PostgreSQL connected (finance subsystem)
 🚀 Backend running on port 4000
+[INFO] 22:18:55 Restarting: /home/nidhi/SKA-School-Management-Desktop-App/backend/src/finance/services/feeStructure.service.ts has been modified
+[dotenv@17.2.4] injecting env (5) from .env -- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops
+🟢 MongoDB connected (identity subsystem)
+(node:59462) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+🟦 PostgreSQL connected (finance subsystem)
+🚀 Backend running on port 4000
+[INFO] 22:19:02 Restarting: /home/nidhi/SKA-School-Management-Desktop-App/backend/src/finance/services/feeStructure.service.ts has been modified
+[dotenv@17.2.4] injecting env (5) from .env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+🟢 MongoDB connected (identity subsystem)
+(node:59672) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[INFO] 22:19:04 Restarting: /home/nidhi/SKA-School-Management-Desktop-App/backend/src/finance/services/feeStructure.service.ts has been modified
+[dotenv@17.2.4] injecting env (5) from .env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
+🟢 MongoDB connected (identity subsystem)
+(node:59737) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+🟦 PostgreSQL connected (finance subsystem)
+🚀 Backend running on port 4000
+[INFO] 22:19:19 Restarting: /home/nidhi/SKA-School-Management-Desktop-App/backend/src/finance/services/feeStructure.service.ts has been modified
+[dotenv@17.2.4] injecting env (5) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+🟢 MongoDB connected (identity subsystem)
+(node:59945) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[INFO] 22:19:22 Restarting: /home/nidhi/SKA-School-Management-Desktop-App/backend/src/finance/routes/feeStructure.routes.ts has been modified
+[dotenv@17.2.4] injecting env (5) from .env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+🟢 MongoDB connected (identity subsystem)
+(node:60079) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+🟦 PostgreSQL connected (finance subsystem)
+🚀 Backend running on port 4000
+[INFO] 22:19:28 Restarting: /home/nidhi/SKA-School-Management-Desktop-App/backend/src/finance/routes/feeStructure.routes.ts has been modified
+[dotenv@17.2.4] injecting env (5) from .env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
+🟢 MongoDB connected (identity subsystem)
+(node:60216) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+🟦 PostgreSQL connected (finance subsystem)
+🚀 Backend running on port 4000
+[INFO] 22:19:57 Restarting: /home/nidhi/SKA-School-Management-Desktop-App/backend/src/system/routes/ledgerTimeline.routes.ts has been modified
+[dotenv@17.2.4] injecting env (5) from .env -- tip: 👥 sync secrets across teammates & machines: https://dotenvx.com/ops
+🟢 MongoDB connected (identity subsystem)
+(node:60700) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+🟦 PostgreSQL connected (finance subsystem)
+🚀 Backend running on port 4000
+[INFO] 22:20:03 Restarting: /home/nidhi/SKA-School-Management-Desktop-App/backend/src/system/routes/ledgerReplay.routes.ts has been modified
+[dotenv@17.2.4] injecting env (5) from .env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+🟢 MongoDB connected (identity subsystem)
+(node:60862) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+🟦 PostgreSQL connected (finance subsystem)
+🚀 Backend running on port 4000
+[INFO] 22:20:12 Restarting: /home/nidhi/SKA-School-Management-Desktop-App/backend/src/shared/error.ts has been modified
+[dotenv@17.2.4] injecting env (5) from .env -- tip: ⚙️  enable debug logging with { debug: true }
+🟢 MongoDB connected (identity subsystem)
+(node:61034) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[INFO] 22:20:14 Restarting: /home/nidhi/SKA-School-Management-Desktop-App/backend/src/shared/observability/request-logger.ts has been modified
+[dotenv@17.2.4] injecting env (5) from .env -- tip: 👥 sync secrets across teammates & machines: https://dotenvx.com/ops
+🟢 MongoDB connected (identity subsystem)
+(node:61141) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+🟦 PostgreSQL connected (finance subsystem)
+🚀 Backend running on port 4000
+[INFO] 22:41:11 Restarting: /home/nidhi/SKA-School-Management-Desktop-App/backend/src/finance/routes/feeStructure.routes.ts has been modified
+[dotenv@17.2.4] injecting env (5) from .env -- tip: ✅ audit secrets and track compliance: https://dotenvx.com/ops
+🟢 MongoDB connected (identity subsystem)
+(node:65209) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+🟦 PostgreSQL connected (finance subsystem)
+🚀 Backend running on port 4000
+[INFO] 22:41:38 Restarting: /home/nidhi/SKA-School-Management-Desktop-App/backend/src/finance/routes/feeStructure.routes.ts has been modified
+[dotenv@17.2.4] injecting env (5) from .env -- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops
+🟢 MongoDB connected (identity subsystem)
+(node:65348) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+🟦 PostgreSQL connected (finance subsystem)
+🚀 Backend running on port 4000
+[INFO] 22:46:28 Restarting: /home/nidhi/SKA-School-Management-Desktop-App/backend/src/finance/services/feeStructure.service.ts has been modified
+Compilation error in /home/nidhi/SKA-School-Management-Desktop-App/backend/src/finance/services/feeStructure.service.ts
+[dotenv@17.2.4] injecting env (5) from .env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+[ERROR] 22:46:28 ⨯ Unable to compile TypeScript:
+src/finance/services/feeStructure.service.ts(6,19): error TS1005: ';' expected.
+src/finance/services/feeStructure.service.ts(13,19): error TS1005: ';' expected.
+
+[INFO] 22:47:42 Restarting: /home/nidhi/SKA-School-Management-Desktop-App/backend/src/finance/services/feeStructure.service.ts has been modified
+[dotenv@17.2.4] injecting env (5) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+🟢 MongoDB connected (identity subsystem)
+(node:66046) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+🟦 PostgreSQL connected (finance subsystem)
+🚀 Backend running on port 4000
+[INFO] 22:48:36 Restarting: /home/nidhi/SKA-School-Management-Desktop-App/backend/src/finance/services/feeStructure.service.ts has been modified
+[dotenv@17.2.4] injecting env (5) from .env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+🟢 MongoDB connected (identity subsystem)
+(node:66226) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+🟦 PostgreSQL connected (finance subsystem)
+🚀 Backend running on port 4000
+[INFO] 00:13:55 Restarting: /home/nidhi/SKA-School-Management-Desktop-App/backend/src/finance/routes/ledgers.routes.ts has been modified
+[dotenv@17.2.4] injecting env (5) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+🟢 MongoDB connected (identity subsystem)
+(node:74984) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[INFO] 00:13:57 Restarting: /home/nidhi/SKA-School-Management-Desktop-App/backend/src/finance/services/ledger.service.ts has been modified
+[dotenv@17.2.4] injecting env (5) from .env -- tip: 📡 add observability to secrets: https://dotenvx.com/ops
+🟢 MongoDB connected (identity subsystem)
+(node:75106) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+🟦 PostgreSQL connected (finance subsystem)
+🚀 Backend running on port 4000
+[INFO] 00:14:16 Restarting: /home/nidhi/SKA-School-Management-Desktop-App/backend/src/finance/routes/ledgers.routes.ts has been modified
+Compilation error in /home/nidhi/SKA-School-Management-Desktop-App/backend/src/finance/routes/ledgers.routes.ts
+[dotenv@17.2.4] injecting env (5) from .env -- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops
+[ERROR] 00:14:16 ⨯ Unable to compile TypeScript:
+src/finance/routes/ledgers.routes.ts(66,9): error TS1005: '{' expected.
+src/finance/routes/ledgers.routes.ts(69,1): error TS1005: ',' expected.
+
+[INFO] 00:14:17 Restarting: /home/nidhi/SKA-School-Management-Desktop-App/backend/src/finance/services/ledger.service.ts has been modified
+[dotenv@17.2.4] injecting env (5) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+[ERROR] 00:14:18 ⨯ Unable to compile TypeScript:
+src/finance/routes/ledgers.routes.ts(66,9): error TS1005: '{' expected.
+src/finance/routes/ledgers.routes.ts(69,1): error TS1005: ',' expected.
+
+[INFO] 00:14:27 Restarting: /home/nidhi/SKA-School-Management-Desktop-App/backend/src/finance/routes/ledgers.routes.ts has been modified
+Compilation error in /home/nidhi/SKA-School-Management-Desktop-App/backend/src/finance/routes/ledgers.routes.ts
+[dotenv@17.2.4] injecting env (5) from .env -- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops
+[ERROR] 00:14:28 ⨯ Unable to compile TypeScript:
+src/finance/routes/ledgers.routes.ts(67,9): error TS1005: '{' expected.
+src/finance/routes/ledgers.routes.ts(70,1): error TS1005: ',' expected.
+
+[INFO] 00:14:38 Restarting: /home/nidhi/SKA-School-Management-Desktop-App/backend/src/finance/routes/ledgers.routes.ts has been modified
+[dotenv@17.2.4] injecting env (5) from .env -- tip: 🗂️ backup and recover secrets: https://dotenvx.com/ops
+🟢 MongoDB connected (identity subsystem)
+(node:75393) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+🟦 PostgreSQL connected (finance subsystem)
+🚀 Backend running on port 4000
+{"timestamp":"2026-03-07T18:44:53.132Z","message":"HTTP GET /api/health","level":"INFO","requestId":"4956c361-e0bb-4920-b772-1bf34eefdfec","method":"GET","route":"/api/health","statusCode":404,"durationMs":5}
+{"timestamp":"2026-03-07T18:45:07.547Z","message":"HTTP GET /health","level":"INFO","requestId":"afec44b7-b208-4c78-9f91-e80d0cd72e02","method":"GET","route":"/health","statusCode":200,"durationMs":1718}
+{"timestamp":"2026-03-07T18:45:25.368Z","message":"HTTP GET /api/auth/me","level":"INFO","requestId":"d819c744-6b18-4d3a-9c2f-78461c4f54a9","method":"GET","route":"/api/auth/me","statusCode":304,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:25.372Z","message":"HTTP GET /api/students","level":"INFO","requestId":"7a9f4db0-9300-4486-a383-f43f23bfdc08","method":"GET","route":"/api/students","statusCode":304,"durationMs":23,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:25.374Z","message":"HTTP GET /api/classes","level":"INFO","requestId":"8554b0ff-1d9c-43bf-bd0c-0d6eaf66e1a8","method":"GET","route":"/api/classes","statusCode":304,"durationMs":17,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:25.376Z","message":"HTTP GET /api/teachers","level":"INFO","requestId":"f8ae978c-2bfd-4668-a910-bff46693f4b8","method":"GET","route":"/api/teachers","statusCode":304,"durationMs":15,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:25.377Z","message":"HTTP GET /api/sections","level":"INFO","requestId":"57a9bdf8-4ddd-4dac-b943-92682ec1b8db","method":"GET","route":"/api/sections","statusCode":304,"durationMs":13,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:25.382Z","message":"HTTP GET /api/auth/me","level":"INFO","requestId":"5a08940d-9d6d-4f90-8b1c-6d83bc12d3e1","method":"GET","route":"/api/auth/me","statusCode":304,"durationMs":2,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:25.386Z","message":"HTTP GET /api/students","level":"INFO","requestId":"cc178217-476d-45b3-ba14-90addaa56bb0","method":"GET","route":"/api/students","statusCode":304,"durationMs":4,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:25.390Z","message":"HTTP GET /api/classes","level":"INFO","requestId":"c0d081c1-3b73-47c2-9028-b6348889d334","method":"GET","route":"/api/classes","statusCode":304,"durationMs":3,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:25.401Z","message":"HTTP GET /api/teachers","level":"INFO","requestId":"ff3d02fa-2ec3-4a2c-bf9d-46135730c7f8","method":"GET","route":"/api/teachers","statusCode":304,"durationMs":5,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:25.402Z","message":"HTTP GET /api/sections","level":"INFO","requestId":"d6fecf08-14c7-4d85-acf6-ad9cc533d21e","method":"GET","route":"/api/sections","statusCode":304,"durationMs":4,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:26.770Z","message":"HTTP GET /api/fee-structures","level":"INFO","requestId":"c40d83c5-f1dd-4ded-bb1e-f2c480cde226","method":"GET","route":"/api/fee-structures","statusCode":304,"durationMs":1409,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:26.865Z","message":"HTTP GET /api/academic-years","level":"INFO","requestId":"0ba5fe7c-9fe3-4090-8653-fa6f2e88f96e","method":"GET","route":"/api/academic-years","statusCode":304,"durationMs":1487,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:26.971Z","message":"HTTP GET /api/fee-structures","level":"INFO","requestId":"2d29de47-f979-488b-a3cf-7102dd801914","method":"GET","route":"/api/fee-structures","statusCode":304,"durationMs":200,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:27.078Z","message":"HTTP GET /api/academic-years","level":"INFO","requestId":"a9333a70-dad3-4180-ab23-14d4fd2ff977","method":"GET","route":"/api/academic-years","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:27.172Z","message":"HTTP GET /api/expenses","level":"INFO","requestId":"09105088-1d83-4d4d-b93c-8a068fd0608b","method":"GET","route":"/api/expenses","statusCode":304,"durationMs":200,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:27.247Z","message":"HTTP GET /api/system/activity?limit=50","level":"INFO","requestId":"13dc7f24-0cc9-46f8-9cc9-c9ab786a77ad","method":"GET","route":"/api/system/activity?limit=50","statusCode":304,"durationMs":1878,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:27.655Z","message":"HTTP GET /api/system/activity?limit=50","level":"INFO","requestId":"fbf4ee7c-1853-4a84-b5c7-d5e5c35e880b","method":"GET","route":"/api/system/activity?limit=50","statusCode":304,"durationMs":407,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:28.292Z","message":"HTTP GET /api/dashboard/monthly-collections?year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"0302698d-8e20-4990-a94d-4a25f0c602b8","method":"GET","route":"/api/dashboard/monthly-collections?year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":1410,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:28.293Z","message":"HTTP GET /api/dashboard/overview?year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"c77d24a2-d13a-4fac-b272-fed1b8ab8dea","method":"GET","route":"/api/dashboard/overview?year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":1414,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:28.372Z","message":"HTTP GET /api/ledgers?year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"1a12397a-5d33-4528-a456-8637ed83e970","method":"GET","route":"/api/ledgers?year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":200,"durationMs":1489,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:36.290Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"7b71e1ea-5b0e-4bd5-8b90-1c82da7c5e96","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":200,"durationMs":203,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:36.300Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"b73c9276-6286-45a2-80c2-d324e4ed0cd4","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":200,"durationMs":214,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:36.306Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:45:36.306Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"b0184932-ba25-4f6b-9c27-99003228a4e8","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":2,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:36.530Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"a814a181-a4a3-44f5-b767-4d33c4089264","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:36.745Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"83d12f52-27f6-430a-9361-97fbc97dc41c","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:36.751Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:45:36.751Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"4b815795-dccb-4a35-a8e6-1ebda4c0eadb","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:36.971Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"c11a5988-07e0-4796-a647-3d3460e0c92b","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:37.187Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"46d365b5-8493-4567-a77e-973e12765d14","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":214,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:37.192Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:45:37.193Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"6d203e17-6b20-4ca1-a114-182bc173d4ef","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:37.414Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"53dce88e-8658-4230-a215-534f94064eb6","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":214,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:37.629Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"08f6a1dd-aea2-4a1a-893c-f727400e7034","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":214,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:37.635Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:45:37.635Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"e7598b01-020a-4104-9809-752f07c47b31","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:37.859Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"a8df5980-ebf3-4b17-b21b-6e53e40fdf8c","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":216,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:38.073Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"a594d199-1289-48ea-b644-6a9df137439d","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:38.080Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:45:38.080Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"2914a6fa-e7e2-4704-85dd-b43bcdc02605","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:38.733Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"89c91cee-554e-4d60-9168-b2e06727dafe","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":646,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:38.946Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"f870aaf3-7533-470c-b4b7-5de72cef38e8","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:38.951Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:45:38.952Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"9db78edd-832d-40e1-96e3-a2081c9de547","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:39.169Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"527e8654-dc0d-44a0-9ff1-53597b8d05e9","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:39.383Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"f78f483f-aba5-44cd-843c-6a621526509c","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:39.388Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:45:39.389Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"83273a77-356a-47fe-8477-63de19f04254","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:39.608Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"295facf5-53eb-4321-83d0-92b90045bd29","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:39.823Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"1342adf5-aadd-49d3-9da3-03dbd6a1a108","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":214,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:39.829Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:45:39.829Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"04e948a1-2b35-4246-9274-ab4f14fa0b7b","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:40.049Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"4bdeff3f-505a-49ac-bf5c-2101ac50bb95","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:40.264Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"afe4b0bb-27a9-497c-a554-f926518a1466","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:40.270Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:45:40.271Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"66176502-688a-44a2-a2f3-1b1f0a1457dd","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":2,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:40.491Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"ae524f13-2639-49dd-82c9-c33bb70299c6","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:40.704Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"78fbc91a-5ba2-4e77-be14-91ac69efbde2","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:40.710Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:45:40.710Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"400e247f-6fb4-4e4e-aef5-0302c30848e8","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:40.931Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"6b9dfd99-2b43-4bba-b3da-a69ad4ef68ef","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:41.145Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"bedb6dcb-b8e3-48d5-a697-98a00cd245ea","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:41.150Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:45:41.150Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"847dee9a-71b2-4c80-aa06-6e55634a22b6","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:41.372Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"2f00b11f-fea9-4cea-806e-b71446d63d31","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:41.586Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"5324f6a5-3ec2-4d4c-b33a-2c4445a54770","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:41.592Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:45:41.593Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"cfac0407-5359-4edc-9564-379c6f85fcce","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:41.812Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"fab3d304-2bb4-4b07-ad87-61135be11dc6","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:42.026Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"f193573a-fd7d-4a7d-a86e-4d375aff5fe1","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:42.032Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:45:42.032Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"4be708db-bb43-4242-8b52-fbd4848c8ab1","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:42.250Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"28f0009e-1557-4170-a85f-3f78c3c8b5c2","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:42.464Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"ee55be9f-1e24-4dbb-b789-b21f6f986db2","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:42.468Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:45:42.469Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"43e0cc55-b8e4-489e-8bb4-c786fd46264b","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:42.687Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"630220ab-738d-4a65-ac83-6d8b5194fea5","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:42.900Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"87efb324-deb4-419a-ad44-a46795b17067","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:42.905Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:45:42.905Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"29bc8c44-88c6-4a30-8b6a-0b8ca3250291","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:43.124Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"632fda43-a90b-438a-b2bc-a60db1d71c46","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:43.339Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"0d96ee8e-a393-46ce-8c70-0251049d3958","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:43.345Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:45:43.345Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"437d18bc-18c2-47fd-a780-628cb14f62c3","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:43.564Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"e3feaaf8-2562-46c3-847f-717aa2affdfd","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:43.777Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"bb45a6c7-322e-4409-986d-0dcac9660fed","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:43.783Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:45:43.783Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"1bc99514-e98e-4928-9746-df2f5ef4a181","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:44.003Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"6273c8a8-c13f-472a-a3d3-d26992c1e9b7","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:44.216Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"9e33e74b-93eb-4c6d-b131-099136271e02","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:44.223Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:45:44.223Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"727da18e-2fde-4e01-aa1d-571699fe0d40","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:44.442Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"6c27ed20-172f-4b85-98ef-cfe58d6917ce","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:44.656Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"a4b741a7-c67e-4949-ad31-ed8fc03775cd","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:44.661Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:45:44.662Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"65429f69-830f-483f-854f-a21b5f9ef156","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:44.881Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"e4dcaed6-f9b3-458e-a42e-04a96a760536","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:45.095Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"f5a1c27d-7df6-46a5-bf36-8dd46bbc62e8","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:45.100Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:45:45.101Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"d193e2a6-7058-43a3-a8b8-caed463044f9","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:45.319Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"5bdb9d13-1563-409a-8b54-b75ae3171e00","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:45.533Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"6990f02d-73ca-4298-8e3c-67665ddd70cb","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:45.540Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:45:45.540Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"5ca13242-4a32-405e-8695-fc7144866345","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:45.760Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"72ad0e9d-cb2c-4306-aa45-0d6e9733ac7c","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:45.973Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"f2c163ae-c9a3-4a34-aa91-3c9645d1ac7f","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:45.979Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:45:45.979Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"52ca8ef5-a705-42f9-9089-eb7d1205d48e","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:46.198Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"b5365b86-1a4e-4b59-9fa3-4713b6fd88d2","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:46.415Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"00134f07-dcb4-44a4-8c97-f2414035c88d","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:46.425Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:45:46.425Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"69c7bbfe-3d11-4379-9602-e41113f16b44","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:46.650Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"a60638fe-572b-4142-9061-c3560626e2a5","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:46.867Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"2cfe4c7d-d9ad-46af-8104-bdeeda19ea04","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":216,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:46.874Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:45:46.874Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"e6ea2dae-b873-47ba-8eff-189ee09058af","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:47.094Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"550b5bab-5c44-4ca7-bd4e-feeb973dc955","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:47.308Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"e2202b99-407f-4f8f-9673-139abfcf3cb6","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:47.313Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:45:47.314Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"6bdd191b-a0f4-4645-94c3-902c912dcb87","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:47.540Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"7e120ae1-114a-4d77-b607-1644f8d476a2","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:47.754Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"eabda401-c5f9-4b71-a647-3b09a6069cb5","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:47.759Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:45:47.759Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"ec60d5ef-0112-4cdd-9835-f2bbbe60ecc1","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:47.977Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"959e48fc-2f81-4605-903d-24f2bcf87a77","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:48.191Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"a2939fbc-6047-40f6-82a9-189189e7176e","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:48.202Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:45:48.202Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"4067078d-9f31-4d8f-9e13-d8b8f9fa2ff8","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:48.433Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"d7491834-cf9e-430a-9a91-5e6e775f8deb","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":220,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:48.647Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"8eb6d3dd-ef19-47b1-b3f1-cb4e97e507a8","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:48.660Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:45:48.661Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"1718c8af-2067-4d12-8b4a-6da475ce4214","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:48.887Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"7345c8be-9786-4b2b-b26f-3721f75fe28c","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:49.107Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"b3c896b2-bcca-4283-9b4e-ccc2590a4ab6","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":218,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:49.124Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:45:49.125Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"7e679759-ad3f-494f-adf6-a1cf1314dfcc","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":2,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:49.388Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"ba7019b8-e838-4dea-9f57-f49c387fd1ee","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":217,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:49.613Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"f8ebb2de-4f68-4b18-8553-566aafca78d3","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:49.627Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:45:49.628Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"37fff373-5f80-43a6-8ef3-2ffe53a8c2ab","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:49.858Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"c5e0e929-69a3-41c0-b6ea-95636d6a18df","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:50.072Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"85e8bb22-f656-4c86-889a-2048fbaa0480","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:50.077Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:45:50.077Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"ad1df91e-a74a-4aaf-954c-0f86a78744a5","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:50.296Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"13687767-91f0-4a3a-9c91-04a9f4de43d7","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:50.509Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"52ea896b-8d83-4b4e-9a63-90c6a2f2ebe9","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:50.513Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:45:50.514Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"db3659fb-3e57-4db4-8e58-86b9bded8172","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:50.732Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"a409c78e-04f9-4f47-a1c2-109f94cdbb9c","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:50.946Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"d9a6c5f8-a227-4c6f-bcbe-42644650f48f","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:50.952Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:45:50.952Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"701a2267-af8f-4905-841c-5f314ca22354","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:51.170Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"75299359-10d1-4494-805e-e97f97340302","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:51.384Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"d2e08bb4-dee4-4659-84c9-9d9255599b63","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:51.389Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:45:51.389Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"6b63a5af-5d89-40e6-af91-f9e38d67c85b","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:51.610Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"34870879-78bb-400d-a726-44a55cfe07cd","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:51.823Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"28562774-f183-4932-ac02-a29962a6ba79","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:51.828Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:45:51.829Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"2a32945f-4563-4caa-8a3b-a4b94b331142","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:52.049Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"c013db4b-69ef-47a5-8e96-8ac91bb8e15f","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":214,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:52.263Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"b0406091-5e94-4b01-b2bd-e1e1a1fd9616","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:52.270Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:45:52.270Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"681b5756-6059-4e5a-878f-d470900e635f","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:52.490Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"b021339c-52d7-4db7-83ed-6e59c6749f45","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:52.717Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"c42e4385-6f92-43ba-8520-bd46b2508974","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":219,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:52.722Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:45:52.723Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"3e5e5e82-5373-4dc2-a0a6-04158febe4b5","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:52.942Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"003683cf-f074-4b97-9a3f-4335a7498a71","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:53.156Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"32075ea1-6a69-4f8d-8e16-955e54767f6a","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:53.161Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:45:53.161Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"1fb88fdd-c5ce-4cc9-83bc-8ff6d98bc0cd","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:53.379Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"d4bbe00c-b79d-47ad-8484-dfd4c3d3224b","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:53.593Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"fd98b3b0-486d-410e-999b-8a7beebdfc72","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:53.598Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:45:53.598Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"f446568b-b5a5-40ad-9698-ef3280cdb8da","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:54.242Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"faf7733b-7eaa-4b8e-a45c-92bf6826872b","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":637,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:54.489Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"80c65692-55ba-41e7-b847-f45537290c8d","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:54.494Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:45:54.494Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"b915fb27-e0ae-42dd-a7ac-f3d9b6182372","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:54.723Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"270be3ea-7718-4a4f-b572-c4e54fba86ac","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:54.937Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"e3a3f36d-e2da-44a9-8815-71504f59495d","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:54.942Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:45:54.943Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"dfbc9d65-18fe-4405-a3da-7590177cdc20","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:55.161Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"ec88d86d-d5ee-444c-8bd3-a81731d1fa8d","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:55.375Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"4dcd7637-e905-438b-a236-02f4ce411d76","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:55.380Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:45:55.380Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"63813893-a625-421c-b1b0-a4c05910e104","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:55.599Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"15d82bb0-52d6-4ec1-8838-cb33a95c5fcd","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:45:55.813Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"a5c804d0-9e78-4d9d-8bac-4510e22644b6","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69[INFO] 00:16:18 Restarting: /home/nidhi/SKA-School-Management-Desktop-App/backend/src/finance/mappers/ledger.mapper.ts has been modified
+[dotenv@17.2.4] injecting env (5) from .env -- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops
+🟢 MongoDB connected (identity subsystem)
+(node:75912) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+🟦 PostgreSQL connected (finance subsystem)
+🚀 Backend running on port 4000
+{"timestamp":"2026-03-07T18:46:35.040Z","message":"HTTP GET /health","level":"INFO","requestId":"54de45c8-b42d-4f27-8283-a19ce99dc773","method":"GET","route":"/health","statusCode":200,"durationMs":2044}
+{"timestamp":"2026-03-07T18:46:47.924Z","message":"HTTP GET /api/auth/me","level":"INFO","requestId":"c6a91ebc-0b03-4a2c-a8b8-377b399edfd3","method":"GET","route":"/api/auth/me","statusCode":304,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:47.928Z","message":"HTTP GET /api/students","level":"INFO","requestId":"6f7c16fb-a789-471e-b1b5-69912c6aa1dd","method":"GET","route":"/api/students","statusCode":304,"durationMs":18,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:47.935Z","message":"HTTP GET /api/auth/me","level":"INFO","requestId":"5bf11c84-e56f-4901-9ab2-78223e9c2852","method":"GET","route":"/api/auth/me","statusCode":304,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:47.938Z","message":"HTTP GET /api/teachers","level":"INFO","requestId":"bad32601-169e-49bf-8300-99fa5f19eb84","method":"GET","route":"/api/teachers","statusCode":304,"durationMs":19,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:47.940Z","message":"HTTP GET /api/classes","level":"INFO","requestId":"62dd3b0d-26b6-4f71-adbe-f78bb3af1010","method":"GET","route":"/api/classes","statusCode":304,"durationMs":19,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:47.945Z","message":"HTTP GET /api/sections","level":"INFO","requestId":"7dbf1bde-96a3-42ce-ac63-4456859aa9bd","method":"GET","route":"/api/sections","statusCode":304,"durationMs":16,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:47.952Z","message":"HTTP GET /api/students","level":"INFO","requestId":"eed5fb15-28a9-4ec8-8a0b-15d1cdc77d40","method":"GET","route":"/api/students","statusCode":304,"durationMs":10,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:47.955Z","message":"HTTP GET /api/teachers","level":"INFO","requestId":"5e5fb40d-317d-48d9-aa36-7d1eae8e9102","method":"GET","route":"/api/teachers","statusCode":304,"durationMs":7,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:47.959Z","message":"HTTP GET /api/classes","level":"INFO","requestId":"2ccd48f0-0c6e-417d-bec6-43b09f804359","method":"GET","route":"/api/classes","statusCode":304,"durationMs":7,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:47.960Z","message":"HTTP GET /api/sections","level":"INFO","requestId":"3386300a-d779-4f4f-8212-3e85e449efb7","method":"GET","route":"/api/sections","statusCode":304,"durationMs":4,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:49.662Z","message":"HTTP GET /api/students","level":"INFO","requestId":"1dce89cd-dd1d-4763-adf6-5919e5f05738","method":"GET","route":"/api/students","statusCode":304,"durationMs":5,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:49.663Z","message":"HTTP GET /api/teachers","level":"INFO","requestId":"f54aec8c-95b2-418c-9a26-47097e18e497","method":"GET","route":"/api/teachers","statusCode":304,"durationMs":4,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:49.667Z","message":"HTTP GET /api/sections","level":"INFO","requestId":"5f9790ed-f4ef-4575-892e-94dcd0d7b4e9","method":"GET","route":"/api/sections","statusCode":304,"durationMs":3,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:49.668Z","message":"HTTP GET /api/auth/me","level":"INFO","requestId":"a0c0379b-8790-436f-b517-4428b34a8322","method":"GET","route":"/api/auth/me","statusCode":304,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:49.674Z","message":"HTTP GET /api/classes","level":"INFO","requestId":"1d445568-ccc4-455e-bd72-fb0cb7c23ec4","method":"GET","route":"/api/classes","statusCode":304,"durationMs":5,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:49.682Z","message":"HTTP GET /api/students","level":"INFO","requestId":"f8374203-a342-4464-b4d9-547537f0cb06","method":"GET","route":"/api/students","statusCode":304,"durationMs":12,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:49.683Z","message":"HTTP GET /api/auth/me","level":"INFO","requestId":"fd53a7e1-46fe-4ad5-b6ca-1f08df825ea6","method":"GET","route":"/api/auth/me","statusCode":304,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:49.686Z","message":"HTTP GET /api/teachers","level":"INFO","requestId":"76f7f5cc-5728-41fe-8e1b-a01d39288483","method":"GET","route":"/api/teachers","statusCode":304,"durationMs":12,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:49.687Z","message":"HTTP GET /api/sections","level":"INFO","requestId":"b7f34235-f4f6-40e6-9e0a-166b8fc35c30","method":"GET","route":"/api/sections","statusCode":304,"durationMs":10,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:49.691Z","message":"HTTP GET /api/classes","level":"INFO","requestId":"bfe63b9d-bb55-4977-93c9-d0f90d7d3153","method":"GET","route":"/api/classes","statusCode":304,"durationMs":3,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:49.885Z","message":"HTTP GET /api/fee-structures","level":"INFO","requestId":"d5f63d8d-ade6-49c5-b51a-89c8c7e14390","method":"GET","route":"/api/fee-structures","statusCode":304,"durationMs":206,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:50.360Z","message":"HTTP GET /api/fee-structures","level":"INFO","requestId":"e4b30f45-0cf8-4ae9-95e4-cad47ab7800a","method":"GET","route":"/api/fee-structures","statusCode":304,"durationMs":474,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:51.119Z","message":"HTTP GET /api/system/activity?limit=50","level":"INFO","requestId":"90c76667-ba38-4f21-b6a5-355af3359301","method":"GET","route":"/api/system/activity?limit=50","statusCode":304,"durationMs":1435,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:51.608Z","message":"HTTP GET /api/academic-years","level":"INFO","requestId":"3f6a3ba3-64e8-4b9f-ad17-089525936b39","method":"GET","route":"/api/academic-years","statusCode":304,"durationMs":1916,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:51.811Z","message":"HTTP GET /api/academic-years","level":"INFO","requestId":"ec851c61-8912-45d0-8fb1-1602c01ae264","method":"GET","route":"/api/academic-years","statusCode":304,"durationMs":202,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:51.826Z","message":"HTTP GET /api/dashboard/overview?year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"7b8ddb34-f3d4-48c4-a8fa-f20a20ec054b","method":"GET","route":"/api/dashboard/overview?year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":205,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:51.826Z","message":"HTTP GET /api/dashboard/monthly-collections?year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"e10cd0dc-f771-4b5f-96a5-0e8395af693d","method":"GET","route":"/api/dashboard/monthly-collections?year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":203,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:51.827Z","message":"HTTP GET /api/ledgers?year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"a90e9dd5-1c4c-47b6-9fce-d4fc1314da51","method":"GET","route":"/api/ledgers?year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":200,"durationMs":203,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:51.996Z","message":"HTTP GET /api/system/activity?limit=50","level":"INFO","requestId":"4df3efdc-bef7-4bc2-bb69-c84171b6892d","method":"GET","route":"/api/system/activity?limit=50","statusCode":304,"durationMs":876,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:53.037Z","message":"HTTP GET /api/expenses","level":"INFO","requestId":"eae0dea8-a974-45fa-9ded-49822fed268f","method":"GET","route":"/api/expenses","statusCode":304,"durationMs":1412,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:54.193Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"72e28a31-ce31-4988-b728-d8ca41a875c3","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":200,"durationMs":204,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:54.399Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"a30e4ba9-80e4-4b1c-b7d5-5245b6c6c3bb","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":204,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:54.608Z","message":"HTTP GET /api/ledgers/59d3ac1b-cfb9-47a6-bb5f-8cbdae1c5187/summary","level":"INFO","requestId":"395fd944-67b8-40c2-ae59-664212cbdf71","method":"GET","route":"/api/ledgers/59d3ac1b-cfb9-47a6-bb5f-8cbdae1c5187/summary","statusCode":200,"durationMs":203,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:49:04.313Z","message":"HTTP GET /api/students","level":"INFO","requestId":"36f3e410-53fa-4e80-afc5-5f309a82aa0b","method":"GET","route":"/api/students","statusCode":304,"durationMs":5,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:49:04.314Z","message":"HTTP GET /api/teachers","level":"INFO","requestId":"7f123c73-675d-4b8d-88f3-6e5378cb1b66","method":"GET","route":"/api/teachers","statusCode":304,"durationMs":4,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:49:04.320Z","message":"HTTP GET /api/auth/me","level":"INFO","requestId":"5e04e209-9d60-4060-861c-5a95147e079a","method":"GET","route":"/api/auth/me","statusCode":304,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:49:04.321Z","message":"HTTP GET /api/classes","level":"INFO","requestId":"e97a6b17-b762-4d5e-a93b-59977924bc64","method":"GET","route":"/api/classes","statusCode":304,"durationMs":5,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:49:04.321Z","message":"HTTP GET /api/sections","level":"INFO","requestId":"74840b02-a18a-4d21-acf0-d708066e052b","method":"GET","route":"/api/sections","statusCode":304,"durationMs":8,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:49:04.328Z","message":"HTTP GET /api/students","level":"INFO","requestId":"7bffb6fc-b5fe-4bf3-822c-7cd2e08c7a2c","method":"GET","route":"/api/students","statusCode":304,"durationMs":6,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:49:04.331Z","message":"HTTP GET /api/auth/me","level":"INFO","requestId":"587f473f-fd64-412b-b95e-493b4a2c262f","method":"GET","route":"/api/auth/me","statusCode":304,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:49:04.332Z","message":"HTTP GET /api/teachers","level":"INFO","requestId":"ea9a1f9d-39cc-458e-9b27-06659196fb27","method":"GET","route":"/api/teachers","statusCode":304,"durationMs":4,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:49:04.337Z","message":"HTTP GET /api/sections","level":"INFO","requestId":"e6cf96b5-5f58-414e-b367-1464770f9952","method":"GET","route":"/api/sections","statusCode":304,"durationMs":4,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:49:04.339Z","message":"HTTP GET /api/classes","level":"INFO","requestId":"fa853757-8e16-4eff-9b6a-d7620df688a2","method":"GET","route":"/api/classes","statusCode":304,"durationMs":4,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:49:05.754Z","message":"HTTP GET /api/academic-years","level":"INFO","requestId":"819de691-8c55-425f-b0aa-65b856420517","method":"GET","route":"/api/academic-years","statusCode":304,"durationMs":1428,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:49:05.755Z","message":"HTTP GET /api/fee-structures","level":"INFO","requestId":"ee3d409f-6747-4c0c-8be0-97ca42e0309a","method":"GET","route":"/api/fee-structures","statusCode":304,"durationMs":1438,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:49:05.958Z","message":"HTTP GET /api/academic-years","level":"INFO","requestId":"f221821c-344c-40c9-ae34-a9690ccdc329","method":"GET","route":"/api/academic-years","statusCode":304,"durationMs":202,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:49:05.958Z","message":"HTTP GET /api/fee-structures","level":"INFO","requestId":"cfc9cfb8-c387-4972-b820-87309f6a9e9d","method":"GET","route":"/api/fee-structures","statusCode":304,"durationMs":202,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:49:06.160Z","message":"HTTP GET /api/expenses","level":"INFO","requestId":"386e7904-0eb5-482d-8a3d-ade74c160aca","method":"GET","route":"/api/expenses","statusCode":304,"durationMs":202,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:49:06.225Z","message":"HTTP GET /api/system/activity?limit=50","level":"INFO","requestId":"c1ca499a-051a-4d5d-89de-276c80cb90d8","method":"GET","route":"/api/system/activity?limit=50","statusCode":304,"durationMs":1901,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:49:06.434Z","message":"HTTP GET /api/system/activity?limit=50","level":"INFO","requestId":"107787d4-5608-4f82-8eed-5412505ff212","method":"GET","route":"/api/system/activity?limit=50","statusCode":304,"durationMs":208,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:49:07.185Z","message":"HTTP GET /api/dashboard/overview?year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"d2afe037-b804-4333-b4d4-801c3a7e4bfe","method":"GET","route":"/api/dashboard/overview?year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":1403,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:49:07.186Z","message":"HTTP GET /api/dashboard/monthly-collections?year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"6ec87b37-5dc1-4e35-9516-96660b3d2ff1","method":"GET","route":"/api/dashboard/monthly-collections?year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":1402,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:49:07.819Z","message":"HTTP GET /api/ledgers?year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"f45da692-5fd5-4d16-87db-d165b79fb311","method":"GET","route":"/api/ledgers?year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":2033,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:49:10.853Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"6c366123-ac53-4abe-88ae-f25ee860e414","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":702,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:49:11.067Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"c4ce7a72-1add-4081-9bf0-86368fd53ce1","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":214,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:49:11.495Z","message":"HTTP GET /api/ledgers/59d3ac1b-cfb9-47a6-bb5f-8cbdae1c5187/summary","level":"INFO","requestId":"800030c7-5359-462c-84bd-3136a48fdcb7","method":"GET","route":"/api/ledgers/59d3ac1b-cfb9-47a6-bb5f-8cbdae1c5187/summary","statusCode":304,"durationMs":421,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:49:17.431Z","message":"HTTP GET /api/ledgers?studentId=69876c1cc4f6a3ff79fe4653&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"6642ff19-a3f1-4e1f-873c-1b6e1573a9ee","method":"GET","route":"/api/ledgers?studentId=69876c1cc4f6a3ff79fe4653&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":200,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:49:17.647Z","message":"HTTP GET /api/ledgers?studentId=69876c1cc4f6a3ff79fe4653&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"e2daf170-83cd-4788-92da-c9949d32b7fb","method":"GET","route":"/api/ledgers?studentId=69876c1cc4f6a3ff79fe4653&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:49:21.005Z","message":"HTTP GET /api/ledgers?studentId=698794b1f9dfbbfd476ad946&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"2877cc54-b5d3-4bbc-992d-830388fc45a9","method":"GET","route":"/api/ledgers?studentId=698794b1f9dfbbfd476ad946&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":200,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:49:21.219Z","message":"HTTP GET /api/ledgers?studentId=698794b1f9dfbbfd476ad946&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"278126cc-1a38-4adc-95ea-b0886cfd0e7f","method":"GET","route":"/api/ledgers?studentId=698794b1f9dfbbfd476ad946&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:50:31.605Z","message":"HTTP GET /api/sections","level":"INFO","requestId":"d70860e5-b40a-42e1-8465-9447c9d99fb6","method":"GET","route":"/api/sections","statusCode":304,"durationMs":3,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:50:31.610Z","message":"HTTP GET /api/sections","level":"INFO","requestId":"973b8466-dc9a-4b69-80cf-00610361913f","method":"GET","route":"/api/sections","statusCode":304,"durationMs":3,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:50:37.573Z","message":"HTTP POST /api/sections","level":"INFO","requestId":"a8048c85-d501-4b7d-9bf5-b92d505d507f","method":"POST","route":"/api/sections","statusCode":201,"durationMs":19,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:50:40.049Z","message":"HTTP PATCH /api/sections/69ac737d9e4597ee58f202ba/teacher","level":"INFO","requestId":"d3e69bec-a9c7-4a51-bfe8-df05ed587f80","method":"PATCH","route":"/api/sections/69ac737d9e4597ee58f202ba/teacher","statusCode":200,"durationMs":15,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:52:21.784Z","message":"HTTP POST /api/students","level":"INFO","requestId":"4aa79908-a60f-4cfd-ab87-084450a9f44a","method":"POST","route":"/api/students","statusCode":201,"durationMs":7,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:52:42.715Z","message":"HTTP GET /api/ledgers?studentId=69ac73e59e4597ee58f202bd&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"90c2dacf-aa54-4d4f-a773-1afb4d43c1c3","method":"GET","route":"/api/ledgers?studentId=69ac73e59e4597ee58f202bd&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":200,"durationMs":1440,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:52:42.923Z","message":"HTTP GET /api/ledgers?studentId=69ac73e59e4597ee58f202bd&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"9e525be6-d2e1-49b4-a62a-168ab21dab12","method":"GET","route":"/api/ledgers?studentId=69ac73e59e4597ee58f202bd&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":205,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:52:47.800Z","message":"HTTP PATCH /api/students/69ac73e59e4597ee58f202bd/assignment","level":"INFO","requestId":"17e47659-71d3-44ac-b069-b0bc69858820","method":"PATCH","route":"/api/students/69ac73e59e4597ee58f202bd/assignment","statusCode":200,"durationMs":3,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:53:08.281Z","message":"HTTP POST /api/fee-structures","level":"INFO","requestId":"f756ed0f-28b8-42b9-a82c-d2f49ce3b672","method":"POST","route":"/api/fee-structures","statusCode":500,"durationMs":1441,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:53:09.684Z","message":"HTTP POST /api/fee-structures","level":"INFO","requestId":"a7ac6f15-a2f1-4cd8-8961-c5d7677c67d2","method":"POST","route":"/api/fee-structures","statusCode":500,"durationMs":1404,"userId":"69aa74332314cad951d592fa"}
+Node.js[75912]: ../src/node.cc:701:void node::ResetStdio(): Assertion `!(err != 0) || (err == -1 && (*__errno_location ()) == 1)' failed.
+ 1: 0xb9bbf0 node::Abort() [/home/nidhi/.nvm/versions/node/v18.20.8/bin/node]
+ 2: 0xb9bc6e  [/home/nidhi/.nvm/versions/node/v18.20.8/bin/node]
+ 3: 0xb53b24  [/home/nidhi/.nvm/versions/node/v18.20.8/bin/node]
+ 4: 0x7c3388e45495  [/lib/x86_64-linux-gnu/libc.so.6]
+ 5: 0x7c3388e45610 on_exit [/lib/x86_64-linux-gnu/libc.so.6]
+ 6: 0xade0b7 node::DefaultProcessExitHandler(node::Environment*, int) [/home/nidhi/.nvm/versions/node/v18.20.8/bin/node]
+ 7: 0xb219f3 node::Environment::Exit(int) [/home/nidhi/.nvm/versions/node/v18.20.8/bin/node]
+ 8: 0xdd1400  [/home/nidhi/.nvm/versions/node/v18.20.8/bin/node]
+ 9: 0xdd293f v8::internal::Builtin_HandleApiCall(int, unsigned long*, v8::internal::Isolate*) [/home/nidhi/.nvm/versions/node/v18.20.8/bin/node]
+10: 0x1711db9  [/home/nidhi/.nvm/versions/node/v18.20.8/bin/node]
+Node.js[22811]: ../src/node.cc:701:void node::ResetStdio(): Assertion `!(err != 0) || (err == -1 && (*__errno_location ()) == 1)' failed.
+ 1: 0xb9bbf0 node::Abort() [node]
+ 2: 0xb9bc6e  [node]
+ 3: 0xb53b24  [node]
+ 4: 0x7cebd7045495  [/lib/x86_64-linux-gnu/libc.so.6]
+ 5: 0x7cebd7045610 on_exit [/lib/x86_64-linux-gnu/libc.so.6]
+ 6: 0xade0b7 node::DefaultProcessExitHandler(node::Environment*, int) [node]
+ 7: 0xb219f3 node::Environment::Exit(int) [node]
+ 8: 0xdd1400  [node]
+ 9: 0xdd293f v8::internal::Builtin_HandleApiCall(int, unsigned long*, v8::internal::Isolate*) [node]
+10: 0x1711db9  [node]
+":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:46:05.335Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"c67679c8-f50a-48ff-a6dd-e520618593e7","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:05.553Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"06ee9a34-b8c6-4f55-9d9e-6efa83c67862","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:05.768Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"87568b76-db9d-47ae-a987-a82db5de88e4","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:05.772Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:46:05.773Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"7817ab97-7fed-49f0-812a-afb665711bed","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:05.991Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"8c48de2d-b4b8-42ac-8afb-90030346dc5b","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:06.204Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"d1b97f87-3bf6-466f-b2ec-d6a2728c5298","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:06.209Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:46:06.209Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"a8e504df-72d3-409d-85b9-ade2261fc9c0","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:06.428Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"1d9935a8-f7b0-43db-b9ee-20826dc617ba","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:06.642Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"fa91bf1b-7620-40ac-b11a-055c82e1a62b","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:06.648Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:46:06.649Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"b181e987-23f8-4a47-910f-d4191766e1f3","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:06.871Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"c33c1cb6-f5c8-4246-97d9-a98dd1834ff6","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:07.085Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"b65699f0-17a2-47f8-a542-9ff0134fa7ad","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:07.091Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:46:07.091Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"a4e92fd0-b0b8-431a-b82c-bd1b21b546ff","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:07.309Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"38107b1b-0b5d-437d-95cc-57190af71210","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:07.522Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"024dfa12-e6c4-4016-80c9-95443e010c7c","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:07.529Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:46:07.530Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"d8c3c027-ff16-4f21-b26f-e6d882ff4bdf","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:07.751Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"2a51b3c0-dfa7-47a1-98c4-9cdb2091727f","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:07.964Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"d50dc8cd-398b-42b3-a812-36930b265f5f","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:07.970Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:46:07.970Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"8d0c4d02-d20b-4524-b623-b8ea925a0e39","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:08.189Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"b7c9aeee-5cd1-4278-b70e-c004ce388d99","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:08.402Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"2fb4db36-f7b7-411a-a294-7757bf932547","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:08.407Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:46:08.407Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"2f622e85-376d-4584-8339-1c68ed95c86e","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:08.624Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"61798b6d-9c64-4cf3-8410-008c86442c68","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:08.839Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"00202e61-80e0-459e-bdc6-185c28e56a74","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:08.844Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:46:08.845Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"9d5c4b1f-683f-443e-bbad-0e5cbcb55bf4","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:09.064Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"a2d22ca1-85b0-4384-b95f-7accd9c7d1da","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":214,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:09.282Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"d6ae0698-2e38-450f-b8b1-bad9dd4b629c","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":216,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:09.286Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:46:09.289Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"b0b600c4-7ab7-4cf5-b75f-5dea825f130b","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":4,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:09.508Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"77c6de88-ccee-466e-ab57-7b3afcad4a30","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:09.723Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"21a868ad-42ba-4873-a39c-70eb9fa124a3","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:09.727Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:46:09.728Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"b04b490b-f167-4440-8ed2-75add31a723c","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:10.233Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"6fa51091-fd2d-4d34-9c43-2930aaf034f7","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":499,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:10.447Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"02d50785-bc3c-4cf0-96c1-b2924e8bcba1","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:10.452Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:46:10.452Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"aac0ac6e-159f-4407-a945-cd22281d83aa","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:10.672Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"8aeca7f9-0928-4afe-986a-7741d6a6282e","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:10.887Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"f23ef122-2d13-4c59-8ab3-9de0db25ecc2","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":214,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:10.892Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:46:10.893Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"a1b02785-b49e-410e-9879-fd291a89f7b4","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":2,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:11.528Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"33cf0b39-dbd6-4070-93d6-f0a1fa97cb66","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":630,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:11.742Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"9fe16bc7-faa6-4a5e-8506-91ced7658417","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:11.747Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:46:11.748Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"278a202c-7a2b-406c-b8de-8ff2ed92cf2c","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:11.973Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"5e22d9c7-92af-43b8-b012-51c075ab3122","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:12.186Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"4bf98f53-b139-4b43-9901-7c9311d6f3a1","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:12.190Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:46:12.191Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"20d410f1-9a2e-42e4-a19b-e79f64b9ce59","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:12.412Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"1c746b60-bbd2-4e12-bf71-a56de3c536ed","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":214,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:12.834Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"292145e0-4157-4b1e-ad76-3638d665e926","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":421,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:12.841Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:46:12.842Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"22d95d64-7c49-4c13-a8ac-0962521f9505","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:13.060Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"e89267d3-c6a7-4023-9bb0-0c60b84cbaed","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:13.274Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"42f75ef6-05cf-4963-882e-6d64fa7a407e","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:13.279Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:46:13.280Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"c73e7efd-f118-4b35-8032-2200df0537e4","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:13.497Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"571fb76f-0165-4584-a804-af444bef4b99","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:13.711Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"6372fb53-8883-41bd-bd92-55fd8dfa0635","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:13.715Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:46:13.716Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"9f11c4c6-4a67-4e10-96c0-060386e5e85a","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:14.143Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"7df044aa-3489-4612-801b-4e9f1a73b25a","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":421,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:14.357Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"2614981c-6ee5-4e10-9b27-89ec39cdb4cf","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:14.362Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:46:14.365Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"bac5b072-b970-4ed7-8956-ae96486cd33b","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":4,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:14.584Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"ff50e5f1-ce23-4c64-ad3a-cb43be9a12c4","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:14.796Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"63d0d9ec-35e7-40a1-b6d3-2906032ca867","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:14.801Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:46:14.801Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"75e0cede-1033-4e61-adce-9fa906f86b49","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:15.019Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"fb645671-72ab-447c-a316-564e8a3f4f66","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:15.443Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"ef09f19b-82fc-4bf0-9bf5-7ebdfd32b471","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":422,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:15.447Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:46:15.448Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"b112e52d-6035-45f2-b434-6ab0f505a2cf","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:15.666Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"148c49bd-3813-4101-8a76-3edf2efc614e","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:15.879Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"4b8e49f5-5feb-4a1f-8e2e-a9e52570e2de","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:15.884Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:46:15.885Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"a66ff5f0-279a-42af-824e-eab896774173","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:16.103Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"64272e60-10cd-4623-88c3-768b80117831","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:16.317Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"a398ccab-7258-4918-9e38-f6d8c98577d9","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:16.322Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:46:16.323Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"ad33e12e-eb68-4651-8a71-e8f4b1f3b658","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:16.749Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"2bc50454-99c0-4846-9d7e-824a9c1f29bf","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":420,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:16.963Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"057d8d69-10ce-4276-8433-56c7725441cd","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:16.969Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:46:16.969Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"bd0f1625-0f3e-41ab-b08c-ac95881cb047","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:17.188Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"502c2bbb-0cfc-4b63-b59d-9677a2e84ebf","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:17.401Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"304013df-eee1-4150-9f8c-dad545c9b501","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:17.407Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:46:17.408Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"5e46ff04-9d1f-4532-802d-b71eca105fc5","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:17.625Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"27d93274-ad99-4da5-ae90-6749ed75e6b6","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:17.839Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"51df777d-d62b-4aed-a58f-f3520080a518","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":213,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:17.846Z","message":"'ledgerId' must be a valid UUID","level":"WARN","statusCode":400}
+{"timestamp":"2026-03-07T18:46:17.847Z","message":"HTTP GET /api/ledgers/undefined/summary","level":"INFO","requestId":"f7ae7dc2-1cac-4c89-baff-146a146d2b08","method":"GET","route":"/api/ledgers/undefined/summary","statusCode":400,"durationMs":1,"userId":"69aa74332314cad951d592fa"}
+{"timestamp":"2026-03-07T18:46:18.066Z","message":"HTTP GET /api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","level":"INFO","requestId":"ad0f0826-6e3d-426c-85fb-dee0bdd2c2b3","method":"GET","route":"/api/ledgers?studentId=69874bd5e75d13c895e6c501&year=534a1ecc-7a55-49c1-9344-cd7535c553bc","statusCode":304,"durationMs":212,"userId":"69aa74332314cad951d592fa"}
+[INFO] 00:16:18 Restarting: /home/nidhi/SKA-School-Management-Desktop-App/backend/src/finance/mappers/ledger.mapper.ts has been modified
+[dotenv@17.2.4] injecting env (5) from .env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+🟢 MongoDB connected (identity subsystem)
+(node:75913) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+🟦 PostgreSQL connected (finance subsystem)
+🚀 Backend running on port 4000
+Node.js[75913]: ../src/node.cc:701:void node::ResetStdio(): Assertion `!(err != 0) || (err == -1 && (*__errno_location ()) == 1)' failed.
+ 1: 0xb9bbf0 node::Abort() [/home/nidhi/.nvm/versions/node/v18.20.8/bin/node]
+ 2: 0xb9bc6e  [/home/nidhi/.nvm/versions/node/v18.20.8/bin/node]
+ 3: 0xb53b24  [/home/nidhi/.nvm/versions/node/v18.20.8/bin/node]
+ 4: 0x768489a45495  [/lib/x86_64-linux-gnu/libc.so.6]
+ 5: 0x768489a45610 on_exit [/lib/x86_64-linux-gnu/libc.so.6]
+ 6: 0xade0b7 node::DefaultProcessExitHandler(node::Environment*, int) [/home/nidhi/.nvm/versions/node/v18.20.8/bin/node]
+ 7: 0xb219f3 node::Environment::Exit(int) [/home/nidhi/.nvm/versions/node/v18.20.8/bin/node]
+ 8: 0xdd1400  [/home/nidhi/.nvm/versions/node/v18.20.8/bin/node]
+ 9: 0xdd293f v8::internal::Builtin_HandleApiCall(int, unsigned long*, v8::internal::Isolate*) [/home/nidhi/.nvm/versions/node/v18.20.8/bin/node]
+10: 0x1711db9  [/home/nidhi/.nvm/versions/node/v18.20.8/bin/node]
+Node.js[23067]: ../src/node.cc:701:void node::ResetStdio(): Assertion `!(err != 0) || (err == -1 && (*__errno_location ()) == 1)' failed.
+ 1: 0xb9bbf0 node::Abort() [node]
+ 2: 0xb9bc6e  [node]
+ 3: 0xb53b24  [node]
+ 4: 0x7295d8845495  [/lib/x86_64-linux-gnu/libc.so.6]
+ 5: 0x7295d8845610 on_exit [/lib/x86_64-linux-gnu/libc.so.6]
+ 6: 0xade0b7 node::DefaultProcessExitHandler(node::Environment*, int) [node]
+ 7: 0xb219f3 node::Environment::Exit(int) [node]
+ 8: 0xdd1400  [node]
+ 9: 0xdd293f v8::internal::Builtin_HandleApiCall(int, unsigned long*, v8::internal::Isolate*) [node]
+10: 0x1711db9  [node]

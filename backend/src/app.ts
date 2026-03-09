@@ -34,6 +34,9 @@ import financeConsistencyRoutes from "./system/routes/financeConsistency.routes"
 import ledgerReplayRoutes from "./system/routes/ledgerReplay.routes";
 import ledgerTimelineRoutes from "./system/routes/ledgerTimeline.routes";
 
+// Fee Structure (Phase 13)
+import feeStructureRoutes from "./finance/routes/feeStructure.routes";
+
 const app = express();
 
 app.use(
@@ -89,6 +92,10 @@ app.use("/api/system/activity", activityRoutes);
 app.use("/api/system", financeConsistencyRoutes);
 app.use("/api/system", ledgerReplayRoutes);
 app.use("/api/system", ledgerTimelineRoutes);
+
+
+// ── Fee Structure ────────────────────────────────────────────────
+app.use("/api/fee-structures", feeStructureRoutes);
 
 // ── Admin Dashboard (Phase 11)  ──────────────────────────────────────────────
 import dashboardRoutes from "./system/routes/dashboard.routes";

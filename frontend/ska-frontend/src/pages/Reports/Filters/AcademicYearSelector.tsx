@@ -8,7 +8,7 @@ type Props = {
 };
 
 function AcademicYearSelector({ academicYear, onChange }: Props) {
-  const { availableYears } = useAcademicYear();
+  const { academicYears } = useAcademicYear();
 
   return (
     <div className="filter-group">
@@ -18,9 +18,9 @@ function AcademicYearSelector({ academicYear, onChange }: Props) {
         value={academicYear}
         onChange={(e) => onChange(e.target.value)}
       >
-        {availableYears.map((y) => (
-          <option key={y} value={y}>
-            {y}
+        {academicYears?.map((y) => (
+          <option key={y.id} value={y.id}>
+            {y.name}
           </option>
         ))}
       </select>

@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFeeLedger } from "../../context/FeeLedgerContext";
 import { useStudents } from "../../context/StudentContext";
 import { useClasses } from "../../context/ClassContext";
 import { useAcademicYear } from "../../context/AcademicYearContext";
+import type { LedgerSummary } from "../../context/FeeLedgerContext";
 import "../../styles/OutstandingDues.css"
 
 function OutstandingDues() {
@@ -12,7 +13,8 @@ function OutstandingDues() {
     const { ledgers, getLedgerSummary } = useFeeLedger();
     const { students } = useStudents();
     const { classes } = useClasses();
-    const { academicYear, availableYears } = useAcademicYear();
+    const { academicYears, activeYear } = useAcademicYear();
+    const [ledgerSummaries, setLedgerSummaries] = useState<Record<string, LedgerSummary>>({});
 
     const [selectedClassId, setSelectedClassId] = useState("");
 
@@ -20,11 +22,26 @@ function OutstandingDues() {
        Build outstanding rows
     ========================= */
 
+    useEffect(() => {
+        const load = async () => {
+            const map: Record<string, LedgerSummary> = {};
+
+            for (const ledger of ledgers) {
+                const s = await getLedgerSummary(ledger.id);
+                if (s) map[ledger.id] = s;
+            }
+
+            setLedgerSummaries(map);
+        };
+
+        load();
+    }, [ledgers]);
+
     const rows = ledgers
-        .filter((l) => l.academicYear === academicYear)
+        .filter((l) => l.academicSessionId === activeYear?.id)
         .map((ledger) => {
-            const summary = getLedgerSummary(ledger.id);
-            if (summary.pending <= 0) return null;
+            const summary = ledgerSummaries[ledger.id];
+            if (!summary || summary.pending <= 0) return null;
 
             const student = students.find(
                 (s) => s.id === ledger.studentId
@@ -70,10 +87,10 @@ function OutstandingDues() {
 
             {/* Filters */}
             <div className="form-row">
-                <select value={academicYear} disabled>
-                    {availableYears.map((y) => (
-                        <option key={y} value={y}>
-                            {y}
+                <select value={activeYear?.id} disabled>
+                    {academicYears?.map((y) => (
+                        <option key={y.id} value={y.id}>
+                            {y.name}
                         </option>
                     ))}
                 </select>

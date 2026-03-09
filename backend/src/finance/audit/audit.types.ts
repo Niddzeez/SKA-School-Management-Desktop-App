@@ -4,6 +4,7 @@ export const AUDIT_EVENT_TYPES = [
     "ADJUSTMENT_ADDED",
     "EXPENSE_CREATED",
     "ACADEMIC_YEAR_CLOSED",
+    "LEDGER_BASE_COMPONENTS_UPDATED"
 ] as const;
 
 export type AuditEventType = typeof AUDIT_EVENT_TYPES[number];

@@ -6,6 +6,7 @@ import {
     createLedger,
     addPayment,
     addAdjustment,
+    getLedgersByYear,
 } from "../services/ledger.service";
 import {
     mapLedgerSummary,
@@ -36,25 +37,32 @@ router.get("/", async (req: Request, res: Response) => {
     try {
         const { studentId, year } = req.query;
 
-        if (!studentId || typeof studentId !== "string" || !isMongoId(studentId)) {
-            throw new ValidationError("Query parameter 'studentId' must be a valid MongoDB ObjectId");
+        if (studentId) {
+            if (typeof studentId !== "string" || !isMongoId(studentId)) {
+                throw new ValidationError("Query parameter 'studentId' must be a valid MongoDB ObjectId");
+            }
         }
         if (!year || typeof year !== "string") {
-            throw new ValidationError("Query parameter 'year' is required (e.g. '2025-26')");
+            throw new ValidationError("Query parameter 'year' is required");
         }
-        if (!/^\d{4}-\d{2}$/.test(year)) {
-            throw new ValidationError("'year' must match the format YYYY-YY (e.g. '2025-26')");
-        }
-
-        const summary = await getLedgerSummaryByStudentAndYear(studentId, year);
-        if (!summary) {
-            throw new NotFoundError(
-                "Ledger",
-                `student '${studentId}' for year '${year}'`
-            );
+        if (!isUUID(year)) {
+            throw new ValidationError("'year' must be a valid UUID representing the academic session ID");
         }
 
-        res.json(mapLedgerSummary(summary));
+        if (studentId) {
+            const summary = await getLedgerSummaryByStudentAndYear(studentId as string, year);
+            if (!summary) {
+                // If context expects an array when fetching by just year, maybe it expects an array even for studentId? 
+                // Context code says `apiClient.get<StudentFeeLedger[]>(/api/ledgers?studentId=${studentId}&year=${academicSessionId})` 
+                // So the context ALWAYS expects an array! 
+                res.json([]);
+                return;
+            }
+            res.json([mapLedgerSummary(summary)]);
+        } else {
+            const summaries = await getLedgersByYear(year);
+            res.json(summaries.map(mapLedgerSummary));
+        }
     } catch (err) {
         const { status, body } = toErrorResponse(err);
         res.status(status).json(body);

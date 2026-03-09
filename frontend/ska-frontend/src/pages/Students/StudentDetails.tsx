@@ -502,8 +502,8 @@ function StudentDetails() {
         value={academicYear}
         onChange={(e) => setAcademicYear(e.target.value)}
       >
-        {availableYears.map((y) => (
-          <option key={y} value={y}>
+        {availableYears.map((y, idx) => (
+          <option key={`${y}-${idx}`} value={y}>
             {y}
           </option>
         ))}

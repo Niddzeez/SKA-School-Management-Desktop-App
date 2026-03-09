@@ -87,11 +87,30 @@ export async function getLedgerSummaryByStudentAndYear(
             ls.academic_year, ls.is_closed,
             ls.base_total, ls.adjustments_total, ls.paid_total
      FROM   ledger_summary ls
+     JOIN   student_fee_ledgers sfl ON ls.ledger_id = sfl.id
      WHERE  ls.student_id  = $1
-       AND  ls.academic_year = $2`,
+       AND  sfl.academic_session_id = $2`,
         [studentId, year]
     );
     return rows[0] ?? null;
+}
+
+/**
+ * Returns all ledger summaries for a given academic session ID (year UUID).
+ */
+export async function getLedgersByYear(
+    yearId: string
+): Promise<LedgerSummaryRow[]> {
+    const { rows } = await getPool().query<LedgerSummaryRow>(
+        `SELECT ls.ledger_id, ls.student_id, ls.class_id,
+            ls.academic_year, ls.is_closed,
+            ls.base_total, ls.adjustments_total, ls.paid_total
+     FROM   ledger_summary ls
+     JOIN   student_fee_ledgers sfl ON ls.ledger_id = sfl.id
+     WHERE  sfl.academic_session_id = $1`,
+        [yearId]
+    );
+    return rows;
 }
 
 /**

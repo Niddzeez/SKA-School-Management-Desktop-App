@@ -7,7 +7,7 @@ import { Navigate } from "react-router-dom";
 
 function AdminLayout() {
   const { role } = useAuth();
-  const { academicYear, setAcademicYear, availableYears } = useAcademicYear();
+  const { academicYears, activeYear, setActiveYear } = useAcademicYear();
 
   // 🔒 Hard admin gate
   if (!role || !can(role, "VIEW_REPORTS")) {
@@ -39,12 +39,12 @@ function AdminLayout() {
       <div className="topbar-context">
         <label className="topbar-label">Academic Year</label>
         <select
-          value={academicYear}
-          onChange={(e) => setAcademicYear(e.target.value)}
+          value={activeYear?.name}
+          onChange={(e) => setActiveYear(e.target.value)}
           className="topbar-select"
         >
-          {availableYears.map((y) => (
-            <option key={y} value={y}>{y}</option>
+          {academicYears?.map((y) => (
+            <option key={y.id} value={y.id}>{y.name}</option>
           ))}
         </select>
       </div>

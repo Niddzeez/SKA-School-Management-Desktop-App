@@ -16,7 +16,9 @@ router.get(
     requireRole("ADMIN"),
     async (req, res, next) => {
         try {
-            const report = await runLedgerReplay(req.params.ledgerId);
+            const ledgerId = req.params.ledgerId as string;
+            // In this diagnostic endpoint, we just run the replay
+            const report = await runLedgerReplay(ledgerId);
             res.json(report);
         } catch (err) {
             next(err);

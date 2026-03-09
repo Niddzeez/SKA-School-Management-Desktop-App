@@ -1,9 +1,12 @@
 import { getPool } from "../../config/postgres";
 import { logger } from "../../shared/observability/logger";
+import { randomUUID } from "crypto";
 
 export interface FeeComponent {
+    id: string;
     name: string;
     amount: number;
+    mandatory: boolean;
 }
 
 export interface FeeStructure {
@@ -12,6 +15,7 @@ export interface FeeStructure {
     academicSessionId: string;
     status: 'DRAFT' | 'ACTIVE';
     components: FeeComponent[];
+    createdAt: string | Date;
 }
 
 export const feeStructureService = {
@@ -24,17 +28,17 @@ export const feeStructureService = {
         return rows;
     },
 
-    async create(classId: string, academicYear: string): Promise<FeeStructure> {
+    async create(classId: string, academicSessionId: string): Promise<FeeStructure> {
         const pool = getPool();
         const { rows } = await pool.query(`
             INSERT INTO fee_structures (class_id, academic_session_id, status, components)
             VALUES ($1, $2, 'DRAFT', '[]'::jsonb)
-            RETURNING id, class_id as "classId", academic_session_id as "academicSessionId", status, components
-        `, [classId, academicYear]);
+            RETURNING id, class_id as "classId", academic_session_id as "academicSessionId", status, components, created_at as "createdAt"
+        `, [classId, academicSessionId]);
         return rows[0];
     },
 
-    async addComponent(id: string, name: string, amount: number): Promise<FeeStructure> {
+    async addComponent(id: string, name: string, amount: number, mandatory: boolean): Promise<FeeStructure> {
         const pool = getPool();
         const client = await pool.connect();
         try {
@@ -47,12 +51,14 @@ export const feeStructureService = {
             if (structureRows.length === 0) throw new Error("Fee structure not found");
             if (structureRows[0].status !== 'DRAFT') throw new Error("Cannot modify non-DRAFT fee structure");
 
-            const newComponent = { name, amount };
+            // Neon Postgres requires pgcrypto for uuid generation natively in PG13+, but we just generate it here in Node for simplicity
+            const newComponentId = randomUUID();
+            const newComponent = { id: newComponentId, name, amount, mandatory };
             const { rows } = await client.query(`
                 UPDATE fee_structures
                 SET components = components || $1::jsonb
                 WHERE id = $2
-                RETURNING id, class_id as "classId", academic_session_id as "academicSessionId", status, components
+                RETURNING id, class_id as "classId", academic_session_id as "academicSessionId", status, components, created_at as "createdAt"
             `, [JSON.stringify(newComponent), id]);
 
             await client.query('COMMIT');
@@ -66,8 +72,6 @@ export const feeStructureService = {
     },
 
     async removeComponent(id: string, componentId: string): Promise<FeeStructure> {
-        // Here componentId is the component name for simplicity, based on existing structure unless it has an id.
-        // Assuming componentId = name to match the specification (frontend uses component name or id, let's look at it if needed).
         const pool = getPool();
         const client = await pool.connect();
         try {
@@ -80,29 +84,19 @@ export const feeStructureService = {
             if (structureRows.length === 0) throw new Error("Fee structure not found");
             if (structureRows[0].status !== 'DRAFT') throw new Error("Cannot modify non-DRAFT fee structure");
 
-            // Remove component by name (or id if they have ids)
+            // Remove component by id
             const { rows } = await client.query(`
                 UPDATE fee_structures
-                SET components = (
-                    SELECT jsonb_agg(comp) 
-                    FROM jsonb_array_elements(components) AS comp 
-                    WHERE comp->>'name' != $1
+                SET components = COALESCE(
+                    (
+                        SELECT jsonb_agg(comp) 
+                        FROM jsonb_array_elements(components) AS comp 
+                        WHERE comp->>'id' != $1
+                    ), '[]'::jsonb
                 )
                 WHERE id = $2
-                RETURNING id, class_id as "classId", academic_session_id as "academicSessionId", status, components
+                RETURNING id, class_id as "classId", academic_session_id as "academicSessionId", status, components, created_at as "createdAt"
             `, [componentId, id]);
-
-            // Handle case where components array becomes null if all are removed
-            if (rows.length > 0 && !rows[0].components) {
-                const { rows: fixedRows } = await client.query(`
-                    UPDATE fee_structures
-                    SET components = '[]'::jsonb
-                    WHERE id = $1
-                    RETURNING id, class_id as "classId", academic_session_id as "academicSessionId", status, components
-                `, [id]);
-                await client.query('COMMIT');
-                return fixedRows[0];
-            }
 
             await client.query('COMMIT');
             return rows[0];

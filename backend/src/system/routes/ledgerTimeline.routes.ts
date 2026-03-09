@@ -16,7 +16,8 @@ router.get(
     requireRole("ADMIN"),
     async (req, res, next) => {
         try {
-            const report = await buildLedgerTimeline(req.params.ledgerId);
+            const ledgerId = req.params.ledgerId as string;
+            const report = await buildLedgerTimeline(ledgerId);
             res.json(report);
         } catch (err) {
             next(err);

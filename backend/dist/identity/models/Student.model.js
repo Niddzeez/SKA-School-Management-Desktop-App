@@ -35,25 +35,32 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Student = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
+/**
+ * Student identity model — stored in MongoDB (identity subsystem).
+ *
+ * IMPORTANT: This model must never contain financial data.
+ * discountFeePercent has been removed — fee discounts are LedgerAdjustments
+ * in PostgreSQL (SYSTEM_RULES.md: financial data stored only in PostgreSQL).
+ */
 const ParentInfoSchema = new mongoose_1.Schema({
-    name: { type: String, required: true },
-    occupation: String,
-    education: String,
-    phone: String,
-    aadhaar: String,
-    income: Number,
+    name: { type: String },
+    occupation: { type: String },
+    education: { type: String },
+    phone: { type: String },
+    aadhaar: { type: String },
+    income: { type: Number },
 }, { _id: false });
 const AddressSchema = new mongoose_1.Schema({
-    addressLine: String,
-    city: String,
-    state: String,
-    pinCode: String,
+    addressLine: { type: String },
+    city: { type: String },
+    state: { type: String },
+    pinCode: { type: String },
 }, { _id: false });
 const AcademicInfoSchema = new mongoose_1.Schema({
-    dateOfAdmission: Date,
-    discountFeePercent: Number,
-    previousSchool: String,
-    rollNumber: String,
+    dateOfAdmission: { type: Date },
+    // discountFeePercent intentionally removed — belongs in PostgreSQL as a LedgerAdjustment
+    previousSchool: { type: String },
+    rollNumber: { type: String },
 }, { _id: false });
 const StudentSchema = new mongoose_1.Schema({
     firstName: { type: String, required: true },
@@ -64,22 +71,22 @@ const StudentSchema = new mongoose_1.Schema({
         required: true,
     },
     dateOfBirth: { type: Date, required: true },
-    classID: String,
-    sectionID: String,
-    email: String,
-    aadhaarNumber: String,
+    classID: { type: String },
+    sectionID: { type: String },
+    email: { type: String },
+    aadhaarNumber: { type: String },
     phoneNumber: { type: String, required: true },
     nationality: { type: String, required: true },
-    religion: String,
-    caste: String,
-    category: String,
-    minorityStatus: String,
-    disabilityStatus: String,
-    medicalConditions: String,
-    bloodGroup: String,
-    emergencyContact: String,
-    guardianName: String,
-    transportationNeeds: String,
+    religion: { type: String },
+    caste: { type: String },
+    category: { type: String },
+    minorityStatus: { type: String },
+    disabilityStatus: { type: String },
+    medicalConditions: { type: String },
+    bloodGroup: { type: String },
+    emergencyContact: { type: String },
+    guardianName: { type: String },
+    transportationNeeds: { type: String },
     status: {
         type: String,
         enum: [
@@ -92,12 +99,12 @@ const StudentSchema = new mongoose_1.Schema({
         ],
         default: "Active",
     },
-    address: { type: AddressSchema, required: true },
-    father: { type: ParentInfoSchema, required: true },
-    mother: { type: ParentInfoSchema, required: true },
-    academic: { type: AcademicInfoSchema, required: true },
-    totalSiblings: Number,
-    pictureUrl: String,
+    address: { type: AddressSchema, required: false },
+    father: { type: ParentInfoSchema, required: false },
+    mother: { type: ParentInfoSchema, required: false },
+    academic: { type: AcademicInfoSchema, required: false },
+    totalSiblings: { type: Number },
+    pictureUrl: { type: String },
 }, { timestamps: true });
 exports.Student = mongoose_1.default.model("Student", StudentSchema);
 //# sourceMappingURL=Student.model.js.map

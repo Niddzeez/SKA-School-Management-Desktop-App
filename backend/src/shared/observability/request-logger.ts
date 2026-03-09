@@ -13,8 +13,8 @@ export function requestLoggerMiddleware(req: Request, res: Response, next: NextF
 
         // Extract userId if the requireAuth middleware was applied
         let userId: string | undefined;
-        if (req.user && req.user.id) {
-            userId = req.user.id;
+        if (req.user && req.user.userId) {
+            userId = req.user.userId;
         }
 
         logger.info(`HTTP ${req.method} ${req.originalUrl}`, {

@@ -2,21 +2,39 @@ import { useFeeLedger } from "../../context/FeeLedgerContext";
 import { useClasses } from "../../context/ClassContext";
 import { useAcademicYear } from "../../context/AcademicYearContext";
 import "../../styles/classFeeSummary.css";
+import { useState, useEffect } from "react";
+import type { LedgerSummary } from "../../context/FeeLedgerContext";
 
 function ClassFeeSummary() {
   const { ledgers, getLedgerSummary } = useFeeLedger();
   const { classes } = useClasses();
-  const { academicYear, availableYears } = useAcademicYear();
+  const { academicYears, activeYear } = useAcademicYear();
+  const [ledgerSummaries, setLedgerSummaries] = useState<Record<string, LedgerSummary>>({});
 
   /* =========================
      Build summary per class
   ========================= */
 
+  useEffect(() => {
+    const loadSummaries = async () => {
+      const map: Record<string, LedgerSummary> = {};
+
+      for (const ledger of ledgers) {
+        const s = await getLedgerSummary(ledger.id);
+        if (s) map[ledger.id] = s;
+      }
+
+      setLedgerSummaries(map);
+    };
+
+    loadSummaries();
+  }, [ledgers]);
+
   const summary = classes.map((cls) => {
     const classLedgers = ledgers.filter(
       (l) =>
         l.classId === cls.id &&
-        l.academicYear === academicYear
+        l.academicSessionId === activeYear?.id
     );
 
     let totalFee = 0;
@@ -24,12 +42,13 @@ function ClassFeeSummary() {
     let pending = 0;
 
     classLedgers.forEach((ledger) => {
-      const s = getLedgerSummary(ledger.id);
+      const s = ledgerSummaries[ledger.id];
+      if (!s) return;
+
       totalFee += s.finalFee;
       collected += s.paidTotal;
       pending += s.pending;
     });
-
     return {
       classId: cls.id,
       className: cls.ClassName,
@@ -50,6 +69,12 @@ function ClassFeeSummary() {
     { totalFee: 0, collected: 0, pending: 0 }
   );
 
+  /* =========================
+   Load Ledger Summaries
+========================= */
+
+
+
   return (
     <div className="page-container">
       <h1>Class-wise Fee Summary</h1>
@@ -62,10 +87,10 @@ function ClassFeeSummary() {
 
       {/* Academic Year */}
       <div className="form-row">
-        <select value={academicYear} disabled>
-          {availableYears.map((y) => (
-            <option key={y} value={y}>
-              {y}
+        <select value={activeYear?.id} disabled>
+          {academicYears?.map((y) => (
+            <option key={y.id} value={y.id}>
+              {y.name}
             </option>
           ))}
         </select>
