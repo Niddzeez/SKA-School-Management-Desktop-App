@@ -1,25 +1,151 @@
-/* src/pages/Reports/ReportsPage.css */
+/* ================================
+   REPORTS PAGE
+================================ */
 
 .reports-page {
-  padding: 24px;
+  padding: 28px 32px;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  background: #f4f7fe;
+  min-height: 100vh;
 }
 
-.reports-page h2 {
-  margin-bottom: 16px;
-}
-
-.reports-filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  padding: 16px;
-  border: 1px solid #ddd;
-  background: #fafafa;
+/* ── Page header ── */
+.reports-page-header {
   margin-bottom: 20px;
 }
 
+.reports-page-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #0f1c2e;
+  letter-spacing: -0.3px;
+  margin: 0 0 4px;
+}
+
+.reports-page-sub {
+  font-size: 13px;
+  color: #8e9ab5;
+  margin: 0;
+}
+
+/* ================================
+   OUTER CARD SHELL
+   All sections sit inside one
+   connected card (header → filters
+   → badges → kpis → table)
+================================ */
+
+.reports-card {
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(15, 28, 46, 0.1);
+}
+
+/* ── Gradient header ── */
+.reports-card-header {
+  background: linear-gradient(135deg, #0984e3 0%, #6c5ce7 100%);
+  padding: 22px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+
+.reports-card-header::before {
+  content: '';
+  position: absolute;
+  right: -30px;
+  top: -30px;
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  pointer-events: none;
+}
+
+.reports-card-header::after {
+  content: '';
+  position: absolute;
+  right: 60px;
+  bottom: -40px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.07);
+  pointer-events: none;
+}
+
+.reports-header-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: white;
+  letter-spacing: -0.3px;
+  position: relative;
+  z-index: 1;
+}
+
+.reports-header-sub {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 3px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Filter bar ── */
+.reports-filters {
+  background: white;
+  padding: 16px 28px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  border-left: 1.5px solid #e8edf5;
+  border-right: 1.5px solid #e8edf5;
+  border-bottom: 1.5px solid #e8edf5;
+}
+
+/* ── Active filter badge bar ── */
+.reports-meta-bar {
+  background: white;
+  padding: 10px 28px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-left: 1.5px solid #e8edf5;
+  border-right: 1.5px solid #e8edf5;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.reports-meta-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #8e9ab5;
+  margin-right: 2px;
+}
+
+.reports-meta-dot {
+  color: #cbd5e1;
+  font-size: 12px;
+}
+
+.reports-meta-badge {
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.reports-meta-badge.category { background: #fef3f2; color: #c0392b; }
+.reports-meta-badge.granularity { background: #eff6ff; color: #1d4ed8; }
+.reports-meta-badge.year { background: #e8fdf5; color: #00845a; }
+
+/* ── Output area (report components render here) ── */
 .reports-output {
-  padding: 16px;
-  border: 1px solid #ddd;
-  background: #fff;
+  background: white;
+  border-left: 1.5px solid #e8edf5;
+  border-right: 1.5px solid #e8edf5;
+  border-bottom: 1.5px solid #e8edf5;
+  border-radius: 0 0 20px 20px;
 }

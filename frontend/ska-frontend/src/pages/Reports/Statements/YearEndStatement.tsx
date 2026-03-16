@@ -38,17 +38,10 @@ function YearEndStatement() {
      Totals
   ========================= */
 
-  const totalIncome = yearlyIncome.reduce(
-    (sum, p) => sum + p.amount,
-    0
-  );
-
-  const totalExpense = yearlyExpenses.reduce(
-    (sum, e) => sum + e.amount,
-    0
-  );
-
-  const netResult = totalIncome - totalExpense;
+  const totalIncome  = yearlyIncome.reduce((sum, p) => sum + p.amount, 0);
+  const totalExpense = yearlyExpenses.reduce((sum, e) => sum + e.amount, 0);
+  const netResult    = totalIncome - totalExpense;
+  const isDeficit    = netResult < 0;
 
   /* =========================
      Monthly Snapshot
@@ -56,24 +49,14 @@ function YearEndStatement() {
 
   const monthlySnapshot = Array.from({ length: 12 }).map((_, i) => {
     const monthStart = new Date(start.getFullYear(), start.getMonth() + i, 1);
-    const monthEnd = new Date(
-      start.getFullYear(),
-      start.getMonth() + i + 1,
-      0
-    );
+    const monthEnd   = new Date(start.getFullYear(), start.getMonth() + i + 1, 0);
 
     const income = yearlyIncome
-      .filter((p) => {
-        const d = new Date(p.createdAt);
-        return d >= monthStart && d <= monthEnd;
-      })
+      .filter((p) => { const d = new Date(p.createdAt); return d >= monthStart && d <= monthEnd; })
       .reduce((sum, p) => sum + p.amount, 0);
 
     const expense = yearlyExpenses
-      .filter((e) => {
-        const d = new Date(e.expenseDate);
-        return d >= monthStart && d <= monthEnd;
-      })
+      .filter((e) => { const d = new Date(e.expenseDate); return d >= monthStart && d <= monthEnd; })
       .reduce((sum, e) => sum + e.amount, 0);
 
     return {
@@ -100,39 +83,23 @@ function YearEndStatement() {
       {
         title: "Income Summary",
         headers: ["Metric", "Amount"],
-        rows: [
-          { columns: ["Total Income", `₹${totalIncome}`] },
-        ],
+        rows: [{ columns: ["Total Income", `₹${totalIncome}`] }],
       },
       {
         title: "Expense Summary",
         headers: ["Metric", "Amount"],
-        rows: [
-          { columns: ["Total Expense", `₹${totalExpense}`] },
-        ],
+        rows: [{ columns: ["Total Expense", `₹${totalExpense}`] }],
       },
       {
         title: "Net Result",
         headers: ["Metric", "Amount"],
-        rows: [
-          {
-            columns: [
-              netResult >= 0 ? "Net Surplus" : "Net Deficit",
-              `₹${netResult}`,
-            ],
-          },
-        ],
+        rows: [{ columns: [isDeficit ? "Net Deficit" : "Net Surplus", `₹${netResult}`] }],
       },
       {
         title: "Monthly Snapshot",
         headers: ["Month", "Income", "Expense", "Net"],
         rows: monthlySnapshot.map((m) => ({
-          columns: [
-            m.month,
-            `₹${m.income}`,
-            `₹${m.expense}`,
-            `₹${m.net}`,
-          ],
+          columns: [m.month, `₹${m.income}`, `₹${m.expense}`, `₹${m.net}`],
         })),
       },
     ],
@@ -144,9 +111,10 @@ function YearEndStatement() {
 
   return (
     <div className="statement-card">
+
+      {/* Hidden header — used only for print */}
       <div className="statement-header">
         <h2>Year-End Financial Statement</h2>
-
         <div className="year-selector">
           <label>Academic Year:</label>
           <select
@@ -154,35 +122,47 @@ function YearEndStatement() {
             onChange={(e) => setAcademicYear(e.target.value)}
           >
             {availableYears.map((yr) => (
-              <option key={yr} value={yr}>
-                {yr}
-              </option>
+              <option key={yr} value={yr}>{yr}</option>
             ))}
           </select>
-
           {isYearClosed(academicYear) && (
-            <span className="closed-year-badge">
-              Closed Year
-            </span>
+            <span className="closed-year-badge">Closed Year</span>
           )}
         </div>
       </div>
 
-      <div className="summary-block">
-        <p>
-          <strong>Total Income:</strong> ₹{totalIncome}
-        </p>
-        <p>
-          <strong>Total Expense:</strong> ₹{totalExpense}
-        </p>
-        <p>
-          <strong>
-            {netResult >= 0 ? "Net Surplus" : "Net Deficit"}:
-          </strong>{" "}
-          ₹{netResult}
-        </p>
+      {/* ── KPI Cards ── */}
+      <div className="statement-kpi-row">
+
+        <div className="statement-kpi income">
+          <div className="statement-kpi-icon">💰</div>
+          <div className="statement-kpi-label">Total Income</div>
+          <div className="statement-kpi-value">₹{totalIncome.toLocaleString("en-IN")}</div>
+          <div className="statement-kpi-sub">Academic Year {academicYear}</div>
+        </div>
+
+        <div className="statement-kpi expense">
+          <div className="statement-kpi-icon">💸</div>
+          <div className="statement-kpi-label">Total Expense</div>
+          <div className="statement-kpi-value">₹{totalExpense.toLocaleString("en-IN")}</div>
+          <div className="statement-kpi-sub">Academic Year {academicYear}</div>
+        </div>
+
+        <div className="statement-kpi net">
+          <div className="statement-kpi-icon">⚖️</div>
+          <div className="statement-kpi-label">
+            {isDeficit ? "Net Deficit" : "Net Surplus"}
+          </div>
+          <div className="statement-kpi-value">₹{netResult.toLocaleString("en-IN")}</div>
+          <div className="statement-kpi-sub">Income − Expense</div>
+          {isYearClosed(academicYear) && (
+            <span className="closed-year-badge">Closed Year</span>
+          )}
+        </div>
+
       </div>
 
+      {/* ── Monthly table ── */}
       <table className="report-table">
         <thead>
           <tr>
@@ -196,20 +176,21 @@ function YearEndStatement() {
           {monthlySnapshot.map((m) => (
             <tr key={m.month}>
               <td>{m.month}</td>
-              <td>₹{m.income}</td>
-              <td>₹{m.expense}</td>
-              <td>₹{m.net}</td>
+              <td>₹{m.income.toLocaleString("en-IN")}</td>
+              <td>₹{m.expense.toLocaleString("en-IN")}</td>
+              <td>₹{m.net.toLocaleString("en-IN")}</td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      <button
-        className="print-btn"
-        onClick={() => printReport(printData)}
-      >
-        Print / Save Statement
-      </button>
+      {/* ── Print button ── */}
+      <div className="statement-footer">
+        <button className="print-btn" onClick={() => printReport(printData)}>
+          🖨 Print / Save Statement
+        </button>
+      </div>
+
     </div>
   );
 }

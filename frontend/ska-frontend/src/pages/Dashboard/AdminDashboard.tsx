@@ -1,72 +1,33 @@
+import React from "react";
 import DashboardKPIs from "./DashboardKPI";
-import { exportBackup, importBackup } from "../../utils/Backup";
 import { useAuth } from "../../context/AuthContext";
 import "./dashboard.css";
-import {can} from "../../auth/permissions"
+import { can } from "../../auth/permissions";
 import { Navigate } from "react-router-dom";
 
-function AdminDashboard() {
-    const {role} = useAuth();
+function AdminDashboard(): React.ReactElement {
+  const { role } = useAuth();
 
-    if(!can(role, "VIEW_REPORTS"))
-    {
-        return <Navigate to="/dashboard" replace />
-    }
+  if (!role || !can(role, "VIEW_REPORTS")) {
+    return <Navigate to="/dashboard" replace />;
+  }
 
-    const handleImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
+  return (
+    <div className="dashboard-page">
 
-        try {
-            await importBackup(file);
-            alert("Backup restored successfully. Reloading…");
-            window.location.reload();
-        } catch {
-            alert("Invalid backup file.");
-        }
-    };
-
-
-    return (
-        <div className="dashboard-page">
-            {/* =========================
-          Header
-      ========================= */}
-            <div className="dashboard-header">
-                <h1>Dashboard</h1>
-
-                
-            </div>
-
-            {/* =========================
-          KPI Section
-      ========================= */}
-            <DashboardKPIs />
-
-            {/* =========================
-          Future Sections (placeholder)
-          Intentionally empty for now
-      ========================= */}
-            {/*
-        <div className="dashboard-section">
-          Charts / Pending Fees / Trends
+      {/* ── Header ── */}
+      <div className="dashboard-header">
+        <div>
+          <h1>Dashboard</h1>
+          <p className="dashboard-subtitle">Welcome back — here's your financial overview</p>
         </div>
-      */}
+      </div>
 
+      {/* ── KPI Section ── */}
+      <DashboardKPIs />
 
-            <div>
-                <button onClick={exportBackup}>
-                    Export Full Backup
-                </button>
-
-                <input
-                    type="file"
-                    accept="application/json"
-                    onChange={handleImport}
-                />
-            </div>
-        </div>
-    );
+    </div>
+  );
 }
 
 export default AdminDashboard;

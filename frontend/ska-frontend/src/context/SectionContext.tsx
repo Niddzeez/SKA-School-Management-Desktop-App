@@ -1,10 +1,11 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext } from "react";
 import type { Section } from "../types/Section";
 import { usePersistentState } from "../hooks/UsePersistentState";
 
 type SectionContextType = {
   sections: Section[];
   addSection: (section: Section) => void;
+  deleteSection: (sectionId: string) => void;
   assignClassTeacher: (sectionId: string, teacherId: string) => void;
 };
 
@@ -17,8 +18,11 @@ export function SectionProvider({ children }: { children: React.ReactNode }) {
     setSections((prev) => [...prev, section]);
   };
 
+  const deleteSection = (sectionId: string) => {
+    setSections((prev) => prev.filter((s) => s.id !== sectionId));
+  };
+
   const assignClassTeacher = (sectionId: string, teacherId: string) => {
-    console.log("Assigning teacher", sectionId, teacherId);
     setSections((prev) =>
       prev.map((section) =>
         section.id === sectionId
@@ -30,7 +34,7 @@ export function SectionProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <SectionContext.Provider
-      value={{ sections, addSection, assignClassTeacher }}
+      value={{ sections, addSection, deleteSection, assignClassTeacher }}
     >
       {children}
     </SectionContext.Provider>
