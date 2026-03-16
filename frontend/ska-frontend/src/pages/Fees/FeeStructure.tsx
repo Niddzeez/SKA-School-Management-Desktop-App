@@ -1,8 +1,9 @@
-import { use, useState } from "react";
+import { useState } from "react";
 import { useClasses } from "../../context/ClassContext";
 import { useFeeStructures } from "../../context/FeeStructureContext";
 import { useAuth } from "../../context/AuthContext";
-import {can} from "../../auth/permissions"
+import { can } from "../../auth/permissions"
+import { useAcademicYear } from "../../context/AcademicYearContext";
 
 type ComponentDraft = {
   name: string;
@@ -21,8 +22,11 @@ function FeeStructures() {
   } = useFeeStructures();
 
   const [selectedClass, setSelectedClass] = useState("");
-  const [academicYear, setAcademicYear] = useState("");
-  const {role} = useAuth();
+  const [selectedAcademicSessionId, setAcademicSessionId] = useState("");
+  const { role } = useAuth();
+
+  const { academicYears } = useAcademicYear();
+  
 
   /**
    * Component drafts keyed by feeStructureId
@@ -34,8 +38,8 @@ function FeeStructures() {
 
   const classFeeStructures = feeStructures.filter(
     (fs) =>
-      fs.classID === selectedClass &&
-      fs.academicYear === academicYear
+      fs.classId === selectedClass &&
+      fs.academicSessionId === selectedAcademicSessionId
   );
 
   const getDraft = (fsId: string): ComponentDraft =>
@@ -70,19 +74,19 @@ function FeeStructures() {
   };
 
   const handleActivate = (feeStructureId: string) => {
-  if (!role || !can(role, "VIEW_REPORTS")) {
-    alert("You do not have permission to activate fee structures.");
-    return;
-  }
+    if (!role || !can(role, "VIEW_REPORTS")) {
+      alert("You do not have permission to activate fee structures.");
+      return;
+    }
 
-  const confirmed = window.confirm(
-    "Activating this fee structure will affect all new ledgers.\n\nDo you want to continue?"
-  );
+    const confirmed = window.confirm(
+      "Activating this fee structure will affect all new ledgers.\n\nDo you want to continue?"
+    );
 
-  if (!confirmed) return;
+    if (!confirmed) return;
 
-  activateFeeStructure(feeStructureId);
-};
+    activateFeeStructure(feeStructureId);
+  };
 
 
   return (
@@ -103,17 +107,25 @@ function FeeStructures() {
           ))}
         </select>
 
-        <input
-          type="text"
-          placeholder="Academic Year (e.g. 2025-26)"
-          value={academicYear}
-          onChange={(e) => setAcademicYear(e.target.value)}
-        />
+        <label>Academic Session </label>
+
+        <select
+          value={selectedAcademicSessionId}
+          onChange={(e) => setAcademicSessionId(e.target.value)}
+        >
+          <option value="">Select Academic Session</option>
+
+          {academicYears.map((year: {id : string; name: string}) => (
+            <option key={year.id} value={year.id}>
+              {year.name}
+            </option>
+          ))}
+        </select>
 
         <button
-          disabled={!selectedClass || !academicYear}
+          disabled={!selectedClass || !selectedAcademicSessionId}
           onClick={() =>
-            createFeeStructure(selectedClass, academicYear)
+            createFeeStructure(selectedClass, selectedAcademicSessionId)
           }
         >
           Create Draft
@@ -208,7 +220,6 @@ function FeeStructures() {
                   disabled={!draft.name || !draft.amount}
                   onClick={() => {
                     addFeeComponent(fs.id, {
-                      id: crypto.randomUUID(),
                       name: draft.name,
                       amount: Number(draft.amount),
                       mandatory: draft.mandatory,

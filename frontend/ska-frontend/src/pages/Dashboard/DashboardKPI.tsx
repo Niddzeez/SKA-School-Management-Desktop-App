@@ -93,10 +93,10 @@ function DashboardKPIs() {
                         <span className="kpi-sub">Academic Year {activeYear?.name}</span>
                     </div>
 
-                    <div className="kpi-card warning cursor-pointer" onClick={() => navigate("/dashboard/pending-fees")}>
-                        <h4>Total Adjustments</h4>
-                        <p className="kpi-value">₹{overview.totalAdjustments}</p>
-                        <span className="kpi-sub">Concessions / Waivers / Additions</span>
+                    <div className="kpi-card warning cursor-pointer" onClick={() => navigate("/dashboard/admin/pending-fees")}>
+                        <h4>Pending Fees Students</h4>
+                        <p className="kpi-value">{overview.totalStudents}</p>
+                        <span className="kpi-sub">Students with Pending Fees</span>
                     </div>
                 </div>
             </div>

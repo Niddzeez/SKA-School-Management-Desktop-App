@@ -1,7 +1,6 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, useCallback } from "react";
 import { useAcademicYear } from "./AcademicYearContext";
 import { apiClient } from "../services/apiClient";
-import { toBackendComponents, toFrontendComponents } from "../mappers/feeComponentMapper";
 
 import type { StudentFeeLedger } from "../types/StudentFeeLedger";
 import type { LedgerAdjustment } from "../types/LedgerAdjustments";
@@ -34,25 +33,26 @@ type FeeLedgerContextType = {
     studentId: string,
     classId: string,
     academicSessionId: string,
-    baseComponents: Record<string, { name: string; amount: number }>
+    baseComponents: { name: string; amount: number }[]
   ) => Promise<void>;
 
   upsertLedgerFromFeeStructure: (
     studentId: string,
     classId: string,
     academicSessionId: string,
-    baseComponents: Record<string, { name: string; amount: number }>
+    baseComponents: { name: string; amount: number }[]
   ) => Promise<void>;
 
   addAdjustment: (
     adjustment: Omit<LedgerAdjustment, "id" | "createdAt"> & {
-      type: "DISCOUNT" | "CONCESSION" | "WAIVER";
+      type: "DISCOUNT" | "CONCESSION" | "WAIVER" | "EXTRA" | "LATE_FEE";
+      approvedBy: string;
     }
   ) => Promise<void>;
 
   addPayment: (
     payment: Omit<Payment, "id" | "createdAt"> & {
-      mode: "CASH" | "UPI" | "BANK";
+      mode: "CASH" | "UPI" | "BANK" | "CHEQUE";
       collectedBy: string;
       reference?: string;
     }
@@ -120,9 +120,7 @@ export function FeeLedgerProvider({
       // Remap the arrays into the frontend dictionary model if the frontend relies on them strongly
       const mappedLedgers = ledgersData.map((l: StudentFeeLedger) => ({
         ...l,
-        baseComponents: Array.isArray(l.baseComponents)
-          ? toFrontendComponents(l.baseComponents) as any
-          : l.baseComponents
+        baseComponents: l.baseComponents
       }));
 
       setLedgers(mappedLedgers);
@@ -147,7 +145,7 @@ export function FeeLedgerProvider({
     studentId: string,
     classId: string,
     academicSessionId: string,
-    baseComponents: Record<string, { name: string; amount: number }>
+    baseComponents: { name: string; amount: number }[]
   ) => {
     try {
       setError(null);
@@ -155,13 +153,13 @@ export function FeeLedgerProvider({
         studentId,
         classId,
         academicSessionId,
-        baseComponents: toBackendComponents(baseComponents),
+        baseComponents,
       });
 
       // Maintain legacy interface shapes locally 
       const mappedLedger = {
         ...created,
-        baseComponents: toFrontendComponents(created.baseComponents) as any
+        baseComponents: created.baseComponents
       };
 
       setLedgers((prev) => [...prev, mappedLedger]);
@@ -176,46 +174,57 @@ export function FeeLedgerProvider({
     studentId: string,
     classId: string,
     academicSessionId: string,
-    baseComponents: Record<string, { name: string; amount: number }>
+    baseComponents: { name: string; amount: number }[]
   ) => {
     try {
       setError(null);
       if (!academicSessionId) return;
 
-      const results = await apiClient.get<StudentFeeLedger[]>(`/api/ledgers?studentId=${studentId}&year=${academicSessionId}`);
+      const results = await apiClient.get<StudentFeeLedger[]>(
+        `/api/ledgers?studentId=${studentId}&year=${academicSessionId}`
+      );
 
       if (results.length === 0) {
-        // No ledger exists, perform creation
-        await createLedger(studentId, classId, academicSessionId, baseComponents);
-      } else {
-        const existing = results[0];
 
-        // Safety constraint block: only PATCH if no payments are made
-        try {
-          const summary = await getLedgerSummary(existing.id);
-          if (summary.paidTotal === 0) {
-            // Let PATCH fail softly if not natively wired on API side yet
-            await apiClient.patch(`/api/ledgers/${existing.id}`, {
-              baseComponents: toBackendComponents(baseComponents)
-            });
+        // Create ledger
+        const created = await apiClient.post<StudentFeeLedger>("/api/ledgers", {
+          studentId,
+          classId,
+          academicSessionId,
+          baseComponents
+        });
 
-            setLedgers((prev) =>
-              prev.map((l) =>
-                l.id === existing.id
-                  ? {
-                    ...l,
-                    baseComponents: toFrontendComponents(
-                      toBackendComponents(baseComponents)
-                    ) as any,
-                  }
-                  : l
-              )
-            );
-          }
-        } catch (noop) {
-          // Skip softly 
-        }
+        // update context cache
+        setLedgers(prev => [...prev, created]);
+
+        return;
       }
+
+      const existing = results[0];
+
+      // ensure cache contains the ledger
+      setLedgers(prev => {
+        const exists = prev.some(l => l.id === existing.id);
+        return exists ? prev : [...prev, existing];
+      });
+
+      const summary = await getLedgerSummary(existing.id);
+
+      if (summary.paidTotal === 0) {
+
+        await apiClient.patch(`/api/ledgers/${existing.id}`, {
+          baseComponents
+        });
+
+        setLedgers(prev =>
+          prev.map(l =>
+            l.id === existing.id
+              ? { ...l, baseComponents }
+              : l
+          )
+        );
+      }
+
     } catch (err: any) {
       setError(err.message || "Failed to upsert ledger");
       throw err;
@@ -225,7 +234,8 @@ export function FeeLedgerProvider({
 
   const addAdjustment = async (
     adjustment: Omit<LedgerAdjustment, "id" | "createdAt"> & {
-      type: "DISCOUNT" | "CONCESSION" | "WAIVER";
+      type: "DISCOUNT" | "CONCESSION" | "WAIVER" | "EXTRA" | "LATE_FEE";
+      approvedBy: string;
     }
   ) => {
     try {
@@ -235,6 +245,15 @@ export function FeeLedgerProvider({
         adjustment
       );
       setAdjustments((prev) => [...prev, created]);
+      const updatedSummary = await getLedgerSummary(adjustment.ledgerId);
+
+      setLedgers(prev =>
+        prev.map(l =>
+          l.id === adjustment.ledgerId
+            ? { ...l, ...updatedSummary }
+            : l
+        )
+      );
     } catch (err: any) {
       setError(err.message || "Failed to add adjustment");
       throw err;
@@ -244,7 +263,7 @@ export function FeeLedgerProvider({
 
   const addPayment = async (
     payment: Omit<Payment, "id" | "createdAt"> & {
-      mode: "CASH" | "UPI" | "BANK";
+      mode: "CASH" | "UPI" | "BANK" | "CHEQUE";
       collectedBy: string;
       reference?: string;
     }
@@ -261,6 +280,16 @@ export function FeeLedgerProvider({
         }
       );
       setPayments((prev) => [...prev, created]);
+      // refresh ledger summary
+      const updatedSummary = await getLedgerSummary(payment.ledgerId);
+
+      setLedgers(prev =>
+        prev.map(l =>
+          l.id === payment.ledgerId
+            ? { ...l, ...updatedSummary }
+            : l
+        )
+      );
     } catch (err: any) {
       setError(err.message || "Failed to record payment");
       throw err;
@@ -286,7 +315,7 @@ export function FeeLedgerProvider({
      Read Calculations
   ========================= */
 
-  const getLedgerSummary = async (ledgerId: string): Promise<LedgerSummary> => {
+  const getLedgerSummary = useCallback(async (ledgerId: string): Promise<LedgerSummary> => {
     try {
       setError(null);
       return await apiClient.get<LedgerSummary>(`/api/ledgers/${ledgerId}/summary`);
@@ -294,35 +323,65 @@ export function FeeLedgerProvider({
       setError(err.message || "Failed to calculate summary");
       throw err;
     }
+  }, []
+  );
+
+  const loadLedgerHistory = async (ledgerId: string) => {
+    const [paymentsData, adjustmentsData] = await Promise.all([
+      apiClient.get<Payment[]>(`/api/ledgers/${ledgerId}/payments`),
+      apiClient.get<LedgerAdjustment[]>(`/api/ledgers/${ledgerId}/adjustments`)
+    ]);
+
+    setPayments(paymentsData);
+    setAdjustments(adjustmentsData);
   };
 
-  const getLedgerByStudentYear = async (
-    studentId: string,
-    academicSessionId: string
-  ): Promise<StudentFeeLedger | undefined> => {
-    try {
-      setError(null);
-      // 1. Search cached array 
-      const existing = ledgers.find((l) => l.studentId === studentId && l.academicSessionId === academicSessionId);
-      if (existing) return existing;
+  const getLedgerByStudentYear = useCallback(
+    async (
+      studentId: string,
+      academicSessionId: string
+    ): Promise<StudentFeeLedger | undefined> => {
+      try {
+        setError(null);
 
-      // 2. Fetch if un-cached
-      const results = await apiClient.get<StudentFeeLedger[]>(`/api/ledgers?studentId=${studentId}&year=${academicSessionId}`);
-      if (results.length > 0) {
-        const remote = results[0];
-        return {
-          ...remote,
-          baseComponents: Array.isArray(remote.baseComponents)
-            ? toFrontendComponents(remote.baseComponents) as any
-            : remote.baseComponents
-        };
+        // 1. Check cache
+        const existing = ledgers.find(
+          (l) =>
+            l.studentId === studentId &&
+            l.academicSessionId === academicSessionId
+        );
+
+        if (existing) {
+          await loadLedgerHistory(existing.id);
+          return existing;
+        }
+
+        // 2. Fetch ledger
+        const results = await apiClient.get<StudentFeeLedger[]>(
+          `/api/ledgers?studentId=${studentId}&year=${academicSessionId}`
+        );
+
+        if (results.length === 0) return undefined;
+
+        const ledger = results[0];
+
+        setLedgers(prev => {
+          const exists = prev.some(l => l.id === ledger.id);
+          if (exists) return prev;
+          return [...prev, ledger];
+        });
+
+        // 3. Load historical payments and adjustments
+        await loadLedgerHistory(ledger.id);
+
+        return ledger;
+
+      } catch (err: any) {
+        setError(err.message || "Failed to retrieve specific ledger");
+        throw err;
       }
-      return undefined;
-    } catch (err: any) {
-      setError(err.message || "Failed to retrieve specific ledger");
-      throw err;
-    }
-  };
+    }, [ledgers]
+  );
 
   /* =========================
      Compatibility Helpers

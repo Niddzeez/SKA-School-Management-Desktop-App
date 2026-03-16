@@ -1,19 +1,18 @@
-// src/pages/Reports/income/DailyIncomeReport.tsx
-
+import { useMemo } from "react";
 import { useFeeLedger } from "../../../context/FeeLedgerContext";
-import { getAcademicYearRange } from "../Utils/reportDateUtils";
-import "../../../components/print/report-print.css";
-import { printReport } from "../Utils/PrintUtils";
 import { useStudents } from "../../../context/StudentContext";
-
+import { getAcademicYearRange } from "../Utils/reportDateUtils";
+import { printReport } from "../Utils/PrintUtils";
+import "../../../components/print/report-print.css";
 
 type Props = {
     academicYear: string;
-    selectedDate: string | null; // yyyy-mm-dd
+    selectedDate: string | null;
 };
 
 function DailyIncomeReport({ academicYear, selectedDate }: Props) {
     const { payments } = useFeeLedger();
+    const { students } = useStudents();
 
     if (!selectedDate) {
         return <p>Please select a date.</p>;
@@ -21,13 +20,6 @@ function DailyIncomeReport({ academicYear, selectedDate }: Props) {
 
     const { start, end } = getAcademicYearRange(academicYear);
     const target = new Date(selectedDate);
-    const { students } = useStudents();
-
-    const getStudentName = (studentId: string) => {
-        const s = students.find((st) => st.id === studentId);
-        return s ? `${s.firstName} ${s.lastName}` : "Unknown";
-    };
-
 
     if (target < start || target > end) {
         return (
@@ -37,19 +29,48 @@ function DailyIncomeReport({ academicYear, selectedDate }: Props) {
         );
     }
 
-    const dailyIncome = payments.filter((p) => {
-        const d = new Date(p.createdAt);
-        return d.toDateString() === target.toDateString();
-    });
+    /* =========================
+       Student lookup map
+    ========================= */
+
+    const studentMap = useMemo(() => {
+        const map = new Map<string, string>();
+        students.forEach((s) =>
+            map.set(s.id, `${s.firstName} ${s.lastName}`)
+        );
+        return map;
+    }, [students]);
+
+    const getStudentName = (studentId: string) =>
+        studentMap.get(studentId) ?? "Unknown";
+
+    /* =========================
+       Daily Income Filter
+    ========================= */
+
+    const dailyIncome = useMemo(() => {
+        return payments.filter((p) => {
+            const d = new Date(p.createdAt);
+            return d.toDateString() === target.toDateString();
+        });
+    }, [payments, selectedDate]);
 
     if (dailyIncome.length === 0) {
         return <p>No income recorded on this date.</p>;
     }
 
+    /* =========================
+       Totals
+    ========================= */
+
     const totalIncome = dailyIncome.reduce(
         (sum, p) => sum + p.amount,
         0
     );
+
+    /* =========================
+       Print Structure
+    ========================= */
 
     const printData = {
         title: "Daily Income Report",
@@ -57,7 +78,7 @@ function DailyIncomeReport({ academicYear, selectedDate }: Props) {
             academicYear,
             reportType: "INCOME",
             granularity: "DAILY",
-            periodLabel: new Date(selectedDate).toLocaleDateString(),
+            periodLabel: target.toLocaleDateString(),
         },
         sections: [
             {
@@ -84,27 +105,32 @@ function DailyIncomeReport({ academicYear, selectedDate }: Props) {
         ],
     } as const;
 
-
-
+    /* =========================
+       Render
+    ========================= */
 
     return (
         <div className="report-card">
             <h3>
-                Daily Income Report —{" "}
-                {target.toLocaleDateString()}
+                Daily Income Report — {target.toLocaleDateString()}
             </h3>
 
             <table className="report-table">
                 <thead>
                     <tr>
+                        <th>Date</th>
+                        <th>Student</th>
                         <th>Mode</th>
                         <th>Collected By</th>
                         <th>Amount</th>
                     </tr>
                 </thead>
+
                 <tbody>
                     {dailyIncome.map((p) => (
                         <tr key={p.id}>
+                            <td>{new Date(p.createdAt).toLocaleDateString()}</td>
+                            <td>{getStudentName(p.studentId)}</td>
                             <td>{p.mode}</td>
                             <td>{p.collectedBy}</td>
                             <td className="amount">₹{p.amount}</td>
@@ -123,8 +149,6 @@ function DailyIncomeReport({ academicYear, selectedDate }: Props) {
             >
                 Print / Save as PDF
             </button>
-
-
         </div>
     );
 }

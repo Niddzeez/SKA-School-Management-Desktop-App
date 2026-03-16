@@ -1,6 +1,7 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import type { FeeStructure, FeeComponent } from "../types/ClassFeeStructure";
 import { apiClient } from "../services/apiClient";
+import { useAcademicYear } from "./AcademicYearContext";
 
 type FeeStructureContextType = {
   feeStructures: FeeStructure[];
@@ -33,15 +34,22 @@ export function FeeStructureProvider({
   const [feeStructures, setFeeStructures] = useState<FeeStructure[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const { activeYear } = useAcademicYear();
 
   /* -------------------------
      LOAD DATA
   ------------------------- */
   const loadFeeStructures = async () => {
+    if (!activeYear?.id) return;
+
     try {
-      setLoading(true);
+      if (feeStructures.length === 0) setLoading(true);
       setError(null);
-      const data = await apiClient.get<FeeStructure[]>("/api/fee-structures");
+
+      const data = await apiClient.get<FeeStructure[]>(
+        `/api/fee-structures?sessionId=${activeYear.id}`
+      );
+
       setFeeStructures(data);
     } catch (err: any) {
       setError(err.message || "Failed to load fee structures");
@@ -52,7 +60,7 @@ export function FeeStructureProvider({
 
   useEffect(() => {
     loadFeeStructures();
-  }, []);
+  }, [activeYear?.id]);
 
   /* -------------------------
      CREATE
@@ -89,20 +97,20 @@ export function FeeStructureProvider({
   /* -------------------------
      ACTIVE SELECTOR (Offline)
   ------------------------- */
-  const getActiveFeeStructure = (
-    classId: string,
-    academicSessionId: string
-  ): FeeStructure | undefined => {
-    return feeStructures.find(
-      (fs) =>
-        fs.classId === classId &&
-        fs.academicSessionId === academicSessionId &&
-        fs.status === "ACTIVE"
-    );
-  };
+  const getActiveFeeStructure = useCallback(
+    (classId: string, academicSessionId: string) => {
+      return feeStructures.find(
+        fs =>
+          fs.classId === classId &&
+          fs.academicSessionId === academicSessionId &&
+          fs.status === "ACTIVE"
+      );
+    },
+    [feeStructures]
+  );
 
   /* -------------------------
-     COMPONENTS
+     COMPOsNENTS
   ------------------------- */
   const addFeeComponent = async (
     feeStructureID: string,
@@ -117,16 +125,14 @@ export function FeeStructureProvider({
     }
 
     try {
-      const addedComponent = await apiClient.post<FeeComponent>(
+      const updated = await apiClient.post<FeeStructure>(
         `/api/fee-structures/${feeStructureID}/components`,
         component
       );
 
-      setFeeStructures((prev) =>
-        prev.map((fs) =>
-          fs.id === feeStructureID
-            ? { ...fs, components: [...fs.components, addedComponent] }
-            : fs
+      setFeeStructures(prev =>
+        prev.map(fs =>
+          fs.id === feeStructureID ? updated : fs
         )
       );
     } catch (err: any) {
@@ -149,6 +155,7 @@ export function FeeStructureProvider({
 
     try {
       await apiClient.delete(`/api/fee-structures/${feeStructureID}/components/${componentID}`);
+      await loadFeeStructures();
 
       setFeeStructures((prev) =>
         prev.map((fs) =>

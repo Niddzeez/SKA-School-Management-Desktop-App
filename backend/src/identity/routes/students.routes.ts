@@ -109,10 +109,47 @@ router.patch("/:id/assignment", requireRole("ADMIN"), async (req: Request, res: 
 // ---------------------------------------------------------------------------
 router.patch("/:id", requireRole("ADMIN"), async (req: Request, res: Response) => {
   try {
-    // Protect command-specific fields from being set via the generic update path
-    const { status, classID, sectionID, ...safeUpdates } = req.body;
+    // Allowed fields for update
+    const allowedFields = [
+      "firstName",
+      "lastName",
+      "gender",
+      "dateOfBirth",
+      "email",
+      "phoneNumber",
+      "nationality",
+      "address",
+      "father",
+      "mother",
+      "academic",
+      "status",
+      "classID",
+      "sectionID",
+      "aadhaarNumber",
+      "religion",
+      "caste",
+      "category",
+      "minorityStatus",
+      "disabilityStatus",
+      "medicalConditions",
+      "bloodGroup",
+      "emergencyContact",
+      "guardianName",
+      "transportationNeeds",
+      "totalSiblings",
+      "pictureUrl"
+    ];
 
-    if (status !== undefined || classID !== undefined || sectionID !== undefined) {
+    // Build safeUpdates using whitelist
+    const safeUpdates = allowedFields.reduce((acc: any, field) => {
+      if (req.body[field] !== undefined) {
+        acc[field] = req.body[field];
+      }
+      return acc;
+    }, {});
+
+    // Protect command-specific fields from being set via the generic update path
+    if (req.body.status !== undefined || req.body.classID !== undefined || req.body.sectionID !== undefined) {
       throw new ValidationError(
         "Use /status for status changes and /assignment for class/section changes"
       );

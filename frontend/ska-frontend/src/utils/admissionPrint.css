@@ -1,46 +1,41 @@
+/* =====================================================
+   BASE PRINT PAGE
+===================================================== */
+
 .print-page {
-  font-family: Arial, sans-serif;
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+  background: white;
   padding: 12px 14px;
+  font-family: Arial, sans-serif;
+  position: relative;
 }
 
-/* ================= HEADER ================= */
 
-/* LOGO PLACEHOLDER — smaller */
-.logo-box {
-  width: 70px;
-  height: 70px;
-  font-size: 9px;
-}
-
-/* PHOTO PLACEHOLDER — passport size */
-.photo-box {
-  width: 90px;
-  height: 110px;
-  border: 1px dashed #444;
-  font-size: 9px;
-  margin-bottom: 4px;
-}
+/* =====================================================
+   HEADER
+===================================================== */
 
 .print-header {
   display: flex;
   justify-content: space-between;
-  align-items: center; /* key change */
-  margin-bottom: 3px;
+  align-items: center;
+  margin-bottom: 6px;
 }
 
 .header-left {
   display: flex;
   align-items: center;
-  gap: 10px;   /* was larger earlier */
+  gap: 10px;
 }
 
-
 .header-right {
-  text-align: right;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 4px;
+  text-align: right;
 }
 
 .school-text h1 {
@@ -54,18 +49,105 @@
   font-size: 12px;
 }
 
+.letterhead {
+  font-size: 10.5px;
+  color: #666;
+}
+
+
+/* =====================================================
+   LOGO + PHOTO
+===================================================== */
+
+.logo-box {
+  width: 90px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.photo-box {
+  width: 90px;
+  height: 110px;
+  border: 1px dashed #444;
+  font-size: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.academic-year {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+
+/* =====================================================
+   CARDS / SECTIONS
+===================================================== */
+
 .card {
   border: 1px solid #ccc;
-  padding: 5px 6px;
-  margin-top: 5px;
+  padding: 10px 12px;
+  margin-top: 8px;
   page-break-inside: avoid;
 }
 
-.row {
-  margin-bottom: 6px;
+.card.compact {
+  padding: 12px 14px;
 }
 
-/* ================= PARENTS ================= */
+.card h3 {
+  margin-bottom: 6px;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+
+/* =====================================================
+   GRID LAYOUTS
+===================================================== */
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 180px 1fr 180px 1fr;
+  column-gap: 12px;
+  row-gap: 6px;
+  font-size: 14px;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 16px;
+  row-gap: 6px;
+  font-size: 13.5px;
+}
+
+.details-grid .span-2 {
+  grid-column: span 2;
+}
+
+.details-grid .span-3 {
+  grid-column: span 3;
+}
+
+.address-line {
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+
+/* =====================================================
+   PARENTS SECTION
+===================================================== */
 
 .parents-horizontal {
   display: flex;
@@ -79,7 +161,9 @@
 }
 
 
-/* ================= SIGNATURES ================= */
+/* =====================================================
+   SIGNATURES
+===================================================== */
 
 .signatures {
   margin-top: 28px;
@@ -97,155 +181,102 @@
   justify-content: center;
 }
 
-/* ================= PRINT RULES ================= */
+
+/* =====================================================
+   HORIZONTAL RULE
+===================================================== */
+
+hr {
+  margin: 6px 0 10px 0;
+}
+
+
+/* =====================================================
+   PRINT SETTINGS
+===================================================== */
 
 @page {
   size: A4;
   margin: 12mm;
 }
 
-@media print {
-  body {
-    margin: 0;
-  }
-}
 
-.details-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px 16px;
-  font-size: 14px;
-}
-
-.details-grid .span-2 {
-  grid-column: span 2;
-}
-
-.details-grid .span-3 {
-  grid-column: span 3;
-}
+/* =====================================================
+   PRINT MODE
+===================================================== */
 
 @media print {
-  .print-controls,
-  .app-layout,
+
+  /* remove dashboard UI */
   .sidebar,
-  .navbar {
+  .navbar,
+  .print-controls {
     display: none !important;
   }
-}
 
-.academic-year {
-  font-size: 12px;
-  font-weight: bold;
-}
+  /* keep layout container alive */
+  .app-layout {
+    display: block !important;
+  }
 
-
-hr {
-  margin: 6px 0 10px 0;
-}
-
-/* Compact card variant */
-.card.compact {
-  padding: 12px 14px;
-}
-
-/* Form-style grid */
-.form-grid {
-  display: grid;
-  grid-template-columns: 180px 1fr 180px 1fr;
-  row-gap: 6px;
-  column-gap: 12px;
-  font-size: 14px;
-}
-
-
-.card h3 {
-  margin-bottom: 6px;
-  font-size: 15px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.address-line {
-  font-size: 14px;
-  line-height: 1.4;
-}
-
-.details-grid {
-  grid-template-columns: repeat(3, 1fr);
-  row-gap: 6px;
-  column-gap: 16px;
-  font-size: 13.5px;
-}
-
-
-
-/* Logo container */
-.logo-box {
-  width: 90px;        /* narrow */
-  height: 70px;       /* controlled height */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Actual logo */
-.logo-img {
-  max-height: 100%;
-  max-width: 100%;
-  object-fit: contain;
-  opacity: 0.95;      /* softens visual weight */
-}
-.logo-img {
-  filter: grayscale(10%);
-}
-
-.letterhead {
-  margin-top: 2px;
-  font-size: 10.5px;
-  color: #666;
-  letter-spacing: 0.3px;
-}
-
-.contact-line {
-  margin-top: 2px;
-  font-size: 10.5px;
-  color: #777;
-}
-
-
-
-.watermark-container {
-  position: relative;
-}
-
-.watermark {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  width: 320px;                 /* smaller = faster */
-  height: auto;
-  transform: translate(-50%, -50%);
-  opacity: 0.02;                /* lighter = cheaper */
-  z-index: -1;
-  pointer-events: none;
-
-  /* performance hints */
-  will-change: transform;
-  contain: paint;
-}
-
-
-@media print {
   body {
+    margin: 0;
+    background: white;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
+
+}
+
+@media print {
+
+  body * {
+    visibility: hidden;
+  }
+
+  .print-page,
+  .print-page * {
+    visibility: visible;
+  }
+
+  .print-page {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+
 }
 
 
-.logo-svg {
-  width: 100%;
-  height: 100%;
-}
+@media print {
 
+  /* Hide the dashboard UI */
+  .sidebar,
+  .navbar,
+  .print-controls {
+    display: none !important;
+  }
+
+  /* Ensure the main layout stays visible */
+  .app-layout,
+  .content,
+  main {
+    display: block !important;
+  }
+
+  /* Ensure print page is rendered */
+  .print-page {
+    display: block !important;
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    background: white;
+  }
+
+  body {
+    margin: 0;
+    background: white;
+  }
+
+}

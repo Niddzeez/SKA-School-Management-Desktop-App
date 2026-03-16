@@ -11,18 +11,7 @@ export type AcademicYear = {
   startDate: string;
   endDate: string;
   isClosed: boolean;
-};
-
-// Legacy references (if still needed externally for UI, though logic moved to backend)
-type PromotionSummary = {
-  promotedCount: number;
-  alumniCount: number;
-  promotedAt: string;
-};
-
-type AutoPromotionRequest = {
-  year: string;
-  requestedAt: string;
+  isPromotionLocked: boolean;
 };
 
 type AcademicYearContextType = {
@@ -34,18 +23,8 @@ type AcademicYearContextType = {
   closeYear: (yearId: string) => Promise<void>;
   isYearClosed: (yearId: string) => boolean;
   getActiveYearName: () => string | null;
-
-  // Legacy Promotion stubs to prevent immediate breaking changes in dependent files if they still call these
+  getActiveYearLabel: () => string | null;
   isPromotionLocked: (year: string) => boolean;
-  lockPromotion: (year: string) => void;
-  getPromotionSummary: (year: string) => PromotionSummary | undefined;
-  setPromotionSummaryForYear: (
-    year: string,
-    summary: PromotionSummary
-  ) => void;
-  autoPromotionRequest: AutoPromotionRequest | null;
-  requestAutoPromotion: (year: string) => void;
-  clearAutoPromotionRequest: () => void;
 };
 
 /* =========================
@@ -76,15 +55,40 @@ export function AcademicYearProvider({
   const loadYears = async () => {
     try {
       setLoading(true);
-      const data = await apiClient.get<AcademicYear[]>("/api/academic-years");
+
+      const raw = await apiClient.get<{
+        id: string;
+        year: string;
+        startDate: string;
+        endDate: string;
+        status: string;
+      }[]>("/api/academic-years");
+
+      const data: AcademicYear[] = raw.map((y) => ({
+        id: y.id,
+        name: y.year,                  // map backend → frontend
+        startDate: y.startDate,
+        endDate: y.endDate,
+        isClosed: y.status === "CLOSED",
+        isPromotionLocked: false
+      }));
+
       setAcademicYears(data);
 
-      if (data.length > 0) {
-        setActiveYearState((current) => {
-          if (current) return current;
-          return data.find((y) => !y.isClosed) || data[0];
-        });
-      }
+      const today = new Date();
+
+      const current = data.find((y) => {
+        const start = new Date(y.startDate);
+        const end = new Date(y.endDate);
+        return today >= start && today <= end;
+      });
+
+      const next = data
+        .filter((y) => new Date(y.startDate) > today)
+        .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())[0];
+
+      setActiveYearState(current ?? next ?? data[0]);
+
     } catch (err: any) {
       setError(err.message || "Failed to load academic years");
     } finally {
@@ -95,7 +99,6 @@ export function AcademicYearProvider({
   useEffect(() => {
     loadYears();
   }, []);
-
   /* -------------------------
      Actions
   ------------------------- */
@@ -110,16 +113,20 @@ export function AcademicYearProvider({
   const closeYear = async (yearId: string): Promise<void> => {
     try {
       setError(null);
+
       await apiClient.post(`/api/academic-years/${yearId}/close`);
-      await loadYears();
+
+      const data = await apiClient.get<AcademicYear[]>("/api/academic-years");
+
+      setAcademicYears(data);
 
       setActiveYearState((current) => {
         if (!current || current.id === yearId) {
-          const openYear = academicYears.find((y) => !y.isClosed);
-          return openYear || academicYears[0] || null;
+          return data.find((y) => !y.isClosed) || data[0] || null;
         }
         return current;
       });
+
     } catch (err: any) {
       setError(err.message || "Failed to close academic year");
       throw err;
@@ -130,24 +137,25 @@ export function AcademicYearProvider({
     return academicYears.find((y) => y.id === yearId)?.isClosed === true;
   };
 
+
   const getActiveYearName = (): string | null => {
     return activeYear?.name || null;
+  };
+
+  const getActiveYearLabel = (): string | null => {
+    return activeYear?.name ?? null;
   };
 
   /* -------------------------
      Legacy Promotion Stubs
   ------------------------- */
   // Minimal empty state implementations for UI components that haven't been migrated off yet
-  const [promotionLocked, setPromotionLocked] = useState<Record<string, boolean>>({});
-  const [promotionSummary, setPromotionSummary] = useState<Record<string, PromotionSummary>>({});
-  const [autoPromotionRequest, setAutoPromotionRequest] = useState<AutoPromotionRequest | null>(null);
 
-  const isPromotionLocked = (year: string) => promotionLocked[year] === true;
-  const lockPromotion = (year: string) => setPromotionLocked((p) => ({ ...p, [year]: true }));
-  const setPromotionSummaryForYear = (year: string, summary: PromotionSummary) => setPromotionSummary((p) => ({ ...p, [year]: summary }));
-  const getPromotionSummary = (year: string) => promotionSummary[year];
-  const requestAutoPromotion = (year: string) => setAutoPromotionRequest({ year, requestedAt: new Date().toISOString() });
-  const clearAutoPromotionRequest = () => setAutoPromotionRequest(null);
+
+  const isPromotionLocked = (year: string) => {
+    return academicYears.find((y) => y.id === year)?.isPromotionLocked === true;
+  };
+
 
   return (
     <AcademicYearContext.Provider
@@ -161,15 +169,8 @@ export function AcademicYearProvider({
         closeYear,
         isYearClosed,
         getActiveYearName,
-
-        // Legacy bypasses to avoid crashing depending child components until they're refactored
+        getActiveYearLabel,
         isPromotionLocked,
-        lockPromotion,
-        getPromotionSummary,
-        setPromotionSummaryForYear,
-        autoPromotionRequest,
-        requestAutoPromotion,
-        clearAutoPromotionRequest,
       }}
     >
       {children}

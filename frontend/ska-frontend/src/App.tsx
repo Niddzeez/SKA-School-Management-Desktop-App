@@ -9,6 +9,7 @@ import { ClassProvider } from "./context/ClassContext";
 import { FeeStructureProvider } from "./context/FeeStructureContext";
 import { FeeLedgerProvider } from "./context/FeeLedgerContext";
 import { SystemLogProvider } from "./context/SystemLogContext";
+import { AcademicYearProvider } from "./context/AcademicYearContext";
 
 /* Auth */
 import RequireAuth from "./auth/RequireAuth";
@@ -49,93 +50,95 @@ import SettingsPage from "./pages/Admin/Settings";
 function App() {
   return (
     <SystemLogProvider>
-    <AuthProvider>
-      <FeeLedgerProvider>
-        <FeeStructureProvider>
-          <ClassProvider>
-            <SectionProvider>
-              <TeacherProvider>
-                <StudentProvider>
-                  <BrowserRouter>
-                    <Routes>
+      <AuthProvider>
+        <AcademicYearProvider>
+          <FeeLedgerProvider>
+            <FeeStructureProvider>
+              <ClassProvider>
+                <SectionProvider>
+                  <TeacherProvider>
+                    <StudentProvider>
+                      <BrowserRouter>
+                        <Routes>
 
-                      {/* ===== ROOT REDIRECT ===== */}
-                      <Route path="/" element={<Navigate to="/login" replace />} />
+                          {/* ===== ROOT REDIRECT ===== */}
+                          <Route path="/" element={<Navigate to="/login" replace />} />
 
-                      {/* ===== PUBLIC ===== */}
-                      <Route path="/login" element={<Login />} />
+                          {/* ===== PUBLIC ===== */}
+                          <Route path="/login" element={<Login />} />
 
-                      {/* ===== PROTECTED ===== */}
-                      <Route
-                        path="/*"
-                        element={
-                          <RequireAuth>
-                            <Routes>
+                          {/* ===== PROTECTED ===== */}
+                          <Route
+                            path="/*"
+                            element={
+                              <RequireAuth>
+                                <Routes>
 
-                              {/* Shared */}
+                                  {/* Shared */}
 
-                              <Route path="/dashboard" element={<DashboardRouter />} />
+                                  <Route path="/dashboard" element={<DashboardRouter />} />
 
-                              <Route element={<RoleLayout />}>
-                              <Route path="/admission/print" element={<AdmissionPrint />} /><Route path="/students" element={<Students />} />
-                              <Route path="/students/:id" element={<StudentDetails />} />
-                              <Route path="/allclasses" element={<Classes />} />
-                              <Route path="/students/:id/statement" element={<FeeStatement />} />
-                              <Route path="/receipts/:paymentId" element={<PaymentReceipt />} />
-                              <Route path="/students/admission/print" element={<AdmissionPrint />} />
-                              </Route>
-                              
-                                {/* ===== ADMIN AREA ===== */}
-                              <Route element={<AdminLayout />}>
-                                <Route path="/dashboard/admin" element={<AdminDashboard />} />
-                                <Route path="/students" element={<Students />} />
-                                <Route path="/students/:id" element={<StudentDetails />} />
-                                <Route path="/teachers" element={<Teachers />} />
-                                <Route path="/teachers/:id" element={<TeacherDetails />} />
-                                <Route path="/admissionForm" element={<AdmissionForm />} />
-                                <Route path="/teachersForm" element={<TeachersForm />} />
-                                <Route path="/allclasses" element={<Classes />} />
-                                <Route path="/feestructure" element={<FeeStructures />} />
-                                <Route path="/expenses" element={<Expenses />} />
-                                <Route path="/reports/*" element={<ReportsPage />} />
-                                <Route path="/admin/academic-year" element={<AcademicYearAdmin />} />
-                                <Route path="/bulkpromotion" element={<BulkPromotion />} />
-                                <Route path="/students/:id/statement" element={<FeeStatement />} />
-                                <Route path="/receipts/:paymentId" element={<PaymentReceipt />} />
-                                <Route path="/dashboard/admin/pending-fees" element={<PendingFees />} />
-                                <Route path="/students/admission/print" element={<AdmissionPrint />} />
-                                <Route path="settings" element={<SettingsPage/>}/>
-                              </Route>
+                                  <Route element={<RoleLayout />}>
+                                    <Route path="/admission/print" element={<AdmissionPrint />} /><Route path="/students" element={<Students />} />
+                                    <Route path="/students/:id" element={<StudentDetails />} />
+                                    <Route path="/allclasses" element={<Classes />} />
+                                    <Route path="/students/:id/statement" element={<FeeStatement />} />
+                                    <Route path="/receipts/:paymentId" element={<PaymentReceipt />} />
+                                    <Route path="/students/admission/print" element={<AdmissionPrint />} />
+                                  </Route>
 
-                              {/* ===== TEACHER AREA ===== */}
-                              <Route element={<TeacherLayout />}>
-                                <Route path="/dashboard/teacher" element={<TeacherDashboard />} />
-                                <Route path="/students" element={<Students />} />
-                                <Route path="/students/:id" element={<StudentDetails />} />
-                                <Route path="/allclasses" element={<Classes />} />
-                                <Route path="/students/admission/print" element={<AdmissionPrint />} />
-                                <Route path="/students/:id/statement" element={<FeeStatement />} />
-                                <Route path="/receipts/:paymentId" element={<PaymentReceipt />} />
-                              </Route>
+                                  {/* ===== ADMIN AREA ===== */}
+                                  <Route element={<AdminLayout />}>
+                                    <Route path="/dashboard/admin" element={<AdminDashboard />} />
+                                    <Route path="/students" element={<Students />} />
+                                    <Route path="/students/:id" element={<StudentDetails />} />
+                                    <Route path="/teachers" element={<Teachers />} />
+                                    <Route path="/teachers/:id" element={<TeacherDetails />} />
+                                    <Route path="/admissionForm" element={<AdmissionForm />} />
+                                    <Route path="/teachersForm" element={<TeachersForm />} />
+                                    <Route path="/allclasses" element={<Classes />} />
+                                    <Route path="/feestructure" element={<FeeStructures />} />
+                                    <Route path="/expenses" element={<Expenses />} />
+                                    <Route path="/reports/*" element={<ReportsPage />} />
+                                    <Route path="/admin/academic-year" element={<AcademicYearAdmin />} />
+                                    <Route path="/bulkpromotion" element={<BulkPromotion />} />
+                                    <Route path="/students/:id/statement" element={<FeeStatement />} />
+                                    <Route path="/receipts/:paymentId" element={<PaymentReceipt />} />
+                                    <Route path="/dashboard/admin/pending-fees" element={<PendingFees />} />
+                                    <Route path="/students/admission/print" element={<AdmissionPrint />} />
+                                    <Route path="settings" element={<SettingsPage />} />
+                                  </Route>
 
-                            </Routes>
-                          </RequireAuth>
-                        }
-                      />
+                                  {/* ===== TEACHER AREA ===== */}
+                                  <Route element={<TeacherLayout />}>
+                                    <Route path="/dashboard/teacher" element={<TeacherDashboard />} />
+                                    <Route path="/students" element={<Students />} />
+                                    <Route path="/students/:id" element={<StudentDetails />} />
+                                    <Route path="/allclasses" element={<Classes />} />
+                                    <Route path="/students/admission/print" element={<AdmissionPrint />} />
+                                    <Route path="/students/:id/statement" element={<FeeStatement />} />
+                                    <Route path="/receipts/:paymentId" element={<PaymentReceipt />} />
+                                  </Route>
 
-                    </Routes>
-                  </BrowserRouter>
-                </StudentProvider>
-              </TeacherProvider>
-            </SectionProvider>
-          </ClassProvider>
-        </FeeStructureProvider>
-      </FeeLedgerProvider>
-    </AuthProvider>
+                                </Routes>
+                              </RequireAuth>
+                            }
+                          />
+
+                        </Routes>
+                      </BrowserRouter>
+                    </StudentProvider>
+                  </TeacherProvider>
+                </SectionProvider>
+              </ClassProvider>
+            </FeeStructureProvider>
+          </FeeLedgerProvider>
+        </AcademicYearProvider>
+      </AuthProvider>
     </SystemLogProvider>
 
 
-                        
+
   );
 }
 

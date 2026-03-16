@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import { randomUUID } from "crypto";
 import jwt from "jsonwebtoken";
 import { UserModel } from "../../identity/models/User.model";
 import {
@@ -95,9 +96,11 @@ export async function loginUser(
         throw new ValidationError("Invalid email or password");
     }
 
+    const jti = randomUUID();
     const payload: JwtPayload = {
         userId: String(user._id),
         role: user.role as "ADMIN" | "TEACHER",
+        jti
     };
 
     const token = jwt.sign(payload, getJwtSecret(), { expiresIn: TOKEN_EXPIRY });

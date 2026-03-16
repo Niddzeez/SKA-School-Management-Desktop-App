@@ -1,5 +1,4 @@
-// src/pages/Reports/expenses/YearlyExpenseReport.tsx
-
+import { useMemo } from "react";
 import { useFeeLedger } from "../../../context/FeeLedgerContext";
 import { getAcademicYearRange } from "../Utils/reportDateUtils";
 import { printReport } from "../Utils/PrintUtils";
@@ -22,10 +21,12 @@ function YearlyExpenseReport({ academicYear }: Props) {
      Filter Expenses
   ========================= */
 
-  const yearlyExpenses = expenses.filter((e) => {
-    const d = new Date(e.expenseDate);
-    return d >= start && d <= end;
-  });
+  const yearlyExpenses = useMemo(() => {
+    return expenses.filter((e) => {
+      const d = new Date(e.expenseDate);
+      return d >= start && d <= end;
+    });
+  }, [expenses, start, end]);
 
   if (yearlyExpenses.length === 0) {
     return <p>No expenses recorded for academic year {academicYear}.</p>;
@@ -51,23 +52,21 @@ function YearlyExpenseReport({ academicYear }: Props) {
     sections: [
       {
         title: "Expense Details",
-        headers: ["Date", "Paid To", "Category", "Amount"],
+        headers: [
+          "Date",
+          "Category",
+          "Description",
+          "Paid To",
+          "Mode",
+          "Amount",
+        ],
         rows: yearlyExpenses.map((e) => ({
           columns: [
             new Date(e.expenseDate).toLocaleDateString(),
+            e.category,
+            e.description,
             e.paidTo,
-            e.category,
-            `₹${e.amount}`,
-          ],
-        })),
-      },
-      {
-        title: "Expense Details",
-        headers: ["Date", "Category", "Amount"],
-        rows: yearlyExpenses.map((e) => ({
-          columns: [
-            new Date(e.expenseDate).toLocaleDateString(),
-            e.category,
+            e.mode,
             `₹${e.amount}`,
           ],
         })),
@@ -83,7 +82,6 @@ function YearlyExpenseReport({ academicYear }: Props) {
       },
     ],
   } as const;
-
 
   /* =========================
      Render
@@ -104,10 +102,13 @@ function YearlyExpenseReport({ academicYear }: Props) {
             <th>Amount</th>
           </tr>
         </thead>
+
         <tbody>
           {yearlyExpenses.map((e) => (
             <tr key={e.id}>
-              <td>{new Date(e.expenseDate).toLocaleDateString()}</td>
+              <td>
+                {new Date(e.expenseDate).toLocaleDateString()}
+              </td>
               <td>{e.category}</td>
               <td>{e.description}</td>
               <td>{e.paidTo}</td>

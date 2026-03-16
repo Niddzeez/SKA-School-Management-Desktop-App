@@ -167,10 +167,19 @@ export const validatePassword = (value: unknown): string => {
     if (!value || typeof value !== "string") {
         throw new ValidationError("'password' is required");
     }
-    if (value.length < 6) {
-        throw new ValidationError("'password' must be at least 6 characters");
+
+    const password = value.trim();
+
+    const passwordRegex =
+        /^(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>_\-+=~`[\]\\\/]).{12,}$/;
+
+    if (!passwordRegex.test(password)) {
+        throw new ValidationError(
+            "'password' must be at least 12 characters long and include at least one number and one special character"
+        );
     }
-    return value;
+
+    return password;
 };
 
 const VALID_ROLES = ["ADMIN", "TEACHER"] as const;

@@ -4,41 +4,55 @@ import AdmissionPrintView from "../../utils/admissionpdf";
 import { useAcademicYear } from "../../context/AcademicYearContext";
 
 export default function AdmissionPrint() {
+
   const location = useLocation();
   const navigate = useNavigate();
-  const { academicYear } = useAcademicYear();
+  const { activeYear } = useAcademicYear();
 
   const student = location.state?.student;
 
   useEffect(() => {
+
     if (!student) {
-      navigate("/admission");
+      navigate("/admissionForm");
       return;
     }
 
     const originalTitle = document.title;
 
-    document.title = `Admission_${student.firstName}_${student.lastName}_${academicYear}`;
+    document.title =
+      `Admission_${student.firstName}_${student.lastName}_${activeYear?.name}`;
 
     const timer = setTimeout(() => {
+
       window.print();
 
       document.title = originalTitle;
+
     }, 300);
 
     return () => clearTimeout(timer);
-  }, [student, academicYear, navigate]);
+
+  }, [student, activeYear, navigate]);
+
+  if (!student) return null;
 
   return (
     <>
-      {/* 🔁 SCREEN-ONLY CONTROLS */}
       <div className="print-controls">
+
         <button
           onClick={() => {
+
             const originalTitle = document.title;
-            document.title = `Admission_${student.firstName}_${student.lastName}_${academicYear}`;
+
+            document.title =
+              `Admission_${student.firstName}_${student.lastName}_${activeYear?.name ?? ""}`;
+
             window.print();
+
             document.title = originalTitle;
+
           }}
         >
           Re-print
@@ -47,11 +61,12 @@ export default function AdmissionPrint() {
         <button onClick={() => navigate(-1)}>
           Back
         </button>
+
       </div>
 
       <AdmissionPrintView
         student={student}
-        academicYear={academicYear}
+        academicYear={activeYear?.name ?? ""}
       />
     </>
   );

@@ -19,12 +19,14 @@ const router = Router();
 // Returns a paginated list of recent system activities from the audit log.
 // Accessible ONLY to ADMIN role.
 // ===========================================================================
+
 router.get(
     "/",
     requireAuth,
     requireRole("ADMIN"),
     async (req: Request, res: Response) => {
         const authReq = req as AuthenticatedRequest;
+
         try {
             let limit = 20;
             let offset = 0;
@@ -32,7 +34,9 @@ router.get(
             if (req.query.limit !== undefined) {
                 const l = parseInt(String(req.query.limit), 10);
                 if (Number.isNaN(l) || l < 1) {
-                    throw new ValidationError("Query parameter 'limit' must be a positive integer");
+                    throw new ValidationError(
+                        "Query parameter 'limit' must be a positive integer"
+                    );
                 }
                 limit = l;
             }
@@ -40,52 +44,138 @@ router.get(
             if (req.query.offset !== undefined) {
                 const o = parseInt(String(req.query.offset), 10);
                 if (Number.isNaN(o) || o < 0) {
-                    throw new ValidationError("Query parameter 'offset' must be a non-negative integer");
+                    throw new ValidationError(
+                        "Query parameter 'offset' must be a non-negative integer"
+                    );
                 }
                 offset = o;
             }
 
             const rawActivities = await getActivities(limit, offset);
 
-            const enrichedActivities: ActivityResponse[] = [];
+            // ----------------------------------------------------------
+            // 1️⃣ Collect unique IDs for batching
+            // ----------------------------------------------------------
 
-            // Execute enrichment sequentially vs Promise.all directly on map loops
-            // Optional data enrichment outside Postgres finance layer
+            const userIds = new Set<string>();
+            const studentIds = new Set<string>();
+
             for (const activity of rawActivities) {
-                const mapped = mapActivity(activity);
+                if (activity.performedBy) {
+                    userIds.add(activity.performedBy);
+                }
 
-                try {
-                    // Try to resolve the user who performed the action
-                    if (activity.performedBy) {
-                        const user = await User.findById(activity.performedBy).lean().exec();
-                        if (user && user.name) {
-                            mapped.performedByName = user.name;
+                const studentId = activity.metadata?.studentId as
+                    | string
+                    | undefined;
+
+                if (studentId) {
+                    studentIds.add(studentId);
+                }
+            }
+
+            // ----------------------------------------------------------
+            // 2️⃣ Batch Mongo queries
+            // ----------------------------------------------------------
+
+            const users = userIds.size
+                ? await User.find({ _id: { $in: [...userIds] } })
+                    .select("name")
+                    .lean()
+                    .exec()
+                : [];
+
+            const students = studentIds.size
+                ? await Student.find({ _id: { $in: [...studentIds] } })
+                    .select("firstName lastName classID")
+                    .lean()
+                    .exec()
+                : [];
+
+            // ----------------------------------------------------------
+            // 3️⃣ Collect class IDs from students
+            // ----------------------------------------------------------
+
+            const classIds = new Set<string>();
+
+            for (const s of students) {
+                if (s.classID) {
+                    classIds.add(String(s.classID));
+                }
+            }
+
+            const classes = classIds.size
+                ? await Class.find({ _id: { $in: [...classIds] } })
+                    .select("ClassName")
+                    .lean()
+                    .exec()
+                : [];
+
+            // ----------------------------------------------------------
+            // 4️⃣ Create lookup maps
+            // ----------------------------------------------------------
+
+            const userMap = new Map(
+                users.map((u) => [String(u._id), u])
+            );
+
+            const studentMap = new Map(
+                students.map((s) => [String(s._id), s])
+            );
+
+            const classMap = new Map(
+                classes.map((c) => [String(c._id), c])
+            );
+
+            // ----------------------------------------------------------
+            // 5️⃣ Enrich activities using lookup maps
+            // ----------------------------------------------------------
+
+            const enrichedActivities: ActivityResponse[] =
+                rawActivities.map((activity) => {
+                    const mapped = mapActivity(activity);
+
+                    try {
+                        // Resolve user
+                        if (activity.performedBy) {
+                            const user = userMap.get(activity.performedBy);
+                            if (user?.name) {
+                                mapped.performedByName = user.name;
+                            }
                         }
-                    }
 
-                    // Try to resolve student identity if it is available in metadata
-                    const studentId = activity.metadata?.studentId as string | undefined;
-                    if (studentId) {
-                        const student = await Student.findById(studentId).lean().exec();
-                        if (student) {
-                            mapped.studentName = `${student.firstName} ${student.lastName}`;
+                        // Resolve student
+                        const studentId = activity.metadata?.studentId as
+                            | string
+                            | undefined;
 
-                            if (student.classID) {
-                                const classDoc = await Class.findById(student.classID).lean().exec();
-                                if (classDoc) {
-                                    mapped.className = classDoc.ClassName;
+                        if (studentId) {
+                            const student = studentMap.get(studentId);
+
+                            if (student) {
+                                mapped.studentName = `${student.firstName} ${student.lastName}`;
+
+                                if (student.classID) {
+                                    const classDoc = classMap.get(
+                                        String(student.classID)
+                                    );
+
+                                    if (classDoc) {
+                                        mapped.className = classDoc.ClassName;
+                                    }
                                 }
                             }
                         }
+                    } catch (enrichmentError) {
+                        console.error(
+                            "[Enrichment Error] Failed to resolve details for activity:",
+                            activity.id,
+                            enrichmentError
+                        );
                     }
-                } catch (enrichmentError) {
-                    // If enrichment fails (e.g invalid mongo id), we simply ignore it
-                    // The endpoint must still return the base activity record.
-                    console.error("[Enrichment Error] Failed to resolve details for activity:", activity.id, enrichmentError);
-                }
 
-                enrichedActivities.push(mapped);
-            }
+                    return mapped;
+                });
 
             res.json(enrichedActivities);
         } catch (err) {

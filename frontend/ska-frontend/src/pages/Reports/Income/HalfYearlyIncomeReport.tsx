@@ -1,5 +1,4 @@
-// src/pages/Reports/income/HalfYearlyIncomeReport.tsx
-
+import { useMemo } from "react";
 import { useFeeLedger } from "../../../context/FeeLedgerContext";
 import { useStudents } from "../../../context/StudentContext";
 import { getAcademicYearRange } from "../Utils/reportDateUtils";
@@ -17,37 +16,57 @@ function HalfYearlyIncomeReport({ academicYear, half }: Props) {
 
   const { start, end } = getAcademicYearRange(academicYear);
 
-  const getStudentName = (studentId: string) => {
-    const s = students.find((st) => st.id === studentId);
-    return s ? `${s.firstName} ${s.lastName}` : "Unknown";
-  };
+  /* =========================
+     Student lookup map
+  ========================= */
+
+  const studentMap = useMemo(() => {
+    const map = new Map<string, string>();
+    students.forEach((s) =>
+      map.set(s.id, `${s.firstName} ${s.lastName}`)
+    );
+    return map;
+  }, [students]);
+
+  const getStudentName = (studentId: string) =>
+    studentMap.get(studentId) ?? "Unknown";
 
   /* =========================
      Half-Year Date Range
   ========================= */
 
-  const halfStart =
-    half === "H1"
-      ? new Date(start.getFullYear(), 3, 1) // April 1
-      : new Date(start.getFullYear(), 9, 1); // Oct 1
+  const { halfStart, halfEnd } = useMemo(() => {
+    if (half === "H1") {
+      return {
+        halfStart: new Date(start.getFullYear(), 3, 1), // April 1
+        halfEnd: new Date(start.getFullYear(), 8, 30), // Sep 30
+      };
+    }
 
-  const halfEnd =
-    half === "H1"
-      ? new Date(start.getFullYear(), 8, 30) // Sep 30
-      : end; // March 31
+    return {
+      halfStart: new Date(start.getFullYear(), 9, 1), // Oct 1
+      halfEnd: end, // Mar 31
+    };
+  }, [half, start, end]);
 
   /* =========================
      Filter Income
   ========================= */
 
-  const halfYearIncome = payments.filter((p) => {
-    const d = new Date(p.createdAt);
-    return d >= halfStart && d <= halfEnd;
-  });
+  const halfYearIncome = useMemo(() => {
+    return payments.filter((p) => {
+      const d = new Date(p.createdAt);
+      return d >= halfStart && d <= halfEnd;
+    });
+  }, [payments, halfStart, halfEnd]);
 
   if (halfYearIncome.length === 0) {
     return <p>No income recorded for this period.</p>;
   }
+
+  /* =========================
+     Totals
+  ========================= */
 
   const totalIncome = halfYearIncome.reduce(
     (sum, p) => sum + p.amount,
@@ -58,16 +77,16 @@ function HalfYearlyIncomeReport({ academicYear, half }: Props) {
      Print Data
   ========================= */
 
-    const printData = {
+  const periodLabel =
+    half === "H1" ? "April–September" : "October–March";
+
+  const printData = {
     title: "Half-Yearly Income Report",
     meta: {
       academicYear,
       reportType: "INCOME",
       granularity: "HALF_YEARLY",
-      periodLabel:
-        half === "H1"
-          ? "April–September"
-          : "October–March",
+      periodLabel,
     },
     sections: [
       {
@@ -94,17 +113,13 @@ function HalfYearlyIncomeReport({ academicYear, half }: Props) {
     ],
   } as const;
 
-
   /* =========================
      Render
   ========================= */
 
   return (
     <div className="report-card">
-      <h3>
-        Half-Yearly Income Report —{" "}
-        {half === "H1" ? "April–September" : "October–March"}
-      </h3>
+      <h3>Half-Yearly Income Report — {periodLabel}</h3>
 
       <table className="report-table">
         <thead>
@@ -115,6 +130,7 @@ function HalfYearlyIncomeReport({ academicYear, half }: Props) {
             <th>Amount</th>
           </tr>
         </thead>
+
         <tbody>
           {halfYearIncome.map((p) => (
             <tr key={p.id}>

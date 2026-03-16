@@ -1,74 +1,95 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useFeeLedger } from "../../context/FeeLedgerContext";
+
 import { useStudents } from "../../context/StudentContext";
 import { useClasses } from "../../context/ClassContext";
 import { useAcademicYear } from "../../context/AcademicYearContext";
+
+import { apiClient } from "../../services/apiClient";
 import { printReport } from "../Reports/Utils/PrintUtils";
+
 import "../../styles/PendingFees.css";
+
+interface PendingRow {
+  ledger_id: string;
+  student_id: string;
+  class_id: string;
+  total_fee: number | string;
+  paid_total: number | string;
+  pending: number | string;
+}
 
 function PendingFees() {
   const navigate = useNavigate();
 
-  const { ledgers, getLedgerSummary } = useFeeLedger();
   const { students } = useStudents();
   const { classes } = useClasses();
-  const { academicYear } = useAcademicYear();
+  const { activeYear } = useAcademicYear();
 
-  /* =========================
-     UI DATA (NO EXPORT LOGIC)
-  ========================= */
+  const [rows, setRows] = useState<PendingRow[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const pendingList = ledgers
-    .filter((l) => l.academicYear === academicYear)
-    .map((ledger) => {
-      const summary = getLedgerSummary(ledger.id);
-      const student = students.find(
-        (s) => s.id === ledger.studentId
-      );
+  // =========================================================
+  // LOAD PENDING FEES
+  // =========================================================
 
-      return {
-        ledgerId: ledger.id,
-        student,
-        total: summary.finalFee,
-        paid: summary.paidTotal,
-        pending: summary.pending,
-      };
-    })
-    .filter((row) => row.pending > 0);
+  useEffect(() => {
+    async function loadPendingFees() {
+      if (!activeYear?.id) return;
 
-  /* =========================
-     EXPORT PDF (CLASS-WISE)
-     LOGIC LIVES ONLY HERE
-  ========================= */
+      try {
+        setLoading(true);
+        setError(null);
+
+        const res = await apiClient.get<PendingRow[]>(
+          `/api/reports/pending-fees?year=${activeYear.id}`
+        );
+
+        setRows(res);
+      } catch (err: any) {
+        setError(err.message || "Failed to load pending fees");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadPendingFees();
+  }, [activeYear?.id]);
+
+  // =========================================================
+  // EXPORT PDF (CLASS WISE)
+  // =========================================================
 
   const handleExportPDF = () => {
-    const classWiseMap = new Map<string, typeof pendingList>();
 
-    // Group by class (export-only)
-    pendingList.forEach((row) => {
-      const classId = row.student?.classID ?? "UNKNOWN";
+    const classWiseMap = new Map<string, PendingRow[]>();
+
+    rows.forEach((row) => {
+
+      const classId = row.class_id ?? "UNKNOWN";
 
       if (!classWiseMap.has(classId)) {
         classWiseMap.set(classId, []);
       }
 
       classWiseMap.get(classId)!.push(row);
+
     });
 
     const sections: any[] = [];
 
-    classWiseMap.forEach((rows, classId) => {
-      // Sort ONLY for export
-      const sortedRows = [...rows].sort(
-        (a, b) => b.pending - a.pending
+    classWiseMap.forEach((classRows, classId) => {
+
+      const sortedRows = [...classRows].sort(
+        (a, b) => Number(b.pending) - Number(a.pending)
       );
 
       const className =
-        classes.find((c) => c.id === classId)?.ClassName??
-        "Unknown Class";
+        classes.find((c) => c.id === classId)?.ClassName ?? "Unknown Class";
 
       const classTotalPending = sortedRows.reduce(
-        (sum, r) => sum + r.pending,
+        (sum, r) => sum + Number(r.pending),
         0
       );
 
@@ -81,41 +102,57 @@ function PendingFees() {
           "Paid",
           "Pending",
         ],
-        rows: sortedRows.map((r) => ({
-          columns: [
-            `${r.student?.firstName} ${r.student?.lastName}`,
-            r.student?.phoneNumber ??
-              r.student?.father.phone ??
+        rows: sortedRows.map((r) => {
+
+          const student = students.find(
+            (s) => s.id === r.student_id
+          );
+
+          return {
+            columns: [
+              student
+                ? `${student.firstName} ${student.lastName}`
+                : "Unknown",
+              student?.phoneNumber ??
+              student?.father?.phone ??
               "—",
-            `₹${r.total}`,
-            `₹${r.paid}`,
-            `₹${r.pending}`,
-          ],
-        })),
+              `₹${Number(r.total_fee)}`,
+              `₹${Number(r.paid_total)}`,
+              `₹${Number(r.pending)}`
+            ]
+          };
+
+        }),
         footer: `Class Total Pending: ₹${classTotalPending}`,
       });
+
     });
 
     const printData = {
-  title: "Pending Fees Report",
-  meta: {
-    academicYear,
-    reportType: "STATEMENT",
-    granularity: "CLASS_WISE",
-    periodLabel: "Pending Fees",
-  },
-  sections,
-} as const;
+      title: "Pending Fees Report",
+      meta: {
+        academicYear: activeYear?.name,
+        reportType: "STATEMENT",
+        granularity: "CLASS_WISE",
+        periodLabel: "Pending Fees",
+      },
+      sections,
+    } as const;
 
-printReport(printData);
-    };
+    printReport(printData);
+  };
 
-  /* =========================
-     RENDER
-  ========================= */
+  // =========================================================
+  // RENDER
+  // =========================================================
+
+  if (loading) return <p>Loading pending fees...</p>;
+
+  if (error) return <p className="error">{error}</p>;
 
   return (
     <div className="pending-fees-page">
+
       <div className="pending-fees-header">
         <h2>Students with Pending Fees</h2>
 
@@ -124,10 +161,14 @@ printReport(printData);
         </button>
       </div>
 
-      {pendingList.length === 0 ? (
+      {rows.length === 0 ? (
+
         <p>No pending fees 🎉</p>
+
       ) : (
+
         <table className="pending-fees-table">
+
           <thead>
             <tr>
               <th>Student</th>
@@ -136,31 +177,48 @@ printReport(printData);
               <th>Pending</th>
             </tr>
           </thead>
+
           <tbody>
-            {pendingList.map((row) => (
-              <tr
-                key={row.ledgerId}
-                className="clickable-row"
-                onClick={() =>
-                  row.student &&
-                  navigate(`/students/${row.student.id}`)
-                }
-              >
-                <td>
-                  {row.student
-                    ? `${row.student.firstName} ${row.student.lastName}`
-                    : "Unknown"}
-                </td>
-                <td>₹{row.total}</td>
-                <td>₹{row.paid}</td>
-                <td className="pending">
-                  ₹{row.pending}
-                </td>
-              </tr>
-            ))}
+
+            {rows.map((row) => {
+
+              const student = students.find(
+                (s) => s.id === row.student_id
+              );
+
+              return (
+                <tr
+                  key={row.ledger_id}
+                  className="clickable-row"
+                  onClick={() =>
+                    student && navigate(`/students/${student.id}`)
+                  }
+                >
+
+                  <td>
+                    {student
+                      ? `${student.firstName} ${student.lastName}`
+                      : "Unknown"}
+                  </td>
+
+                  <td>₹{Number(row.total_fee)}</td>
+                  <td>₹{Number(row.paid_total)}</td>
+
+                  <td className="pending">
+                    ₹{Number(row.pending)}
+                  </td>
+
+                </tr>
+              );
+
+            })}
+
           </tbody>
+
         </table>
+
       )}
+
     </div>
   );
 }

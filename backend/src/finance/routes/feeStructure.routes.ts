@@ -2,16 +2,22 @@ import { Router, Request, Response } from "express";
 import { feeStructureService, FeeStructure, FeeComponent } from "../services/feeStructure.service";
 import { requireRole } from "../../auth/middleware/requireRole";
 import { requireAuth } from "../../auth/middleware/requireAuth";
-
+import {
+    toErrorResponse,
+    ValidationError,
+    NotFoundError,
+} from "../../shared/error";
 const router = Router();
 
 // GET /api/fee-structures
 router.get("/", requireAuth, async (_req: Request, res: Response): Promise<void> => {
     try {
-        const structures = await feeStructureService.getAll();
+        const { sessionId } = _req.query;
+        const structures = await feeStructureService.getAll(typeof sessionId === "string" ? sessionId : undefined);
         res.json(structures);
     } catch (err) {
-        res.status(500).json({ error: err instanceof Error ? err.message : "Failed to fetch fee structures" });
+        const { status, body } = toErrorResponse(err);
+        res.status(status).json(body);
     }
 });
 
@@ -20,14 +26,15 @@ router.post("/", requireAuth, requireRole("ADMIN"), async (req: Request, res: Re
     try {
         const { classId, academicSessionId } = req.body;
         if (!classId || !academicSessionId) {
-            res.status(400).json({ error: "Missing required fields: classId, academicSessionId" });
+            const error = new ValidationError("Missing required fields: classId, academicSessionId");
             return;
         }
 
         const created = await feeStructureService.create(classId, academicSessionId);
         res.status(201).json(created);
     } catch (err) {
-        res.status(500).json({ error: err instanceof Error ? err.message : "Failed to create fee structure" });
+        const { status, body } = toErrorResponse(err);
+        res.status(status).json(body);
     }
 });
 
@@ -37,14 +44,15 @@ router.post("/:id/components", requireAuth, requireRole("ADMIN"), async (req: Re
         const id = req.params.id as string;
         const { name, amount, mandatory } = req.body;
         if (!name || amount === undefined || mandatory === undefined) {
-            res.status(400).json({ error: "Missing required fields: name, amount, mandatory" });
+            const error = new ValidationError("Missing required fields: name, amount, mandatory");
             return;
         }
 
         const updated = await feeStructureService.addComponent(id, name, amount, mandatory);
         res.status(201).json(updated);
     } catch (err) {
-        res.status(400).json({ error: err instanceof Error ? err.message : "Failed to add component" });
+        const { status, body } = toErrorResponse(err);
+        res.status(status).json(body);
     }
 });
 
@@ -56,7 +64,8 @@ router.delete("/:id/components/:componentId", requireAuth, requireRole("ADMIN"),
         const updated = await feeStructureService.removeComponent(id, componentId);
         res.json({ success: true, structure: updated });
     } catch (err) {
-        res.status(400).json({ error: err instanceof Error ? err.message : "Failed to remove component" });
+        const { status, body } = toErrorResponse(err);
+        res.status(status).json(body);
     }
 });
 
@@ -67,7 +76,8 @@ router.post("/:id/activate", requireAuth, requireRole("ADMIN"), async (req: Requ
         await feeStructureService.activate(id);
         res.json({ success: true, message: "Fee structure activated" });
     } catch (err) {
-        res.status(400).json({ error: err instanceof Error ? err.message : "Failed to activate fee structure" });
+        const { status, body } = toErrorResponse(err);
+        res.status(status).json(body);
     }
 });
 

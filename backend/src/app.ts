@@ -10,6 +10,9 @@ import { requireRole } from "./auth/middleware/requireRole";
 import { requestIdMiddleware } from "./shared/observability/request-id";
 import { requestLoggerMiddleware } from "./shared/observability/request-logger";
 
+// Reconciliation routes used for testing the reconciliation of the two databases
+import reconciliationRoutes from "./system/routes/reconciliation.routes";
+
 // Identity subsystem routes (MongoDB)
 import studentRoutes from "./identity/routes/students.routes";
 import classRoutes from "./identity/routes/classes.routes";
@@ -37,12 +40,18 @@ import ledgerTimelineRoutes from "./system/routes/ledgerTimeline.routes";
 // Fee Structure (Phase 13)
 import feeStructureRoutes from "./finance/routes/feeStructure.routes";
 
+if (!process.env.FRONTEND_URL) { throw new Error("FRONTEND_URL environment variable is not set"); }
+
+const FRONTEND_URL = process.env.FRONTEND_URL;
+
 const app = express();
 
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:5173",
+    origin: FRONTEND_URL,
     credentials: true,
+    methods: ["GET", "POST", "PATCH", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
@@ -61,6 +70,8 @@ const adminOnly = requireRole("ADMIN");
 const anyRole = requireRole("ADMIN", "TEACHER");
 
 // ── Identity subsystem (MongoDB) ─────────────────────────────────────────────
+
+app.use("/api/system", auth, adminOnly, reconciliationRoutes);
 // Read access: ADMIN + TEACHER
 // Write access: ADMIN only
 app.use("/api/students", auth, anyRole, studentRoutes);
@@ -88,14 +99,14 @@ app.use("/api/reports", auth, anyRole, reportsRoutes);
 app.use("/api/receipts", auth, anyRole, receiptDetailRoutes);
 
 // ── Admin Activity Feed (Phase 10)  ──────────────────────────────────────────
-app.use("/api/system/activity", activityRoutes);
-app.use("/api/system", financeConsistencyRoutes);
-app.use("/api/system", ledgerReplayRoutes);
-app.use("/api/system", ledgerTimelineRoutes);
+app.use("/api/system/activity", auth, adminOnly, activityRoutes);
+app.use("/api/system", auth, adminOnly, financeConsistencyRoutes);
+app.use("/api/system", auth, adminOnly, ledgerReplayRoutes);
+app.use("/api/system", auth, adminOnly, ledgerTimelineRoutes);
 
 
 // ── Fee Structure ────────────────────────────────────────────────
-app.use("/api/fee-structures", feeStructureRoutes);
+app.use("/api/fee-structures", auth, anyRole, feeStructureRoutes);
 
 // ── Admin Dashboard (Phase 11)  ──────────────────────────────────────────────
 import dashboardRoutes from "./system/routes/dashboard.routes";

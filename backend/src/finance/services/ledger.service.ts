@@ -361,6 +361,7 @@ export async function addPayment(
     performedBy: string,
     reference?: string
 ): Promise<PaymentRow> {
+
     const result = await withTransaction(async (client) => {
         // Lock the ledger row and read student_id
         const { rows: ledgers } = await client.query<LedgerRow>(
@@ -377,6 +378,41 @@ export async function addPayment(
 
         const studentId = ledgers[0].student_id;
 
+        // Query ledger_summary for final_fee and paid_total
+        const { rows: summaryRows } = await client.query<{
+            base_total: string | number;
+            adjustments_total: string | number;
+            paid_total: string | number;
+        }>(
+            `SELECT base_total, adjustments_total, paid_total
+             FROM   ledger_summary
+             WHERE  ledger_id = $1`,
+            [ledgerId]
+        );
+
+        if (summaryRows.length === 0) {
+            throw new NotFoundError("Ledger summary", ledgerId);
+        }
+
+        // Compute final_fee and remaining
+        const baseTotal = typeof summaryRows[0].base_total === 'string' ? parseFloat(summaryRows[0].base_total) : summaryRows[0].base_total;
+        const adjustmentsTotal = typeof summaryRows[0].adjustments_total === 'string' ? parseFloat(summaryRows[0].adjustments_total) : summaryRows[0].adjustments_total;
+        const paidTotal = typeof summaryRows[0].paid_total === 'string' ? parseFloat(summaryRows[0].paid_total) : summaryRows[0].paid_total;
+        const finalFee = baseTotal + adjustmentsTotal;
+        const remaining = Math.max(0, finalFee - paidTotal);
+
+        // Overpayment guard
+        if (amount > remaining) {
+            throw new UnprocessableError(
+                `Payment of ${amount} exceeds remaining balance of ${remaining}`
+            );
+        }
+
+        if (amount <= 0) {
+            throw new UnprocessableError("Payment amount must be positive");
+        }
+
+        // Proceed with payment insert
         const { rows } = await client.query<PaymentRow>(
             `INSERT INTO payments
                  (ledger_id, student_id, amount, mode, collected_by, reference)
@@ -482,7 +518,9 @@ export async function updateLedgerBaseComponents(
     baseComponents: FeeComponentSnapshotRow[],
     performedBy: string
 ): Promise<LedgerRow> {
+
     const result = await withTransaction(async (client) => {
+
         const { rows: ledgers } = await client.query<{
             id: string;
             paid_total: string | number;
@@ -499,18 +537,35 @@ export async function updateLedgerBaseComponents(
             throw new NotFoundError("Ledger", ledgerId);
         }
 
-        const paidTotal = typeof ledgers[0].paid_total === 'string' ? parseFloat(ledgers[0].paid_total) : ledgers[0].paid_total;
+        const paidTotal =
+            typeof ledgers[0].paid_total === "string"
+                ? parseFloat(ledgers[0].paid_total)
+                : ledgers[0].paid_total;
+
         if (paidTotal > 0) {
-            throw new ConflictError("Ledger cannot be modified after payments are recorded");
+            throw new ConflictError(
+                "Ledger cannot be modified after payments are recorded"
+            );
         }
 
         const { rows } = await client.query<LedgerRow>(
             `UPDATE student_fee_ledgers
              SET base_components = $1
              WHERE id = $2
-             RETURNING id, student_id, class_id, academic_session_id, base_components, created_at`,
-            [JSON.stringify(baseComponents), ledgerId]
+             RETURNING
+                id,
+                student_id,
+                class_id,
+                academic_session_id,
+                base_components,
+                created_at`,
+            [baseComponents, ledgerId]   // no JSON.stringify needed
         );
+
+        if (rows.length === 0) {
+            throw new NotFoundError("Ledger", ledgerId);
+        }
+
         return rows[0];
     });
 
@@ -519,8 +574,62 @@ export async function updateLedgerBaseComponents(
         "STUDENT_FEE_LEDGER",
         result.id,
         performedBy,
-        { ledgerId, baseComponents }
+        {
+            ledgerId,
+            baseComponents
+        }
     );
 
     return result;
+}
+
+export async function getPaymentsByLedgerId(
+  ledgerId: string
+): Promise<PaymentRow[]> {
+  const pool = getPool();
+
+  const { rows } = await pool.query<PaymentRow>(
+    `
+    SELECT
+      id,
+      ledger_id,
+      student_id,
+      amount,
+      mode,
+      reference,
+      collected_by,
+      created_at
+    FROM payments
+    WHERE ledger_id = $1
+    ORDER BY created_at ASC
+    `,
+    [ledgerId]
+  );
+
+  return rows;
+}
+
+export async function getAdjustmentsByLedgerId(
+  ledgerId: string
+): Promise<AdjustmentRow[]> {
+  const pool = getPool();
+
+  const { rows } = await pool.query<AdjustmentRow>(
+    `
+    SELECT
+      id,
+      ledger_id,
+      type,
+      amount,
+      reason,
+      approved_by,
+      created_at
+    FROM ledger_adjustments
+    WHERE ledger_id = $1
+    ORDER BY created_at ASC
+    `,
+    [ledgerId]
+  );
+
+  return rows;
 }

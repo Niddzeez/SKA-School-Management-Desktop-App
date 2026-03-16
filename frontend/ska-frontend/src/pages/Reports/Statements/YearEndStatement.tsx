@@ -1,88 +1,62 @@
-import { useFeeLedger } from "../../../context/FeeLedgerContext";
-import { useAcademicYear } from "../../../context/AcademicYearContext";
-import { getAcademicYearRange } from "../Utils/reportDateUtils";
+import { useEffect, useState } from "react";
+import { apiClient } from "../../../services/apiClient";
 import { printReport } from "../Utils/PrintUtils";
+import { toBackendAcademicYear } from "../Utils/reportDateUtils";
 import "./statements.css";
 
-function YearEndStatement() {
-  const { payments, expenses } = useFeeLedger();
+type YearEndStatementProps = {
+  academicYear: string;
+};
 
-  const {
-    academicYear,
-    setAcademicYear,
-    availableYears,
-    isYearClosed,
-  } = useAcademicYear();
+interface MonthlySnapshot {
+  month: string;
+  income: number;
+  expense: number;
+  net: number;
+}
 
-  /* =========================
-     Academic Year Range
-  ========================= */
+interface YearEndData {
+  totalIncome: number;
+  totalExpense: number;
+  netResult: number;
+  monthlySnapshot: MonthlySnapshot[];
+}
 
-  const { start, end } = getAcademicYearRange(academicYear);
-
-  /* =========================
-     Filter Yearly Data
-  ========================= */
-
-  const yearlyIncome = payments.filter((p) => {
-    const d = new Date(p.createdAt);
-    return d >= start && d <= end;
-  });
-
-  const yearlyExpenses = expenses.filter((e) => {
-    const d = new Date(e.expenseDate);
-    return d >= start && d <= end;
-  });
+function YearEndStatement({ academicYear }: YearEndStatementProps) {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [data, setData] = useState<YearEndData | null>(null);
 
   /* =========================
-     Totals
+     Fetch Year-End Report
   ========================= */
 
-  const totalIncome = yearlyIncome.reduce(
-    (sum, p) => sum + p.amount,
-    0
-  );
+  useEffect(() => {
+    if (!academicYear) return;
 
-  const totalExpense = yearlyExpenses.reduce(
-    (sum, e) => sum + e.amount,
-    0
-  );
+    const fetchStatement = async () => {
+      try {
+        setLoading(true);
+        setError(null);
 
-  const netResult = totalIncome - totalExpense;
+        const res = await apiClient.get<YearEndData>(
+          `/api/reports/year-end?year=${academicYear}`
+        );
 
-  /* =========================
-     Monthly Snapshot
-  ========================= */
-
-  const monthlySnapshot = Array.from({ length: 12 }).map((_, i) => {
-    const monthStart = new Date(start.getFullYear(), start.getMonth() + i, 1);
-    const monthEnd = new Date(
-      start.getFullYear(),
-      start.getMonth() + i + 1,
-      0
-    );
-
-    const income = yearlyIncome
-      .filter((p) => {
-        const d = new Date(p.createdAt);
-        return d >= monthStart && d <= monthEnd;
-      })
-      .reduce((sum, p) => sum + p.amount, 0);
-
-    const expense = yearlyExpenses
-      .filter((e) => {
-        const d = new Date(e.expenseDate);
-        return d >= monthStart && d <= monthEnd;
-      })
-      .reduce((sum, e) => sum + e.amount, 0);
-
-    return {
-      month: monthStart.toLocaleString("default", { month: "long" }),
-      income,
-      expense,
-      net: income - expense,
+        setData(res);
+      } catch (err: any) {
+        setError(err?.message ?? "Failed to load year-end statement");
+      } finally {
+        setLoading(false);
+      }
     };
-  });
+
+    fetchStatement();
+  }, [academicYear]);
+
+  if (loading) return <p>Loading financial statement...</p>;
+  if (error) return <p className="error">{error}</p>;
+  if (!data) return null;
 
   /* =========================
      Print Data
@@ -101,14 +75,14 @@ function YearEndStatement() {
         title: "Income Summary",
         headers: ["Metric", "Amount"],
         rows: [
-          { columns: ["Total Income", `₹${totalIncome}`] },
+          { columns: ["Total Income", `₹${data.totalIncome}`] },
         ],
       },
       {
         title: "Expense Summary",
         headers: ["Metric", "Amount"],
         rows: [
-          { columns: ["Total Expense", `₹${totalExpense}`] },
+          { columns: ["Total Expense", `₹${data.totalExpense}`] },
         ],
       },
       {
@@ -117,8 +91,8 @@ function YearEndStatement() {
         rows: [
           {
             columns: [
-              netResult >= 0 ? "Net Surplus" : "Net Deficit",
-              `₹${netResult}`,
+              data.netResult >= 0 ? "Net Surplus" : "Net Deficit",
+              `₹${data.netResult}`,
             ],
           },
         ],
@@ -126,7 +100,7 @@ function YearEndStatement() {
       {
         title: "Monthly Snapshot",
         headers: ["Month", "Income", "Expense", "Net"],
-        rows: monthlySnapshot.map((m) => ({
+        rows: data.monthlySnapshot.map((m) => ({
           columns: [
             m.month,
             `₹${m.income}`,
@@ -146,42 +120,35 @@ function YearEndStatement() {
     <div className="statement-card">
       <div className="statement-header">
         <h2>Year-End Financial Statement</h2>
-
-        <div className="year-selector">
-          <label>Academic Year:</label>
-          <select
-            value={academicYear}
-            onChange={(e) => setAcademicYear(e.target.value)}
-          >
-            {availableYears.map((yr) => (
-              <option key={yr} value={yr}>
-                {yr}
-              </option>
-            ))}
-          </select>
-
-          {isYearClosed(academicYear) && (
-            <span className="closed-year-badge">
-              Closed Year
-            </span>
-          )}
-        </div>
+        <p className="statement-subtitle">
+          Academic Year: {academicYear}
+        </p>
       </div>
+
+      {/* =========================
+         Summary
+      ========================= */}
 
       <div className="summary-block">
         <p>
-          <strong>Total Income:</strong> ₹{totalIncome}
+          <strong>Total Income:</strong> ₹{data.totalIncome}
         </p>
+
         <p>
-          <strong>Total Expense:</strong> ₹{totalExpense}
+          <strong>Total Expense:</strong> ₹{data.totalExpense}
         </p>
+
         <p>
           <strong>
-            {netResult >= 0 ? "Net Surplus" : "Net Deficit"}:
+            {data.netResult >= 0 ? "Net Surplus" : "Net Deficit"}:
           </strong>{" "}
-          ₹{netResult}
+          ₹{data.netResult}
         </p>
       </div>
+
+      {/* =========================
+         Monthly Table
+      ========================= */}
 
       <table className="report-table">
         <thead>
@@ -192,9 +159,10 @@ function YearEndStatement() {
             <th>Net</th>
           </tr>
         </thead>
+
         <tbody>
-          {monthlySnapshot.map((m) => (
-            <tr key={m.month}>
+          {data.monthlySnapshot.map((m, index) => (
+            <tr key={`${m.month}-${index}`}>
               <td>{m.month}</td>
               <td>₹{m.income}</td>
               <td>₹{m.expense}</td>
@@ -203,6 +171,10 @@ function YearEndStatement() {
           ))}
         </tbody>
       </table>
+
+      {/* =========================
+         Print Button
+      ========================= */}
 
       <button
         className="print-btn"

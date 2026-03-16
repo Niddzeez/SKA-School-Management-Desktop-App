@@ -19,15 +19,39 @@ export interface FeeStructure {
 }
 
 export const feeStructureService = {
-    async getAll(): Promise<FeeStructure[]> {
+    async getAll(sessionId?: string): Promise<FeeStructure[]> {
         const pool = getPool();
-        const { rows } = await pool.query(`
-            SELECT id, class_id as "classId", academic_session_id as "academicSessionId", status, components
+
+        if (sessionId) {
+            const { rows } = await pool.query(
+                `
+            SELECT 
+                id,
+                class_id as "classId",
+                academic_session_id as "academicSessionId",
+                status,
+                components
             FROM fee_structures
-        `);
+            WHERE academic_session_id = $1
+            `,
+                [sessionId]
+            );
+
+            return rows;
+        }
+
+        const { rows } = await pool.query(`
+        SELECT 
+            id,
+            class_id as "classId",
+            academic_session_id as "academicSessionId",
+            status,
+            components
+        FROM fee_structures
+    `);
+
         return rows;
     },
-
     async create(classId: string, academicSessionId: string): Promise<FeeStructure> {
         const pool = getPool();
         const { rows } = await pool.query(`
@@ -110,12 +134,39 @@ export const feeStructureService = {
 
     async activate(id: string): Promise<void> {
         const pool = getPool();
-        const { rowCount } = await pool.query(`
-            UPDATE fee_structures
-            SET status = 'ACTIVE'
-            WHERE id = $1
-        `, [id]);
 
-        if (rowCount === 0) throw new Error("Fee structure not found");
+        // Read the structure and its components
+        const { rows } = await pool.query(
+            `
+        SELECT components
+        FROM fee_structures
+        WHERE id = $1
+        `,
+            [id]
+        );
+
+        if (rows.length === 0) {
+            throw new Error("Fee structure not found");
+        }
+
+        const components = rows[0].components;
+
+        if (!Array.isArray(components) || components.length === 0) {
+            throw new Error("Cannot activate a fee structure with no components");
+        }
+
+        // Activate the structure
+        const { rowCount } = await pool.query(
+            `
+        UPDATE fee_structures
+        SET status = 'ACTIVE'
+        WHERE id = $1
+        `,
+            [id]
+        );
+
+        if (rowCount === 0) {
+            throw new Error("Fee structure not found");
+        }
     }
 };

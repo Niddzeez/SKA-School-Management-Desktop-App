@@ -40,11 +40,13 @@ function ReportsPage() {
     const [academicYear, setAcademicYear] =
         useState<string>("");
 
+
+
     useEffect(() => {
-        if (activeYear?.id && !academicYear) {
-            setAcademicYear(activeYear.id);
+        if (activeYear?.name && !academicYear) {
+            setAcademicYear(activeYear.name);
         }
-    }, [activeYear?.id, academicYear]);
+    }, [activeYear?.name, academicYear]);
 
     const [selectedDate, setSelectedDate] =
         useState<string | null>(null);
@@ -57,52 +59,61 @@ function ReportsPage() {
 
     // Compute Date Boundaries based on selections
     const computeDateBoundaries = () => {
+
+        if (!academicYear) return null;
+
         const { start, end } = getAcademicYearRange(academicYear);
+
         let fromDateStr: string | undefined;
         let toDateStr: string | undefined;
         let periodLabel = academicYear;
 
         if (granularity === "DAILY") {
-            if (selectedDate) {
-                fromDateStr = selectedDate;
-                toDateStr = selectedDate;
-                periodLabel = new Date(selectedDate).toLocaleDateString();
-            } else {
-                return null;
-            }
-        } else if (granularity === "MONTHLY") {
-            if (selectedMonth !== null) {
-                // Approximate monthly bounds; since backend queries map strictly < interval + 1 Day, calculating the precise bounds explicitly saves SQL complexity.
-                const startYear = start.getFullYear();
-                const actualYear = selectedMonth >= 3 ? startYear : startYear + 1; // Apending offset assuming Indian academic scale, April to March
+            if (!selectedDate) return null;
 
-                const fm = new Date(actualYear, selectedMonth, 1);
-                const tm = new Date(actualYear, selectedMonth + 1, 0); // Last day of month
+            const d = new Date(selectedDate);
+            if (isNaN(d.getTime())) return null;
 
-                fromDateStr = fm.toISOString().split("T")[0];
-                toDateStr = tm.toISOString().split("T")[0];
-                periodLabel = fm.toLocaleString("default", { month: "long", year: "numeric" });
+            fromDateStr = selectedDate;
+            toDateStr = selectedDate;
+            periodLabel = d.toLocaleDateString();
+        }
+
+        else if (granularity === "MONTHLY") {
+            if (selectedMonth === null) return null;
+
+            const startYear = start.getFullYear();
+            const actualYear = selectedMonth >= 3 ? startYear : startYear + 1;
+
+            const fm = new Date(actualYear, selectedMonth, 1);
+            const tm = new Date(actualYear, selectedMonth + 1, 0);
+
+            fromDateStr = fm.toISOString().split("T")[0];
+            toDateStr = tm.toISOString().split("T")[0];
+
+            periodLabel = fm.toLocaleString("default", {
+                month: "long",
+                year: "numeric",
+            });
+        }
+
+        else if (granularity === "HALF_YEARLY") {
+            if (!half) return null;
+
+            if (half === "H1") {
+                fromDateStr = start.toISOString().split("T")[0];
+                const endH1 = new Date(start.getFullYear(), 8, 30);
+                toDateStr = endH1.toISOString().split("T")[0];
+                periodLabel = "First Half (H1)";
             } else {
-                return null; // Awaiting month selection
+                const startH2 = new Date(start.getFullYear(), 9, 1);
+                fromDateStr = startH2.toISOString().split("T")[0];
+                toDateStr = end.toISOString().split("T")[0];
+                periodLabel = "Second Half (H2)";
             }
-        } else if (granularity === "HALF_YEARLY") {
-            if (half) {
-                if (half === "H1") {
-                    fromDateStr = start.toISOString().split("T")[0];
-                    const endH1 = new Date(start.getFullYear(), 8, 30); // End September
-                    toDateStr = endH1.toISOString().split("T")[0];
-                    periodLabel = "First Half (H1)";
-                } else {
-                    const startH2 = new Date(start.getFullYear(), 9, 1); // Start October
-                    fromDateStr = startH2.toISOString().split("T")[0];
-                    toDateStr = end.toISOString().split("T")[0];
-                    periodLabel = "Second Half (H2)";
-                }
-            } else {
-                return null;
-            }
-        } else if (granularity === "YEARLY") {
-            // Leave fromDate / toDate empty to span the entire academic year dynamically inside the backend
+        }
+
+        else if (granularity === "YEARLY") {
             periodLabel = `Academic Year ${academicYear}`;
         }
 
@@ -181,7 +192,9 @@ function ReportsPage() {
                 )}
             </div>
 
-            {!role || can(role, "VIEW_REPORTS") && <YearEndStatement />}
+            {role && can(role, "VIEW_REPORTS") && academicYear && (
+                <YearEndStatement academicYear={academicYear} />
+            )}
         </div>
     );
 }

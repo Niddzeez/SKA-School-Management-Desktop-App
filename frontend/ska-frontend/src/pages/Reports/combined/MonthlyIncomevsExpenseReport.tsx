@@ -1,11 +1,9 @@
-// src/pages/Reports/combined/MonthlyIncomeVsExpense.tsx
-
+import { useMemo } from "react";
 import { useFeeLedger } from "../../../context/FeeLedgerContext";
-import { getAcademicYearRange } from "../Utils/reportDateUtils";
-import "../../../components/print/report-print.css";
-import { printReport } from "../Utils/PrintUtils";
 import { useStudents } from "../../../context/StudentContext";
-
+import { getAcademicYearRange } from "../Utils/reportDateUtils";
+import { printReport } from "../Utils/PrintUtils";
+import "../../../components/print/report-print.css";
 
 type Props = {
     academicYear: string;
@@ -13,41 +11,65 @@ type Props = {
 };
 
 function MonthlyIncomeVsExpense({
-
-
     academicYear,
     selectedMonth,
 }: Props) {
     const { payments, expenses } = useFeeLedger();
+    const { students } = useStudents();
 
     if (selectedMonth === null) {
         return <p>Please select a month.</p>;
     }
 
-    const { start, end } = getAcademicYearRange(academicYear);
-    const { students } = useStudents();
+    const { start } = getAcademicYearRange(academicYear);
+
+    /* =========================
+       Correct Academic Month
+    ========================= */
+
+    const startYear = start.getFullYear();
+    const actualYear =
+        selectedMonth >= 3 ? startYear : startYear + 1;
+
+    const monthStart = new Date(actualYear, selectedMonth, 1);
+    const monthEnd = new Date(actualYear, selectedMonth + 1, 0);
+
+    const monthLabel = monthStart.toLocaleString("default", {
+        month: "long",
+    });
+
+    /* =========================
+       Student Lookup Map
+    ========================= */
+
+    const studentMap = useMemo(() => {
+        const map = new Map<string, string>();
+        students.forEach((s) =>
+            map.set(s.id, `${s.firstName} ${s.lastName}`)
+        );
+        return map;
+    }, [students]);
+
+    const getStudentName = (id: string) =>
+        studentMap.get(id) ?? "Unknown";
 
     /* =========================
        Filter Data
     ========================= */
 
-    const monthlyIncome = payments.filter((p) => {
-        const d = new Date(p.createdAt);
-        return (
-            d >= start &&
-            d <= end &&
-            d.getMonth() === selectedMonth
-        );
-    });
+    const monthlyIncome = useMemo(() => {
+        return payments.filter((p) => {
+            const d = new Date(p.createdAt);
+            return d >= monthStart && d <= monthEnd;
+        });
+    }, [payments, monthStart, monthEnd]);
 
-    const monthlyExpenses = expenses.filter((e) => {
-        const d = new Date(e.expenseDate);
-        return (
-            d >= start &&
-            d <= end &&
-            d.getMonth() === selectedMonth
-        );
-    });
+    const monthlyExpenses = useMemo(() => {
+        return expenses.filter((e) => {
+            const d = new Date(e.expenseDate);
+            return d >= monthStart && d <= monthEnd;
+        });
+    }, [expenses, monthStart, monthEnd]);
 
     if (monthlyIncome.length === 0 && monthlyExpenses.length === 0) {
         return <p>No income or expenses for this month.</p>;
@@ -69,15 +91,9 @@ function MonthlyIncomeVsExpense({
 
     const netBalance = totalIncome - totalExpense;
 
-    const monthLabel = new Date(2026, selectedMonth).toLocaleString(
-        "default",
-        { month: "long" }
-    );
-
-    const getStudentName = (studentId: string) => {
-        const s = students.find((st) => st.id === studentId);
-        return s ? `${s.firstName} ${s.lastName}` : "Unknown";
-    };
+    /* =========================
+       Print Data
+    ========================= */
 
     const printData = {
         title: "Monthly Income vs Expense Report",
@@ -90,24 +106,37 @@ function MonthlyIncomeVsExpense({
         sections: [
             {
                 title: "Income Details",
-                headers: ["Date", "Student", "Mode", "Amount"],
+                headers: [
+                    "Date",
+                    "Student",
+                    "Mode",
+                    "Collected By",
+                    "Amount",
+                ],
                 rows: monthlyIncome.map((p) => ({
                     columns: [
                         new Date(p.createdAt).toLocaleDateString(),
                         getStudentName(p.studentId),
                         p.mode,
+                        p.collectedBy,
                         `₹${p.amount}`,
                     ],
                 })),
             },
-
             {
                 title: "Expense Details",
-                headers: ["Date", "Category", "Paid To", "Amount"],
+                headers: [
+                    "Date",
+                    "Category",
+                    "Description",
+                    "Paid To",
+                    "Amount",
+                ],
                 rows: monthlyExpenses.map((e) => ({
                     columns: [
                         new Date(e.expenseDate).toLocaleDateString(),
                         e.category,
+                        e.description,
                         e.paidTo,
                         `₹${e.amount}`,
                     ],
@@ -119,15 +148,11 @@ function MonthlyIncomeVsExpense({
                 rows: [
                     { columns: ["Total Income", `₹${totalIncome}`] },
                     { columns: ["Total Expense", `₹${totalExpense}`] },
-                    {
-                        columns: ["Net Result", `₹${totalIncome - totalExpense}`],
-                    },
+                    { columns: ["Net Result", `₹${netBalance}`] },
                 ],
             },
         ],
     } as const;
-
-
 
     /* =========================
        Render
@@ -139,9 +164,7 @@ function MonthlyIncomeVsExpense({
                 Monthly Income vs Expense — {monthLabel} {academicYear}
             </h3>
 
-            {/* =========================
-          Income Section
-      ========================= */}
+            {/* Income */}
             <div className="section">
                 <h4>Income</h4>
 
@@ -152,17 +175,20 @@ function MonthlyIncomeVsExpense({
                         <thead>
                             <tr>
                                 <th>Date</th>
+                                <th>Student</th>
                                 <th>Mode</th>
                                 <th>Collected By</th>
                                 <th>Amount</th>
                             </tr>
                         </thead>
+
                         <tbody>
                             {monthlyIncome.map((p) => (
                                 <tr key={p.id}>
                                     <td>
                                         {new Date(p.createdAt).toLocaleDateString()}
                                     </td>
+                                    <td>{getStudentName(p.studentId)}</td>
                                     <td>{p.mode}</td>
                                     <td>{p.collectedBy}</td>
                                     <td className="amount">₹{p.amount}</td>
@@ -177,9 +203,7 @@ function MonthlyIncomeVsExpense({
                 </p>
             </div>
 
-            {/* =========================
-          Expense Section
-      ========================= */}
+            {/* Expenses */}
             <div className="section">
                 <h4>Expenses</h4>
 
@@ -196,6 +220,7 @@ function MonthlyIncomeVsExpense({
                                 <th>Amount</th>
                             </tr>
                         </thead>
+
                         <tbody>
                             {monthlyExpenses.map((e) => (
                                 <tr key={e.id}>
@@ -217,9 +242,7 @@ function MonthlyIncomeVsExpense({
                 </p>
             </div>
 
-            {/* =========================
-          Net Summary
-      ========================= */}
+            {/* Net Summary */}
             <div
                 className={`net-summary ${netBalance >= 0 ? "positive" : "negative"
                     }`}
@@ -227,10 +250,12 @@ function MonthlyIncomeVsExpense({
                 Net Balance: ₹{netBalance}
             </div>
 
-            <button className="print-btn" onClick={() => printReport(printData)}>
+            <button
+                className="print-btn"
+                onClick={() => printReport(printData)}
+            >
                 Print / Save as PDF
             </button>
-
         </div>
     );
 }

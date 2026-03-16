@@ -39,12 +39,14 @@ function AdminLayout() {
       <div className="topbar-context">
         <label className="topbar-label">Academic Year</label>
         <select
-          value={activeYear?.name}
+          value={activeYear?.id || ""}
           onChange={(e) => setActiveYear(e.target.value)}
           className="topbar-select"
         >
           {academicYears?.map((y) => (
-            <option key={y.id} value={y.id}>{y.name}</option>
+            <option key={y.id} value={y.id}>
+              {y.name}
+            </option>
           ))}
         </select>
       </div>

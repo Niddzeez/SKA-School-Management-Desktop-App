@@ -1,14 +1,13 @@
 import "../../styles/AdmissionForm.css";
 import InputBox from "../../components/FormInputBoxes";
-import { use, useState } from "react";
+import { useState } from "react";
 import { mapFormDataToStudent } from "../../mappers/formtostudents";
-import type { Student } from "../../types/Student";
-import { useNavigate } from "react-router-dom";
 import { useStudents } from "../../context/StudentContext";
 import { useClasses } from "../../context/ClassContext";
 import { useSections } from "../../context/SectionContext";
 import { useAuth } from "../../context/AuthContext";
 import { can } from "../../auth/permissions"
+import { printAdmission } from "../../utils/printAdmission";
 
 function AdmissionForm() {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -25,7 +24,6 @@ function AdmissionForm() {
       </div>
     );
   }
-  const navigate = useNavigate();
 
 
   const initialFormData = {
@@ -79,7 +77,7 @@ function AdmissionForm() {
 
   const [formData, setFormData] = useState(initialFormData);
 
-  const [successMessage, setSuccessMessage] = useState("");
+  const [successMessage] = useState("");
 
   const handleChange = (name: string, value: string) => {
     setFormData((prev) => ({
@@ -151,30 +149,14 @@ function AdmissionForm() {
     const payload = mapFormDataToStudent(formData);
     const createdStudent = await addStudent(payload);
 
-    navigate("/admission/print", {
-      state: {
-        student: createdStudent,
-        academicYear:
-          createdStudent.academic?.dateOfAdmission?.slice(0, 4) ?? "",
-      },
-    });
+    printAdmission(
+      createdStudent,
+      createdStudent.academic?.dateOfAdmission?.slice(0, 4) ?? ""
+    );
 
     setFormData(initialFormData);
     setErrors({});
   }
-
-  const classOptions = classes.map((c) => ({
-    label: c.ClassName,
-    value: c.id,
-  }));
-
-  const sectionOptions = sections
-    .filter((s) => s.classID === formData.classID)
-    .map((s) => ({
-      label: s.name,
-      value: s.id,
-    }));
-
 
 
 
@@ -334,7 +316,7 @@ function AdmissionForm() {
             value={
               classes.find((c) => c.id === formData.classID)?.ClassName || ""
             }
-            onChange={(name, value) => {
+            onChange={(value) => {
               const selectedClass = classes.find(
                 (c) => c.ClassName === value
               );
@@ -358,7 +340,7 @@ function AdmissionForm() {
             value={
               sections.find((s) => s.id === formData.sectionID)?.name || ""
             }
-            onChange={(name, value) => {
+            onChange={(value) => {
               const selectedSection = sections.find(
                 (s) =>
                   s.classID === formData.classID &&

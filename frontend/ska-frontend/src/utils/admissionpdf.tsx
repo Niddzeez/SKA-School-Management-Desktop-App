@@ -11,7 +11,7 @@ type Props = {
 
 export default function AdmissionPrintView({ student, academicYear }: Props) {
   return (
-    <PrintLayout watermark={<SchoolLogo className="watermark" />}>
+    <PrintLayout>
       <PrintHeader
         logo={<SchoolLogo className="logo-svg" />}
         title="SMART KIDS ACADEMY"
@@ -36,7 +36,7 @@ export default function AdmissionPrintView({ student, academicYear }: Props) {
 
         <div className="form-grid">
           <div><strong>Name:</strong></div><div>{student.firstName} {student.lastName}</div>
-          <div><strong>Date of Birth:</strong></div><div>{student.dateOfBirth}</div>
+          <div><strong>Date of Birth:</strong></div><div>{new Date(student.dateOfBirth).toLocaleDateString("en-IN")}</div>
 
           <div><strong>Gender:</strong></div><div>{student.gender}</div>
           <div><strong>Blood Group:</strong></div><div>{student.bloodGroup}</div>

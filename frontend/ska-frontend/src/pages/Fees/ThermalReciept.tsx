@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
+
 import { useStudents } from "../../context/StudentContext";
 import { useClasses } from "../../context/ClassContext";
 import { useSections } from "../../context/SectionContext";
@@ -7,13 +8,14 @@ import { useFeeLedger } from "../../context/FeeLedgerContext";
 import { useAcademicYear } from "../../context/AcademicYearContext";
 
 function PaymentReceipt() {
+
   const { paymentId } = useParams<{ paymentId: string }>();
 
   const { students } = useStudents();
   const { classes } = useClasses();
   const { sections } = useSections();
   const { payments, ledgers, getReceiptNumber } = useFeeLedger();
-  const { academicYear } = useAcademicYear();
+  const { activeYear } = useAcademicYear();
 
   const payment = payments.find(p => p.id === paymentId);
   if (!payment) return <p>Payment not found.</p>;
@@ -29,155 +31,160 @@ function PaymentReceipt() {
 
   const receiptNo = getReceiptNumber(payment.id);
 
-  /* =========================
-     Filename
-  ========================= */
-
   useEffect(() => {
+
     const originalTitle = document.title;
+
     document.title = `Receipt_${receiptNo}`;
 
     return () => {
       document.title = originalTitle;
     };
+
   }, [receiptNo]);
 
-  /* =========================
-     Thermal Print
-  ========================= */
-
   const handlePrint = () => {
+
     const printWindow = window.open("", "_blank", "width=400,height=600");
     if (!printWindow) return;
 
-    printWindow.document.write(`
-      <html>
-        <head>
-          <title>Receipt_${receiptNo}</title>
-          <style>
-            @page {
-              size: 80mm auto;
-              margin: 4mm;
-            }
+    const html = `
+    <html>
+      <head>
+        <title>Receipt_${receiptNo}</title>
 
-            body {
-              font-family: monospace;
-              font-size: 12px;
-              margin: 0;
-              padding: 0;
-              color: #000;
-            }
+        <style>
 
-            .center {
-              text-align: center;
-            }
+          @page {
+            size: 80mm auto;
+            margin: 4mm;
+          }
 
-            .bold {
-              font-weight: bold;
-            }
+          body {
+            font-family: monospace;
+            font-size: 12px;
+            margin: 0;
+            padding: 0;
+            color: #000;
+          }
 
-            .line {
-              border-top: 1px dashed #000;
-              margin: 6px 0;
-            }
+          .center { text-align: center; }
+          .right { text-align: right; }
+          .bold { font-weight: bold; }
 
-            table {
-              width: 100%;
-              border-collapse: collapse;
-            }
+          .line {
+            border-top: 1px dashed #000;
+            margin: 6px 0;
+          }
 
-            td {
-              padding: 2px 0;
-              vertical-align: top;
-            }
+          table {
+            width: 100%;
+            border-collapse: collapse;
+          }
 
-            .right {
-              text-align: right;
-            }
+          td {
+            padding: 2px 0;
+          }
 
-            .small {
-              font-size: 11px;
-            }
-          </style>
-        </head>
-        <body>
+          .small {
+            font-size: 11px;
+          }
 
-          <div class="center bold">
-            SMART KIDS ACADEMY
-          </div>
-          <div class="center small">
-            Fee Payment Receipt
-          </div>
+        </style>
+      </head>
 
-          <div class="line"></div>
+      <body>
 
-          <div class="small">
-            Receipt No : ${receiptNo}<br/>
-            Date       : ${new Date(payment.createdAt).toLocaleDateString()}<br/>
-            Academic Yr: ${academicYear}
-          </div>
+        <div class="center bold">
+          SMART KIDS ACADEMY
+        </div>
 
-          <div class="line"></div>
+        <div class="center small">
+          Fee Payment Receipt
+        </div>
 
-          <div class="small">
-            Student : ${student.firstName} ${student.lastName}<br/>
-            Class   : ${cls?.ClassName ?? "-"} ${sec?.name ?? ""}
-          </div>
+        <div class="line"></div>
 
-          <div class="line"></div>
+        <div class="small">
+          Receipt No : ${receiptNo}<br/>
+          Date       : ${new Date(payment.createdAt).toLocaleDateString()}<br/>
+          Academic Yr: ${activeYear?.name ?? "-"}
+        </div>
 
-          <table>
-            <tr>
-              <td>Fee Payment</td>
-              <td class="right">₹${payment.amount}</td>
-            </tr>
-          </table>
+        <div class="line"></div>
 
-          <div class="line"></div>
+        <div class="small">
+          Student : ${student.firstName} ${student.lastName}<br/>
+          Class   : ${cls?.ClassName ?? "-"} ${sec?.name ?? ""}
+        </div>
 
-          <div class="small">
-            Mode      : ${payment.mode}<br/>
-            Reference : ${payment.reference ?? "-"}<br/>
-            Collected : ${payment.collectedBy}
-          </div>
+        <div class="line"></div>
 
-          <div class="line"></div>
+        <table>
+          <tr>
+            <td>Fee Payment</td>
+            <td class="right">₹${payment.amount}</td>
+          </tr>
+        </table>
 
-          <div class="center small">
-            Thank you 🙏
-          </div>
+        <div class="line"></div>
 
-          <div class="center small">
-            (System Generated)
-          </div>
+        <div class="small">
+          Mode      : ${payment.mode}<br/>
+          Reference : ${payment.reference ?? "-"}<br/>
+          Collected : ${payment.collectedBy}
+        </div>
 
-        </body>
-      </html>
-    `);
+        <div class="line"></div>
 
+        <div class="center small">
+          Thank you 🙏
+        </div>
+
+        <div class="center small">
+          (System Generated)
+        </div>
+
+      </body>
+    </html>
+    `;
+
+    printWindow.document.write(html);
     printWindow.document.close();
     printWindow.focus();
     printWindow.print();
     printWindow.close();
-  };
 
-  /* =========================
-     Preview (Screen Only)
-  ========================= */
+  };
 
   return (
     <div style={{ padding: "20px" }}>
+
       <h3>Receipt Preview</h3>
-      <p><strong>Receipt No:</strong> {receiptNo}</p>
-      <p><strong>Student:</strong> {student.firstName} {student.lastName}</p>
-      <p><strong>Amount:</strong> ₹{payment.amount}</p>
-      <p><strong>Mode:</strong> {payment.mode}</p>
+
+      <p>
+        <strong>Receipt No:</strong> {receiptNo}
+      </p>
+
+      <p>
+        <strong>Student:</strong> {student.firstName} {student.lastName}
+      </p>
+
+      <p>
+        <strong>Amount:</strong> ₹{payment.amount}
+      </p>
+
+      <p>
+        <strong>Mode:</strong> {payment.mode}
+      </p>
 
       <button onClick={handlePrint}>
         Print Thermal Receipt
       </button>
+
     </div>
   );
+
 }
 
 export default PaymentReceipt;

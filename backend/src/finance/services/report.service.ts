@@ -273,7 +273,11 @@ export async function getExpenseReport(year: string, fromDate?: string, toDate?:
     };
 }
 
-export async function getCombinedReport(year: string, fromDate?: string, toDate?: string) {
+export async function getCombinedReport(
+    year: string,
+    fromDate?: string,
+    toDate?: string
+) {
     const [inc, exp] = await Promise.all([
         getIncomeReport(year, fromDate, toDate),
         getExpenseReport(year, fromDate, toDate)
@@ -282,6 +286,104 @@ export async function getCombinedReport(year: string, fromDate?: string, toDate?
     return {
         incomeTotal: inc.totalCollected,
         expenseTotal: exp.totalExpenses,
-        netBalance: inc.totalCollected - exp.totalExpenses
+        netBalance: inc.totalCollected - exp.totalExpenses,
+
+        incomes: inc.payments,
+        expenses: exp.expenses
     };
 }
+
+
+export interface YearEndStatementRow {
+    month: string;
+    income: number;
+    expense: number;
+    net: number;
+}
+
+export interface YearEndStatementResult {
+    totalIncome: number;
+    totalExpense: number;
+    netResult: number;
+    monthlySnapshot: YearEndStatementRow[];
+}
+
+export async function getYearEndStatementFast(
+    year: string
+): Promise<YearEndStatementResult> {
+
+    const { rows } = await getPool().query(
+        `
+        SELECT
+            to_char(month, 'FMMonth') AS month,
+            income_total,
+            expense_total,
+            net_total
+        FROM finance_monthly_summary
+        WHERE academic_year = $1
+        `,
+        [year]
+    );
+
+    const monthlySnapshot: YearEndStatementRow[] = rows.map((r: any) => ({
+        month: r.month,
+        income: Number(r.income_total),
+        expense: Number(r.expense_total),
+        net: Number(r.net_total)
+    }));
+
+    const totalIncome = monthlySnapshot.reduce(
+        (sum, m) => sum + m.income,
+        0
+    );
+
+    const totalExpense = monthlySnapshot.reduce(
+        (sum, m) => sum + m.expense,
+        0
+    );
+
+    const netResult = totalIncome - totalExpense;
+
+    return {
+        totalIncome,
+        totalExpense,
+        netResult,
+        monthlySnapshot
+    };
+}
+
+export interface PendingFeeRow {
+    ledger_id: string;
+    student_id: string;
+    class_id: string;
+    total_fee: number;
+    paid_total: number;
+    pending: number;
+}
+
+export async function getPendingFees(
+    academicSessionId: string
+): Promise<PendingFeeRow[]> {
+
+    const { rows } = await getPool().query<PendingFeeRow>(
+        `
+    SELECT
+      ls.ledger_id,
+      ls.student_id,
+      ls.class_id,
+      (ls.base_total + ls.adjustments_total) AS total_fee,
+      ls.paid_total,
+      (ls.base_total + ls.adjustments_total - ls.paid_total) AS pending
+    FROM ledger_summary ls
+    JOIN student_fee_ledgers sfl
+      ON sfl.id = ls.ledger_id
+    WHERE sfl.academic_session_id = $1
+    AND (ls.base_total + ls.adjustments_total - ls.paid_total) > 0
+    ORDER BY pending DESC
+    `,
+        [academicSessionId]
+    );
+
+    return rows;
+}
+

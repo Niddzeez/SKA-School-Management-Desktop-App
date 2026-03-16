@@ -6,6 +6,14 @@ import type { Request } from "express";
 export interface JwtPayload {
     userId: string;
     role: "ADMIN" | "TEACHER";
+    jti?: string;
+    exp?: number;
+}
+
+export interface AuthUserPayload {
+  userId: string;
+  name: string;
+  role: "ADMIN" | "TEACHER";
 }
 
 declare global {
@@ -21,5 +29,5 @@ declare global {
  * Populated by the requireAuth middleware.
  */
 export interface AuthenticatedRequest extends Request {
-    user: JwtPayload;
+    user: AuthUserPayload;
 }

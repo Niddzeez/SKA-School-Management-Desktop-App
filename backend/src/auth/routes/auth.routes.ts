@@ -1,4 +1,5 @@
 import { Router, Request, Response } from "express";
+import rateLimit from "express-rate-limit";
 import {
     registerUser,
     loginUser,
@@ -9,8 +10,19 @@ import { validateEmail, validatePassword, validateRole } from "../../shared/vali
 import { requireAuth } from "../middleware/requireAuth";
 import { requireRole } from "../middleware/requireRole";
 import type { AuthenticatedRequest } from "../types";
+import { addTokenToBlacklist } from "../../config/tokenBlacklist";
 
 const router = Router();
+
+// Rate limiter for login endpoint only
+const loginLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 5, // limit each IP to 5 requests per window
+    message: { error: "Too many login attempts. Please try again later." },
+    standardHeaders: true,
+    legacyHeaders: false,
+    skipSuccessfulRequests: true
+});
 
 // ---------------------------------------------------------------------------
 // POST /api/auth/register
@@ -48,7 +60,7 @@ router.post("/register", async (req: Request, res: Response) => {
             const { verifyToken } = await import("../services/auth.service");
             try {
                 const payload = verifyToken(header.slice(7));
-                authReq.user = payload;
+                authReq.user = payload as AuthenticatedRequest["user"];
             } catch {
                 res.status(401).json({ error: "Invalid or expired token" });
                 return;
@@ -81,7 +93,7 @@ router.post("/register", async (req: Request, res: Response) => {
 //
 // Response: { token, userId, name, role }
 // ---------------------------------------------------------------------------
-router.post("/login", async (req: Request, res: Response) => {
+router.post("/login", loginLimiter, async (req: Request, res: Response) => {
     try {
         const { email, password } = req.body;
 
@@ -115,10 +127,34 @@ router.get(
     async (req: Request, res: Response) => {
         const authReq = req as AuthenticatedRequest;
         res.json({
-            userId: authReq.user.userId,
-            role: authReq.user.role,
+            userId: authReq.user!.userId,
+            name: authReq.user!.name,
+            role: authReq.user!.role,
         });
     }
 );
 
 export default router;
+
+// ---------------------------------------------------------------------------
+// POST /api/auth/logout
+// Invalidates JWT token by blacklisting its jti
+// ---------------------------------------------------------------------------
+router.post("/logout", requireAuth, async (req: Request, res: Response) => {
+    try {
+        const token = req.headers.authorization?.split(" ")[1];
+        if (!token) {
+            return res.status(400).json({ error: "Token required" });
+        }
+        const { verifyToken } = await import("../services/auth.service");
+        const payload = verifyToken(token);
+        const expiry = payload.exp ? payload.exp * 1000 : Date.now() + 3600000;
+        if (!payload.jti) {
+            return res.status(400).json({ error: "Token missing jti" });
+        }
+        addTokenToBlacklist(payload.jti, expiry);
+        res.json({ message: "Logged out successfully" });
+    } catch (err) {
+        res.status(401).json({ error: "Invalid token" });
+    }
+});

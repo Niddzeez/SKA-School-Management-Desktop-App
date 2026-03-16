@@ -17,12 +17,12 @@ function StudentDetails() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
 
-  const { students, UpdateStudentStatus, assignStudenttoSection, getStudentById } =
+  const { students, UpdateStudentStatus, assignStudenttoSection } =
     useStudents();
   const { orderedClasses } = useClasses();
   const { sections, loadAllSections } = useSections();
 
-  const { role } = useAuth();
+  const { role, name } = useAuth();
 
   const {
     getLedgerByStudentYear,
@@ -41,6 +41,7 @@ function StudentDetails() {
     isYearClosed,
   } = useAcademicYear();
 
+  const academicYearID = activeYear?.id || "";
   const academicYear = activeYear?.name || "";
   const availableYears = academicYears.map((y) => y.name);
 
@@ -150,11 +151,11 @@ function StudentDetails() {
     upsertLedgerFromFeeStructure(
       student.id,
       student.classID,
-      academicYear,
-      activeFeeStructure.components.reduce((acc, c) => {
-        acc[c.name] = { name: c.name, amount: c.amount };
-        return acc;
-      }, {} as Record<string, { name: string; amount: number; }>)
+      academicYearID,
+      activeFeeStructure.components.map((c) => ({
+        name: c.name,
+        amount: c.amount,
+      }))
     );
 
 
@@ -209,7 +210,7 @@ function StudentDetails() {
 
 
   const handlePromote = () => {
-    if (!role || can(role, "PROMOTE_STUDENT")) {
+    if (!role || !can(role, "PROMOTE_STUDENT")) {
       alert("You do not have permission to perform this action.");
       return;
     }
@@ -249,7 +250,7 @@ function StudentDetails() {
       student.id,
       nextClassId,
       nextAcademicYear,
-      baseComponentsRecord
+      Object.values(baseComponentsRecord)
     );
   };
 
@@ -615,7 +616,7 @@ function StudentDetails() {
                   type: adjType as any,
                   amount: signed,
                   reason: adjReason,
-                  approvedBy: "Admin",
+                  approvedBy: name || "Admin",
                 });
 
                 setAdjAmount("");
@@ -649,7 +650,7 @@ function StudentDetails() {
               <th>Mode</th>
               <th>Reference</th>
               <th>Collected By</th>
-              <th>Reciept</th>
+              <th>Receipt</th>
             </tr>
           </thead>
           <tbody>

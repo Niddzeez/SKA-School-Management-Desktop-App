@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState, useCallback } from "react";
 import { apiClient } from "../services/apiClient";
 
 export type SystemLogEvent = string;
@@ -19,6 +19,7 @@ type SystemLogContextType = {
   error: string | null;
   page: number;
   hasMore: boolean;
+  loadLogs: () => Promise<void>;
   loadMoreLogs: () => Promise<void>;
   addLog: (
     event: SystemLogEvent,
@@ -37,43 +38,50 @@ export function SystemLogProvider({ children }: { children: React.ReactNode }) {
   const [page, setPage] = useState<number>(0);
   const [hasMore, setHasMore] = useState<boolean>(true);
 
-  // Initial Fetch
-  useEffect(() => {
-    async function loadInitialLogs() {
-      try {
-        setLoading(true);
-        setError(null);
-        // Load default limit 50
-        const data = await apiClient.get<SystemLog[]>("/api/system/activity?limit=50");
-        setLogs(data);
-        if (data.length < 50) setHasMore(false);
-      } catch (err: any) {
-        setError(err.message || "Failed to load system logs");
-      } finally {
-        setLoading(false);
-      }
+  // loadLogs does the initial fetch of logs
+  const loadLogs = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const data = await apiClient.get<SystemLog[]>(
+        "/api/system/activity?limit=50"
+      );
+
+      setLogs(data);
+      setPage(1);
+
+      if (data.length < 50) setHasMore(false);
+    } catch (err: any) {
+      setError(err.message || "Failed to load system logs");
+    } finally {
+      setLoading(false);
     }
-    loadInitialLogs();
   }, []);
 
-  const loadMoreLogs = async () => {
+
+  const loadMoreLogs = useCallback(async () => {
     if (!hasMore || loading) return;
 
     try {
       setLoading(true);
       setError(null);
+
       const data = await apiClient.get<SystemLog[]>(
         `/api/system/activity?limit=50&offset=${logs.length}`
       );
+
       setLogs((prev) => [...prev, ...data]);
+
       if (data.length < 50) setHasMore(false);
+
       setPage((p) => p + 1);
     } catch (err: any) {
       setError(err.message || "Failed to load older logs");
     } finally {
       setLoading(false);
     }
-  };
+  }, [logs.length, hasMore, loading]);
 
   /**
    * NO-OP Compatibility implementation.
@@ -89,7 +97,7 @@ export function SystemLogProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <SystemLogContext.Provider
-      value={{ logs, loading, error, page, hasMore, loadMoreLogs, addLog }}
+      value={{ logs, loading, error, page, hasMore, loadLogs, loadMoreLogs, addLog }}
     >
       {children}
     </SystemLogContext.Provider>

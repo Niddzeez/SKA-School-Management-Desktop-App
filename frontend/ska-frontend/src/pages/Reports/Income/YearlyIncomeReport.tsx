@@ -1,5 +1,4 @@
-// src/pages/Reports/income/YearlyIncomeReport.tsx
-
+import { useMemo } from "react";
 import { useFeeLedger } from "../../../context/FeeLedgerContext";
 import { useStudents } from "../../../context/StudentContext";
 import { getAcademicYearRange } from "../Utils/reportDateUtils";
@@ -14,11 +13,6 @@ function YearlyIncomeReport({ academicYear }: Props) {
   const { payments } = useFeeLedger();
   const { students } = useStudents();
 
-  const getStudentName = (studentId: string) => {
-    const s = students.find((st) => st.id === studentId);
-    return s ? `${s.firstName} ${s.lastName}` : "Unknown";
-  };
-
   /* =========================
      Academic Year Range
   ========================= */
@@ -26,17 +20,38 @@ function YearlyIncomeReport({ academicYear }: Props) {
   const { start, end } = getAcademicYearRange(academicYear);
 
   /* =========================
-     Filter Income
+     Student Lookup Map
   ========================= */
 
-  const yearlyIncome = payments.filter((p) => {
-    const d = new Date(p.createdAt);
-    return d >= start && d <= end;
-  });
+  const studentMap = useMemo(() => {
+    const map = new Map<string, string>();
+    students.forEach((s) =>
+      map.set(s.id, `${s.firstName} ${s.lastName}`)
+    );
+    return map;
+  }, [students]);
+
+  const getStudentName = (id: string) =>
+    studentMap.get(id) ?? "Unknown";
+
+  /* =========================
+     Filter Yearly Income
+  ========================= */
+
+  const yearlyIncome = useMemo(() => {
+    return payments.filter((p) => {
+      const d = new Date(p.createdAt);
+      return d >= start && d <= end;
+    });
+  }, [payments, start, end]);
 
   if (yearlyIncome.length === 0) {
     return <p>No income recorded for academic year {academicYear}.</p>;
   }
+
+  /* =========================
+     Totals
+  ========================= */
 
   const totalIncome = yearlyIncome.reduce(
     (sum, p) => sum + p.amount,
@@ -48,34 +63,44 @@ function YearlyIncomeReport({ academicYear }: Props) {
   ========================= */
 
   const printData = {
-        title: "Yearly Income Report",
-        meta: {
-            academicYear,
-            reportType: "INCOME",
-            granularity: "YEARLY",
-            periodLabel: academicYear,
-        },
-        sections: [
-            {
-                title: "Income Details",
-                headers: ["Date", "Student", "Mode", "Amount"],
-                rows: yearlyIncome.map((p) => ({
-                    columns: [
-                        new Date(p.createdAt).toLocaleDateString(),
-                        getStudentName(p.studentId),
-                        p.mode,
-                        `₹${p.amount}`,
-                    ],
-                })),
-            },
-            {
-                title: "Summary",
-                headers: ["Metric", "Value"],
-                rows: [{ columns: ["Total Income", `₹${totalIncome}`] }],
-            },
+    title: "Yearly Income Report",
+    meta: {
+      academicYear,
+      reportType: "INCOME",
+      granularity: "YEARLY",
+      periodLabel: academicYear,
+    },
+    sections: [
+      {
+        title: "Income Details",
+        headers: [
+          "Date",
+          "Student",
+          "Mode",
+          "Collected By",
+          "Amount",
         ],
-    } as const;
-
+        rows: yearlyIncome.map((p) => ({
+          columns: [
+            new Date(p.createdAt).toLocaleDateString(),
+            getStudentName(p.studentId),
+            p.mode,
+            p.collectedBy,
+            `₹${p.amount}`,
+          ],
+        })),
+      },
+      {
+        title: "Summary",
+        headers: ["Metric", "Value"],
+        rows: [
+          {
+            columns: ["Total Income", `₹${totalIncome}`],
+          },
+        ],
+      },
+    ],
+  } as const;
 
   /* =========================
      Render
@@ -95,10 +120,13 @@ function YearlyIncomeReport({ academicYear }: Props) {
             <th>Amount</th>
           </tr>
         </thead>
+
         <tbody>
           {yearlyIncome.map((p) => (
             <tr key={p.id}>
-              <td>{new Date(p.createdAt).toLocaleDateString()}</td>
+              <td>
+                {new Date(p.createdAt).toLocaleDateString()}
+              </td>
               <td>{getStudentName(p.studentId)}</td>
               <td>{p.mode}</td>
               <td>{p.collectedBy}</td>

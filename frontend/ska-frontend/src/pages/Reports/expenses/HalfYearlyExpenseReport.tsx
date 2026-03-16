@@ -1,5 +1,4 @@
-// src/pages/Reports/expenses/HalfYearlyExpenseReport.tsx
-
+import { useMemo } from "react";
 import { useFeeLedger } from "../../../context/FeeLedgerContext";
 import { getAcademicYearRange } from "../Utils/reportDateUtils";
 import { printReport } from "../Utils/PrintUtils";
@@ -19,28 +18,40 @@ function HalfYearlyExpenseReport({ academicYear, half }: Props) {
      Half-Year Date Range
   ========================= */
 
-  const halfStart =
-    half === "H1"
-      ? new Date(start.getFullYear(), 3, 1) // April 1
-      : new Date(start.getFullYear(), 9, 1); // Oct 1
+  const { halfStart, halfEnd, periodLabel } = useMemo(() => {
+    if (half === "H1") {
+      return {
+        halfStart: new Date(start.getFullYear(), 3, 1), // Apr 1
+        halfEnd: new Date(start.getFullYear(), 8, 30), // Sep 30
+        periodLabel: "April–September",
+      };
+    }
 
-  const halfEnd =
-    half === "H1"
-      ? new Date(start.getFullYear(), 8, 30) // Sep 30
-      : end; // March 31
+    return {
+      halfStart: new Date(start.getFullYear(), 9, 1), // Oct 1
+      halfEnd: end,
+      periodLabel: "October–March",
+    };
+  }, [half, start, end]);
 
   /* =========================
      Filter Expenses
   ========================= */
 
-  const halfYearExpenses = expenses.filter((e) => {
-    const d = new Date(e.expenseDate);
-    return d >= halfStart && d <= halfEnd;
-  });
+  const halfYearExpenses = useMemo(() => {
+    return expenses.filter((e) => {
+      const d = new Date(e.expenseDate);
+      return d >= halfStart && d <= halfEnd;
+    });
+  }, [expenses, halfStart, halfEnd]);
 
   if (halfYearExpenses.length === 0) {
     return <p>No expenses recorded for this period.</p>;
   }
+
+  /* =========================
+     Totals
+  ========================= */
 
   const totalExpense = halfYearExpenses.reduce(
     (sum, e) => sum + e.amount,
@@ -57,31 +68,26 @@ function HalfYearlyExpenseReport({ academicYear, half }: Props) {
       academicYear,
       reportType: "EXPENSE",
       granularity: "HALF_YEARLY",
-      periodLabel:
-        half === "H1"
-          ? "April–September"
-          : "October–March",
+      periodLabel,
     },
     sections: [
       {
         title: "Expense Details",
-        headers: ["Date", "Paid To", "Category", "Amount"],
+        headers: [
+          "Date",
+          "Category",
+          "Description",
+          "Paid To",
+          "Mode",
+          "Amount",
+        ],
         rows: halfYearExpenses.map((e) => ({
           columns: [
             new Date(e.expenseDate).toLocaleDateString(),
+            e.category,
+            e.description,
             e.paidTo,
-            e.category,
-            `₹${e.amount}`,
-          ],
-        })),
-      },
-      {
-        title: "Expense Details",
-        headers: ["Date", "Category", "Amount"],
-        rows: halfYearExpenses.map((e) => ({
-          columns: [
-            new Date(e.expenseDate).toLocaleDateString(),
-            e.category,
+            e.mode,
             `₹${e.amount}`,
           ],
         })),
@@ -104,10 +110,7 @@ function HalfYearlyExpenseReport({ academicYear, half }: Props) {
 
   return (
     <div className="report-card">
-      <h3>
-        Half-Yearly Expense Report —{" "}
-        {half === "H1" ? "April–September" : "October–March"}
-      </h3>
+      <h3>Half-Yearly Expense Report — {periodLabel}</h3>
 
       <table className="report-table">
         <thead>
@@ -120,6 +123,7 @@ function HalfYearlyExpenseReport({ academicYear, half }: Props) {
             <th>Amount</th>
           </tr>
         </thead>
+
         <tbody>
           {halfYearExpenses.map((e) => (
             <tr key={e.id}>

@@ -7,6 +7,9 @@ import {
     addPayment,
     addAdjustment,
     getLedgersByYear,
+    updateLedgerBaseComponents,
+    getPaymentsByLedgerId,
+    getAdjustmentsByLedgerId
 } from "../services/ledger.service";
 import {
     mapLedgerSummary,
@@ -126,6 +129,43 @@ router.get("/:ledgerId", async (req: Request, res: Response) => {
         const { status, body } = toErrorResponse(err);
         res.status(status).json(body);
     }
+});
+
+router.get("/:ledgerId/payments", async (req: Request, res: Response) => {
+  try {
+    const ledgerId = String(req.params.ledgerId);
+
+    if (!isUUID(ledgerId)) {
+      throw new ValidationError("'ledgerId' must be a valid UUID");
+    }
+
+    const payments = await getPaymentsByLedgerId(ledgerId);
+
+    res.json(payments.map(mapPayment));
+
+  } catch (err) {
+    const { status, body } = toErrorResponse(err);
+    res.status(status).json(body);
+  }
+});
+
+
+router.get("/:ledgerId/adjustments", async (req: Request, res: Response) => {
+  try {
+    const ledgerId = String(req.params.ledgerId);
+
+    if (!isUUID(ledgerId)) {
+      throw new ValidationError("'ledgerId' must be a valid UUID");
+    }
+
+    const adjustments = await getAdjustmentsByLedgerId(ledgerId);
+
+    res.json(adjustments.map(mapAdjustment));
+
+  } catch (err) {
+    const { status, body } = toErrorResponse(err);
+    res.status(status).json(body);
+  }
 });
 
 // ===========================================================================
@@ -289,6 +329,57 @@ router.post("/:ledgerId/adjustments", requireRole("ADMIN"), async (req: Request,
             ledgerId, validatedType, amount, reason.trim(), approvedBy.trim(), performedBy
         );
         res.status(201).json(mapAdjustment(row));
+    } catch (err) {
+        const { status, body } = toErrorResponse(err);
+        res.status(status).json(body);
+    }
+});
+
+// ---------------------------------------------------------------------------
+// PATCH /api/ledgers/:ledgerId
+// Updates the base components of a ledger.
+// Only allowed if no payments have been recorded.
+// ---------------------------------------------------------------------------
+router.patch("/:ledgerId", requireRole("ADMIN"), async (req: Request, res: Response) => {
+    try {
+        const ledgerId = String(req.params.ledgerId);
+
+        if (!isUUID(ledgerId)) {
+            throw new ValidationError("'ledgerId' must be a valid UUID");
+        }
+
+        const { baseComponents } = req.body;
+
+        if (!Array.isArray(baseComponents) || baseComponents.length === 0) {
+            throw new ValidationError("'baseComponents' must be a non-empty array");
+        }
+
+        for (let i = 0; i < baseComponents.length; i++) {
+            const comp = baseComponents[i];
+
+            if (!comp || typeof comp.name !== "string" || !comp.name.trim()) {
+                throw new ValidationError(`baseComponents[${i}].name must be a non-empty string`);
+            }
+
+            if (typeof comp.amount !== "number" || comp.amount <= 0) {
+                throw new ValidationError(`baseComponents[${i}].amount must be a positive number`);
+            }
+        }
+
+        const sanitised = baseComponents.map((c: { name: string; amount: number }) => ({
+            name: c.name.trim(),
+            amount: c.amount,
+        }));
+
+        const performedBy = req.user?.userId || "UNKNOWN_USER";
+
+        const updated = await updateLedgerBaseComponents(
+            ledgerId,
+            sanitised,
+            performedBy
+        );
+
+        res.json(mapLedger(updated));
     } catch (err) {
         const { status, body } = toErrorResponse(err);
         res.status(status).json(body);

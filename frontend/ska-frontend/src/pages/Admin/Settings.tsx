@@ -3,6 +3,8 @@ import { useAcademicYear } from "../../context/AcademicYearContext";
 import { useFeeStructures } from "../../context/FeeStructureContext";
 import { useSystemLogs } from "../../context/SystemLogContext";
 import AcademicYearTimeline from "./AcademicYearTimeline";
+import { apiClient } from "../../services/apiClient";
+import { useEffect } from "react";
 
 function SettingsPage() {
   const navigate = useNavigate();
@@ -16,9 +18,6 @@ function SettingsPage() {
     closeYear,
     isYearClosed,
     isPromotionLocked,
-    lockPromotion,
-    getPromotionSummary,
-    requestAutoPromotion,
   } = useAcademicYear();
 
   const academicYearId = activeYear?.id || "";
@@ -26,15 +25,13 @@ function SettingsPage() {
 
   const { feeStructures } = useFeeStructures();
 
-  const { logs, addLog, loadMoreLogs, hasMore, loading } = useSystemLogs();
-  console.log("SYSTEM LOGS:", logs);
+  const { logs, addLog, loadLogs, loadMoreLogs, hasMore, loading } = useSystemLogs();
   /* =========================
      Derived State
   ========================= */
 
   const yearClosed = isYearClosed(academicYearId);
   const promotionLocked = isPromotionLocked(academicYearId);
-  const promotionSummary = getPromotionSummary(academicYearId);
 
   const activeFeeStructure = feeStructures.find(
     (fs) =>
@@ -45,33 +42,55 @@ function SettingsPage() {
   /* =========================
      Handlers
   ========================= */
+  useEffect(() => {
+    loadLogs();
+  }, []);
 
-  const handleCloseAcademicYear = () => {
-    const confirmed = window.confirm(
-      `Closing the academic year will:\n
+  const handleCloseAcademicYear = async () => {
+    try {
+      const result = await apiClient.get<{ pendingCount: number }>(
+        `/api/academic-years/${academicYearId}/pending-summary`
+      );
+
+      const pending = result.pendingCount;
+
+      if (pending > 0) {
+        const proceed = window.confirm(
+          `${pending} students have outstanding balances.\n\nClose academic year anyway?`
+        );
+
+        if (!proceed) return;
+      }
+
+      const confirmed = window.confirm(
+        `Closing the academic year will:\n
 • Run promotions (if not already run)
 • Lock the academic year
 • Make all data read-only\n
 This action CANNOT be undone.\n\nContinue?`
-    );
+      );
 
-    if (!confirmed) return;
+      if (!confirmed) return;
 
-    if (!promotionLocked) {
-      requestAutoPromotion(academicYearId);
-      lockPromotion(academicYearId);
+      if (!promotionLocked) {
+        await apiClient.post(`/api/academic-years/${academicYearId}/lock-promotion`);
+      }
+
+      addLog(
+        "ACADEMIC_YEAR_CLOSED",
+        academicYearName,
+        "Academic year closed from Settings"
+      );
+
+      await closeYear(academicYearId);
+
+    } catch (err) {
+      console.error("Failed to check pending balances:", err);
+      alert("Unable to verify pending balances before closing the academic year.");
     }
-
-    addLog(
-      "ACADEMIC_YEAR_CLOSED",
-      academicYearName,
-      "Academic year closed from Settings"
-    );
-
-    closeYear(academicYearId);
   };
 
-  const handleRunBulkPromotion = () => {
+  const handleRunBulkPromotion = async () => {
     const confirmed = window.confirm(
       `This will promote ALL eligible students:\n
 • Sections will reset
@@ -82,8 +101,7 @@ This action CANNOT be undone.\n\nContinue?`
 
     if (!confirmed) return;
 
-    requestAutoPromotion(academicYearId);
-    lockPromotion(academicYearId);
+    await apiClient.post(`/api/academic-years/${activeYear?.id}/lock-promotion`);
 
     addLog(
       "BULK_PROMOTION_RUN",
@@ -92,6 +110,11 @@ This action CANNOT be undone.\n\nContinue?`
     );
 
     navigate("/bulkpromotion");
+  };
+
+  const createNextYear = async () => {
+    await apiClient.post("/api/academic-years/create-next");
+    alert("Next academic year created");
   };
 
   /* =========================
@@ -125,10 +148,6 @@ This action CANNOT be undone.\n\nContinue?`
             <strong>Promotions Run:</strong>{" "}
             {promotionLocked ? "Yes" : "No"}
           </div>
-          <div>
-            <strong>Promotion Summary:</strong>{" "}
-            {promotionSummary ? "Available" : "Not Generated"}
-          </div>
         </div>
       </section>
 
@@ -152,14 +171,6 @@ This action CANNOT be undone.\n\nContinue?`
             Close Academic Year
           </button>
 
-          {promotionSummary && (
-            <button
-              className="secondary-btn"
-              onClick={() => navigate("/reports/promotion-summary")}
-            >
-              View Promotion Summary
-            </button>
-          )}
         </div>
 
         {yearClosed && (
@@ -167,6 +178,11 @@ This action CANNOT be undone.\n\nContinue?`
             Academic year is closed. No further changes are allowed.
           </p>
         )}
+
+
+        <button onClick={createNextYear}>
+          Create Next Academic Year
+        </button>
       </section>
 
       {/* =========================
@@ -248,7 +264,7 @@ This action CANNOT be undone.\n\nContinue?`
             <strong>
               {new Date(log.createdAt).toLocaleString()}
             </strong>{" "}
-            — {log.event.replaceAll("_", " ")} ({log.entityType})
+            — {(log.event ?? "").replaceAll("_", " ")} ({log.entityType})
           </div>
         ))}
         {hasMore && (

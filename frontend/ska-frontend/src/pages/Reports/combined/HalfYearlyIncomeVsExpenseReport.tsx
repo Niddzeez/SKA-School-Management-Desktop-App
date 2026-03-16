@@ -1,5 +1,4 @@
-// src/pages/Reports/combined/HalfYearlyIncomeVsExpense.tsx
-
+import { useMemo } from "react";
 import { useFeeLedger } from "../../../context/FeeLedgerContext";
 import { useStudents } from "../../../context/StudentContext";
 import { getAcademicYearRange } from "../Utils/reportDateUtils";
@@ -15,10 +14,20 @@ function HalfYearlyIncomeVsExpense({ academicYear, half }: Props) {
   const { payments, expenses } = useFeeLedger();
   const { students } = useStudents();
 
-  const getStudentName = (studentId: string) => {
-    const s = students.find((st) => st.id === studentId);
-    return s ? `${s.firstName} ${s.lastName}` : "Unknown";
-  };
+  /* =========================
+     Student Lookup Map
+  ========================= */
+
+  const studentMap = useMemo(() => {
+    const map = new Map<string, string>();
+    students.forEach((s) =>
+      map.set(s.id, `${s.firstName} ${s.lastName}`)
+    );
+    return map;
+  }, [students]);
+
+  const getStudentName = (id: string) =>
+    studentMap.get(id) ?? "Unknown";
 
   /* =========================
      Half-Year Date Range
@@ -26,36 +35,47 @@ function HalfYearlyIncomeVsExpense({ academicYear, half }: Props) {
 
   const { start, end } = getAcademicYearRange(academicYear);
 
-  const halfStart =
-    half === "H1"
-      ? new Date(start.getFullYear(), 3, 1) // April 1
-      : new Date(start.getFullYear(), 9, 1); // Oct 1
+  const { halfStart, halfEnd, periodLabel } = useMemo(() => {
+    if (half === "H1") {
+      return {
+        halfStart: new Date(start.getFullYear(), 3, 1),
+        halfEnd: new Date(start.getFullYear(), 8, 30),
+        periodLabel: "April–September",
+      };
+    }
 
-  const halfEnd =
-    half === "H1"
-      ? new Date(start.getFullYear(), 8, 30) // Sep 30
-      : end; // March 31
+    return {
+      halfStart: new Date(start.getFullYear(), 9, 1),
+      halfEnd: end,
+      periodLabel: "October–March",
+    };
+  }, [half, start, end]);
 
   /* =========================
-     Filter Income & Expenses
+     Filter Data
   ========================= */
 
-  const halfYearIncome = payments.filter((p) => {
-    const d = new Date(p.createdAt);
-    return d >= halfStart && d <= halfEnd;
-  });
+  const halfYearIncome = useMemo(() => {
+    return payments.filter((p) => {
+      const d = new Date(p.createdAt);
+      return d >= halfStart && d <= halfEnd;
+    });
+  }, [payments, halfStart, halfEnd]);
 
-  const halfYearExpenses = expenses.filter((e) => {
-    const d = new Date(e.expenseDate);
-    return d >= halfStart && d <= halfEnd;
-  });
+  const halfYearExpenses = useMemo(() => {
+    return expenses.filter((e) => {
+      const d = new Date(e.expenseDate);
+      return d >= halfStart && d <= halfEnd;
+    });
+  }, [expenses, halfStart, halfEnd]);
 
-  if (
-    halfYearIncome.length === 0 &&
-    halfYearExpenses.length === 0
-  ) {
+  if (halfYearIncome.length === 0 && halfYearExpenses.length === 0) {
     return <p>No financial records for this period.</p>;
   }
+
+  /* =========================
+     Totals
+  ========================= */
 
   const totalIncome = halfYearIncome.reduce(
     (sum, p) => sum + p.amount,
@@ -74,53 +94,65 @@ function HalfYearlyIncomeVsExpense({ academicYear, half }: Props) {
   ========================= */
 
   const printData = {
-  title: "Half-Yearly Income vs Expense Report",
-  meta: {
-    academicYear,
-    reportType: "COMBINED",
-    granularity: "HALF_YEARLY",
-    periodLabel:
-      half === "H1"
-        ? "April–September"
-        : "October–March",
-  },
-  sections: [
-    {
-      title: "Income Details",
-      headers: ["Date", "Student", "Mode", "Amount"],
-      rows: halfYearIncome.map((p) => ({
-        columns: [
-          p.createdAt,
-          `${getStudentName(p.studentId)} — ${p.mode}`,
-          `₹${p.amount}`,
+    title: "Half-Yearly Income vs Expense Report",
+    meta: {
+      academicYear,
+      reportType: "COMBINED",
+      granularity: "HALF_YEARLY",
+      periodLabel,
+    },
+    sections: [
+      {
+        title: "Income Details",
+        headers: [
+          "Date",
+          "Student",
+          "Mode",
+          "Collected By",
+          "Amount",
         ],
-      })),
-    },
-    {
-      title: "Expense Details",
-      headers: ["Date", "Category", "Paid To", "Mode", "Amount"],
-      rows: halfYearExpenses.map((e) => ({
-        columns: [
-          e.expenseDate,
-          e.category,
-          e.paidTo,
-          e.mode,
-          `₹${e.amount}`,
+        rows: halfYearIncome.map((p) => ({
+          columns: [
+            new Date(p.createdAt).toLocaleDateString(),
+            getStudentName(p.studentId),
+            p.mode,
+            p.collectedBy,
+            `₹${p.amount}`,
+          ],
+        })),
+      },
+      {
+        title: "Expense Details",
+        headers: [
+          "Date",
+          "Category",
+          "Description",
+          "Paid To",
+          "Mode",
+          "Amount",
         ],
-      })),
-    },
-    {
-      title: "Summary",
-      headers: ["Metric", "Value"],
-      rows: [
-        { columns: ["Total Income", `₹${totalIncome}`] },
-        { columns: ["Total Expense", `₹${totalExpense}`] },
-        { columns: ["Net Result", `₹${netResult}`] },
-      ],
-    },
-  ],
-} as const;
-
+        rows: halfYearExpenses.map((e) => ({
+          columns: [
+            new Date(e.expenseDate).toLocaleDateString(),
+            e.category,
+            e.description,
+            e.paidTo,
+            e.mode,
+            `₹${e.amount}`,
+          ],
+        })),
+      },
+      {
+        title: "Summary",
+        headers: ["Metric", "Value"],
+        rows: [
+          { columns: ["Total Income", `₹${totalIncome}`] },
+          { columns: ["Total Expense", `₹${totalExpense}`] },
+          { columns: ["Net Result", `₹${netResult}`] },
+        ],
+      },
+    ],
+  } as const;
 
   /* =========================
      Render
@@ -128,28 +160,29 @@ function HalfYearlyIncomeVsExpense({ academicYear, half }: Props) {
 
   return (
     <div className="report-card">
-      <h3>
-        Half-Yearly Income vs Expense —{" "}
-        {half === "H1" ? "April–September" : "October–March"}
-      </h3>
+      <h3>Half-Yearly Income vs Expense — {periodLabel}</h3>
 
-      {/* Income Table */}
+      {/* Income */}
       <h4>Income</h4>
+
       <table className="report-table">
         <thead>
           <tr>
             <th>Date</th>
             <th>Student</th>
             <th>Mode</th>
+            <th>Collected By</th>
             <th>Amount</th>
           </tr>
         </thead>
+
         <tbody>
           {halfYearIncome.map((p) => (
             <tr key={p.id}>
               <td>{new Date(p.createdAt).toLocaleDateString()}</td>
               <td>{getStudentName(p.studentId)}</td>
               <td>{p.mode}</td>
+              <td>{p.collectedBy}</td>
               <td className="amount">₹{p.amount}</td>
             </tr>
           ))}
@@ -160,23 +193,29 @@ function HalfYearlyIncomeVsExpense({ academicYear, half }: Props) {
         <strong>Total Income:</strong> ₹{totalIncome}
       </p>
 
-      {/* Expense Table */}
+      {/* Expenses */}
       <h4 style={{ marginTop: "20px" }}>Expenses</h4>
+
       <table className="report-table">
         <thead>
           <tr>
             <th>Date</th>
             <th>Category</th>
+            <th>Description</th>
             <th>Paid To</th>
+            <th>Mode</th>
             <th>Amount</th>
           </tr>
         </thead>
+
         <tbody>
           {halfYearExpenses.map((e) => (
             <tr key={e.id}>
               <td>{new Date(e.expenseDate).toLocaleDateString()}</td>
               <td>{e.category}</td>
+              <td>{e.description}</td>
               <td>{e.paidTo}</td>
+              <td>{e.mode}</td>
               <td className="amount">₹{e.amount}</td>
             </tr>
           ))}

@@ -17,7 +17,7 @@ export interface DashboardOverviewResponse {
 
 export interface MonthlyCollectionResponse {
     month: string;
-    amount: number;
+    total: number;
 }
 
 export interface ClassCollectionResponse {
@@ -55,7 +55,7 @@ export function mapDashboardOverview(row: DashboardOverviewRow): DashboardOvervi
 export function mapMonthlyCollection(row: MonthlyCollectionRow): MonthlyCollectionResponse {
     return {
         month: row.month,
-        amount: parseFloat(row.amount)
+        total: parseFloat(row.amount)
     };
 }
 
