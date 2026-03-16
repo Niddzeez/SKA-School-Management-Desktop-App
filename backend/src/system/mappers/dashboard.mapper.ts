@@ -4,7 +4,7 @@ import type {
     ClassCollectionRow,
     FinanceSummaryRow,
     RecentPaymentRow
-} from "../../finance/services/dashboard.service";
+} from "../../dashboard/services/dashboard.service";
 
 export interface DashboardOverviewResponse {
     totalStudents: number;

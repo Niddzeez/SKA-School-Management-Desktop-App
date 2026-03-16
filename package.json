@@ -1,14 +1,12 @@
 {
-  "devDependencies": {
-    "@types/pdfmake": "^0.2.12",
-    "@types/react": "^19.2.8",
-    "@types/react-dom": "^19.2.3",
-    "vite": "^7.3.1"
+  "name": "ska-school-management",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently -n BACKEND,FRONTEND -c green,blue \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev"
   },
   "dependencies": {
-    "express-rate-limit": "^8.3.1",
-    "html2pdf.js": "^0.14.0",
-    "pdfmake": "^0.2.23",
-    "react-router-dom": "^7.12.0"
+    "concurrently": "^9.2.1"
   }
 }

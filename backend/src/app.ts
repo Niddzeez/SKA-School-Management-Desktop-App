@@ -25,6 +25,7 @@ import ledgerRoutes from "./finance/routes/ledgers.routes";
 import expenseRoutes from "./finance/routes/expenses.routes";
 import receiptRoutes from "./finance/routes/receipts.routes";
 
+
 // Finance reporting & receipt detail (Phase 6 & 7)
 import reportsRoutes from "./finance/routes/reports.routes";
 import receiptDetailRoutes from "./finance/routes/receipt-detail.routes";
@@ -39,6 +40,8 @@ import ledgerTimelineRoutes from "./system/routes/ledgerTimeline.routes";
 
 // Fee Structure (Phase 13)
 import feeStructureRoutes from "./finance/routes/feeStructure.routes";
+
+import bootstrapRoutes from "./dashboard/routes/bootstrap.routes";
 
 if (!process.env.FRONTEND_URL) { throw new Error("FRONTEND_URL environment variable is not set"); }
 
@@ -109,8 +112,9 @@ app.use("/api/system", auth, adminOnly, ledgerTimelineRoutes);
 app.use("/api/fee-structures", auth, anyRole, feeStructureRoutes);
 
 // ── Admin Dashboard (Phase 11)  ──────────────────────────────────────────────
-import dashboardRoutes from "./system/routes/dashboard.routes";
+import dashboardRoutes from "./dashboard/routes/dashboard.routes";
 app.use("/api/dashboard", auth, adminOnly, dashboardRoutes);
+app.use("/api/dashboard/bootstrap", auth, adminOnly, bootstrapRoutes);
 
 // ── Health check (Phase 12) ───────────────────────────────────────────────
 import healthRoutes from "./system/routes/health.routes";
