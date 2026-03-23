@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { apiClient } from "../../../services/apiClient";
-import { printReport } from "../Utils/PrintUtils";
+import { printReport } from "../Utils/printUtils";
 import { toBackendAcademicYear } from "../Utils/reportDateUtils";
 import "./statements.css";
 
@@ -58,6 +58,9 @@ function YearEndStatement({ academicYear }: YearEndStatementProps) {
   if (error) return <p className="error">{error}</p>;
   if (!data) return null;
 
+  // ✅ Derived from API data — safe
+  const isDeficit = data.netResult < 0;
+
   /* =========================
      Print Data
   ========================= */
@@ -91,7 +94,7 @@ function YearEndStatement({ academicYear }: YearEndStatementProps) {
         rows: [
           {
             columns: [
-              data.netResult >= 0 ? "Net Surplus" : "Net Deficit",
+              isDeficit ? "Net Deficit" : "Net Surplus",
               `₹${data.netResult}`,
             ],
           },
@@ -118,6 +121,8 @@ function YearEndStatement({ academicYear }: YearEndStatementProps) {
 
   return (
     <div className="statement-card">
+
+      {/* Header */}
       <div className="statement-header">
         <h2>Year-End Financial Statement</h2>
         <p className="statement-subtitle">
@@ -125,31 +130,41 @@ function YearEndStatement({ academicYear }: YearEndStatementProps) {
         </p>
       </div>
 
-      {/* =========================
-         Summary
-      ========================= */}
+      {/* ── KPI Cards ── */}
+      <div className="statement-kpi-row">
 
-      <div className="summary-block">
-        <p>
-          <strong>Total Income:</strong> ₹{data.totalIncome}
-        </p>
+        <div className="statement-kpi income">
+          <div className="statement-kpi-icon">💰</div>
+          <div className="statement-kpi-label">Total Income</div>
+          <div className="statement-kpi-value">
+            ₹{data.totalIncome.toLocaleString("en-IN")}   {/* ✅ en-IN formatting */}
+          </div>
+          <div className="statement-kpi-sub">Academic Year {academicYear}</div>
+        </div>
 
-        <p>
-          <strong>Total Expense:</strong> ₹{data.totalExpense}
-        </p>
+        <div className="statement-kpi expense">
+          <div className="statement-kpi-icon">💸</div>
+          <div className="statement-kpi-label">Total Expense</div>
+          <div className="statement-kpi-value">
+            ₹{data.totalExpense.toLocaleString("en-IN")}
+          </div>
+          <div className="statement-kpi-sub">Academic Year {academicYear}</div>
+        </div>
 
-        <p>
-          <strong>
-            {data.netResult >= 0 ? "Net Surplus" : "Net Deficit"}:
-          </strong>{" "}
-          ₹{data.netResult}
-        </p>
+        <div className="statement-kpi net">
+          <div className="statement-kpi-icon">⚖️</div>
+          <div className="statement-kpi-label">
+            {isDeficit ? "Net Deficit" : "Net Surplus"}
+          </div>
+          <div className="statement-kpi-value">
+            ₹{data.netResult.toLocaleString("en-IN")}
+          </div>
+          <div className="statement-kpi-sub">Income − Expense</div>
+        </div>
+
       </div>
 
-      {/* =========================
-         Monthly Table
-      ========================= */}
-
+      {/* ── Monthly Table ── */}
       <table className="report-table">
         <thead>
           <tr>
@@ -162,26 +177,26 @@ function YearEndStatement({ academicYear }: YearEndStatementProps) {
 
         <tbody>
           {data.monthlySnapshot.map((m, index) => (
-            <tr key={`${m.month}-${index}`}>
+            <tr key={`${m.month}-${index}`}>   {/* ✅ index-safe key from main */}
               <td>{m.month}</td>
-              <td>₹{m.income}</td>
-              <td>₹{m.expense}</td>
-              <td>₹{m.net}</td>
+              <td>₹{m.income.toLocaleString("en-IN")}</td>
+              <td>₹{m.expense.toLocaleString("en-IN")}</td>
+              <td>₹{m.net.toLocaleString("en-IN")}</td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      {/* =========================
-         Print Button
-      ========================= */}
+      {/* ── Print Button ── */}
+      <div className="statement-footer">   {/* ✅ footer wrapper from frontend */}
+        <button
+          className="print-btn"
+          onClick={() => printReport(printData)}
+        >
+          🖨 Print / Save Statement   {/* ✅ emoji from frontend */}
+        </button>
+      </div>
 
-      <button
-        className="print-btn"
-        onClick={() => printReport(printData)}
-      >
-        Print / Save Statement
-      </button>
     </div>
   );
 }

@@ -1,64 +1,100 @@
+/* ================================
+   INPUT BOX — Option C Clean Style
+================================ */
+
 .box-container {
-  margin: 15px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
 
 .box-content {
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
 }
 
+/* ── Label ── */
 .input-label {
-  position: absolute;
-  top: -8px;
-  left: 14px;
-  font-size: 10px;
-  padding: 2px 8px;
-  border-radius: 12px;
-  color: #fff;
-  background: linear-gradient(87deg, #5e72e4 0, #825ee4 100%);
-}
-
-.input-field {
-  width: 100%;
-  padding: 10px 14px;
-  border-radius: 25px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-  outline: none;
-}
-
-.input-field:focus {
-  border-color: #5e72e4;
-}
-
-.textarea {
-  resize: vertical;
-  min-height: 80px;
-}
-
-.input-error {
-  border-color: #dc2626;
-}
-
-.error-text {
-  color: #dc2626;
-  font-size: 12px;
-  margin-top: 4px;
-  display: block;
-}
-.select-dropdown {
-  width: 100%;
-  padding: 10px 14px;
-  border-radius: 25px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-  outline: none;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.055em;
+  color: #475569;
+  display: flex;
+  align-items: center;
+  gap: 3px;
 }
 
 .required-star {
-  color: #dc2626;
-  margin-left: 4px;
-  font-weight: bold;
+  color: #e17055;
+  font-size: 12px;
+  line-height: 1;
 }
-.select-dropdown:focus {
-  border-color: #5e72e4;
+
+/* ── Base input styles ── */
+.input-field {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1.5px solid #e8edf5;
+  border-radius: 9px;
+  font-size: 13.5px;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  color: #0f1c2e;
+  background: #f8faff;
+  outline: none;
+  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box;
+  appearance: auto;
+}
+
+.input-field::placeholder {
+  color: #b0bac7;
+}
+
+.input-field:focus {
+  border-color: #00b894;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(0, 184, 148, 0.1);
+}
+
+.input-field:hover:not(:focus) {
+  border-color: #cbd5e1;
+}
+
+/* ── Textarea specific ── */
+.input-field.textarea {
+  resize: vertical;
+  min-height: 80px;
+  line-height: 1.5;
+}
+
+/* ── Select specific ── */
+select.input-field {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238e9ab5' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 32px;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+/* ── Error state ── */
+.input-field.input-error {
+  border-color: #e17055;
+  background: #fff8f6;
+}
+
+.input-field.input-error:focus {
+  border-color: #e17055;
+  box-shadow: 0 0 0 3px rgba(225, 112, 85, 0.1);
+}
+
+.error-text {
+  font-size: 11px;
+  color: #e17055;
+  font-weight: 600;
+  margin-top: 2px;
 }

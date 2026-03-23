@@ -6,7 +6,7 @@ import { useClasses } from "../../context/ClassContext";
 import { useAcademicYear } from "../../context/AcademicYearContext";
 
 import { apiClient } from "../../services/apiClient";
-import { printReport } from "../Reports/Utils/PrintUtils";
+import { printReport } from "../Reports/Utils/printUtils";
 
 import "../../styles/PendingFees.css";
 
@@ -131,7 +131,7 @@ function PendingFees() {
     const printData = {
       title: "Pending Fees Report",
       meta: {
-        academicYear: activeYear?.name,
+        academicYear: activeYear?.name || "Unknown Year",
         reportType: "STATEMENT",
         granularity: "CLASS_WISE",
         periodLabel: "Pending Fees",

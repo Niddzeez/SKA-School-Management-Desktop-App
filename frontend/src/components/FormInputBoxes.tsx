@@ -27,26 +27,18 @@ function InputBox({
   required,
 }: InputBoxProps) {
   const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     let val = e.target.value;
-
-    if (numericOnly) {
-      val = val.replace(/\D/g, "");
-    }
-
-    if (maxLength) {
-      val = val.slice(0, maxLength);
-    }
-
+    if (numericOnly) val = val.replace(/\D/g, "");
+    if (maxLength)   val = val.slice(0, maxLength);
     onChange(name, val);
   };
 
   return (
     <div className="box-container">
       <div className="box-content">
+
         <label className="input-label">
           {label}
           {required && <span className="required-star">*</span>}
@@ -54,29 +46,29 @@ function InputBox({
 
         {type === "select" ? (
           <select
-            className={`input-field ${error ? "input-error" : ""}`}
+            className={`input-field${error ? " input-error" : ""}`}
             value={value}
             onChange={handleChange}
           >
             <option value="">Select {label}</option>
             {options?.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
+              <option key={option} value={option}>{option}</option>
             ))}
           </select>
+
         ) : type === "textarea" ? (
           <textarea
-            className={`input-field textarea ${error ? "input-error" : ""}`}
+            className={`input-field textarea${error ? " input-error" : ""}`}
             placeholder={label}
             value={value}
             onChange={handleChange}
           />
+
         ) : (
           <input
             type={type}
             inputMode={numericOnly ? "numeric" : "text"}
-            className={`input-field ${error ? "input-error" : ""}`}
+            className={`input-field${error ? " input-error" : ""}`}
             placeholder={label}
             value={value}
             onChange={handleChange}

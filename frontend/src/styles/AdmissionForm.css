@@ -1,74 +1,323 @@
-.heading {
+/* ================================
+   ADMISSION FORM — Option C
+   Sidebar Nav + Two-Column Clean
+================================ */
+
+.admission-form-page {
+  min-height: 100vh;
+  background: #f4f7fe;
+  padding: 28px 32px;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+}
+
+/* ── Page header ── */
+.admission-page-header {
+  margin-bottom: 24px;
+}
+
+.admission-page-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #0f1c2e;
+  letter-spacing: -0.3px;
+  margin: 0 0 4px;
+}
+
+.admission-page-sub {
+  font-size: 13px;
+  color: #8e9ab5;
+  margin: 0;
+}
+
+/* ── Outer wrapper: sidebar + body ── */
+.admission-layout {
+  display: grid;
+  grid-template-columns: 210px 1fr;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(15, 28, 46, 0.12);
+  min-height: 600px;
+}
+
+/* ================================
+   SIDEBAR
+================================ */
+
+.admission-sidebar {
+  background: linear-gradient(180deg, #00b894 0%, #0984e3 100%);
+  padding: 28px 18px 28px;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  gap: 4px;
 }
 
-.form-container {
-  margin: 20px;
-  -webkit-margin-bottom-collapse: collapse;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  background-color: #f9f9f9;
+.admission-sidebar-brand {
+  margin-bottom: 28px;
 }
 
+.admission-sidebar-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: white;
+  line-height: 1.3;
+  margin-bottom: 4px;
+}
+
+.admission-sidebar-sub {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.admission-sidebar-label {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.45);
+  padding: 10px 10px 4px;
+}
+
+.admission-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 11px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+}
+
+.admission-nav-item:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: white;
+}
+
+.admission-nav-item.active {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  font-weight: 700;
+}
+
+.admission-nav-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+
+.admission-nav-item.active .admission-nav-dot {
+  background: white;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.6);
+}
+
+.admission-nav-item.done .admission-nav-dot {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+/* ================================
+   FORM BODY
+================================ */
+
+.admission-body {
+  background: white;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Section content */
 .form-section {
-  margin-bottom: 20px;
-  padding: 10px;
+  padding: 28px 32px;
+  flex: 1;
 }
 
+.form-section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1.5px solid #f1f5f9;
+}
+
+.form-section-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  flex-shrink: 0;
+}
+
+.section-icon-student    { background: linear-gradient(135deg, #e8fdf5, #d6f5f0); }
+.section-icon-additional { background: linear-gradient(135deg, #e0f2fe, #dbeafe); }
+.section-icon-father     { background: linear-gradient(135deg, #fef3c7, #fde68a); }
+.section-icon-mother     { background: linear-gradient(135deg, #fce7f3, #fbcfe8); }
+
+.form-section-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #0f1c2e;
+  margin: 0 0 2px;
+}
+
+.form-section-sub {
+  font-size: 11.5px;
+  color: #8e9ab5;
+  margin: 0;
+}
+
+/* Divider between sections */
+.section-divider {
+  height: 1px;
+  background: #f1f5f9;
+  margin: 0 32px;
+}
+
+/* ── Form grid ── */
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  gap: 16px 24px;
 }
+
+/* ================================
+   FORM ACTIONS
+================================ */
 
 .form-actions {
   display: flex;
-  justify-content: space-evenly;
+  align-items: center;
+  justify-content: flex-end;
   gap: 12px;
-  margin-top: 24px;
+  padding: 20px 32px;
+  border-top: 1.5px solid #f1f5f9;
+  background: #fafcff;
 }
 
 .primary-btn {
-  background-color: #2563eb;
-  color: white;
+  padding: 11px 28px;
+  border-radius: 10px;
   border: none;
-  padding: 10px 18px;
-  border-radius: 6px;
+  background: linear-gradient(135deg, #00b894, #0984e3);
+  color: white;
+  font-weight: 700;
+  font-size: 13.5px;
   cursor: pointer;
+  font-family: inherit;
+  box-shadow: 0 4px 14px rgba(0, 184, 148, 0.3);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-.secondary-btn {
-  background-color: red;
-  color: #9ca3af;
-  border: 1px solid #1f2937;
-  padding: 10px 18px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.primary-btn:hover {
-  background-color: #1e40af;
-}
-
-.secondary-btn:hover {
-  background-color: #f3f4f6;
+.primary-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0, 184, 148, 0.38);
 }
 
 .primary-btn:disabled {
-  background-color: #94a3b8;
+  background: #d1d5db;
+  box-shadow: none;
   cursor: not-allowed;
   opacity: 0.7;
 }
 
+.secondary-btn {
+  padding: 11px 22px;
+  border-radius: 10px;
+  border: 1.5px solid #e8edf5;
+  background: white;
+  color: #64748b;
+  font-weight: 600;
+  font-size: 13.5px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.secondary-btn:hover {
+  background: #f8faff;
+  border-color: #cbd5e1;
+  color: black;
+}
+
+/* ================================
+   SUCCESS / ERROR MESSAGES
+================================ */
+
 .success-message {
   margin-bottom: 16px;
   padding: 12px 16px;
-  border-radius: 6px;
-  background-color: #dcfce7;
-  color: #166534;
-  border: 1px solid #86efac;
-  font-size: 14px;
+  border-radius: 10px;
+  background: #e8fdf5;
+  color: #00845a;
+  border: 1px solid rgba(0, 184, 148, 0.25);
+  font-size: 13.5px;
+  font-weight: 600;
 }
 
+/* ================================
+   UNAUTHORIZED
+================================ */
+
+.unauthorized {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  gap: 8px;
+  color: #64748b;
+}
+
+.unauthorized h2 {
+  font-size: 20px;
+  font-weight: 800;
+  color: #0f1c2e;
+}
+
+/* ================================
+   RESPONSIVE
+================================ */
+
+@media (max-width: 768px) {
+  .admission-form-page {
+    padding: 16px;
+  }
+
+  .admission-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .admission-sidebar {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 16px;
+  }
+
+  .admission-sidebar-brand {
+    display: none;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-section {
+    padding: 20px 18px;
+  }
+
+  .form-actions {
+    padding: 16px 18px;
+  }
+}

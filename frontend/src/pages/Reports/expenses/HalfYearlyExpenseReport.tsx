@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useFeeLedger } from "../../../context/FeeLedgerContext";
 import { getAcademicYearRange } from "../Utils/reportDateUtils";
-import { printReport } from "../Utils/PrintUtils";
+import { printReport } from "../Utils/printUtils";
 import "../../../components/print/report-print.css";
 
 type Props = {

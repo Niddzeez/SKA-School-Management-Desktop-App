@@ -55,8 +55,12 @@ export async function getExpenses(
         conditions.push(`expense_date >= $${params.length}`);
     }
     if (to) {
-        params.push(to);
-        conditions.push(`expense_date <= $${params.length}`);
+        const toDate = new Date(to);
+        toDate.setDate(toDate.getDate() + 1);
+        const toExclusive = toDate.toISOString().slice(0, 10);
+        console.log("DEBUG to:", to, "toExclusive:", toExclusive);  // ✅ add this
+        params.push(toExclusive);
+        conditions.push(`expense_date < $${params.length}`);
     }
 
     const where = conditions.length ? `WHERE ${conditions.join(" AND ")}` : "";
@@ -69,6 +73,9 @@ export async function getExpenses(
     const limitIdx = params.length;
     params.push(offset);
     const offsetIdx = params.length;
+
+    console.log("DEBUG SQL conditions:", conditions);
+    console.log("DEBUG SQL params:", params);
 
     const { rows } = await getPool().query<ExpenseRow>(
         `SELECT id, category, description, amount, expense_date,

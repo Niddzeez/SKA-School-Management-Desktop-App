@@ -3,7 +3,8 @@
 import ReactDOM from "react-dom/client";
 import PrintLayout from "../../../components/print/PrintLayout";
 import PrintHeader from "../../../components/print/PrintHeader";
-import schoolLogoUrl from "../../../assets/logo.svg";
+
+const schoolLogoUrl = "/logo.png";
 
 type PrintRow = {
   readonly columns: readonly string[];

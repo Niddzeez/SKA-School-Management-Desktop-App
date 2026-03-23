@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { apiClient } from "../../../services/apiClient";
 import "../../../components/print/report-print.css";
-import { printReport } from "../Utils/PrintUtils";
+import { printReport } from "../Utils/printUtils";
 import { toBackendAcademicYear } from "../Utils/reportDateUtils";
 
 type Props = {
@@ -73,6 +73,8 @@ function ExpenseReport({
     const printData = {
         title: `Expense Report — ${periodLabel}`,
         meta: {
+            granularity: fromDate && toDate                ? "DAILY"
+                : "MONTHLY",
             academicYear,
             reportType: "EXPENSE",
             periodLabel,

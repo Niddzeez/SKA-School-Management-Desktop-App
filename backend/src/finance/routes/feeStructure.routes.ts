@@ -2,6 +2,7 @@ import { Router, Request, Response } from "express";
 import { feeStructureService, FeeStructure, FeeComponent } from "../services/feeStructure.service";
 import { requireRole } from "../../auth/middleware/requireRole";
 import { requireAuth } from "../../auth/middleware/requireAuth";
+import { getPool } from "../../config/postgres";
 import {
     toErrorResponse,
     ValidationError,
@@ -81,4 +82,33 @@ router.post("/:id/activate", requireAuth, requireRole("ADMIN"), async (req: Requ
     }
 });
 
+// DELETE /api/fee-structures/:id
+router.delete("/:id", requireAuth, requireRole("ADMIN"), async (req: Request, res: Response): Promise<void> => {
+    try {
+        const id = req.params.id as string;
+
+        // Only DRAFT structures can be deleted
+        const pool = getPool();
+        const { rows } = await pool.query(
+            `SELECT status FROM fee_structures WHERE id = $1`,
+            [id]
+        );
+
+        if (rows.length === 0) {
+            res.status(404).json({ error: "Fee structure not found" });
+            return;
+        }
+
+        if (rows[0].status !== "DRAFT") {
+            res.status(409).json({ error: "Only DRAFT fee structures can be deleted" });
+            return;
+        }
+
+        await pool.query(`DELETE FROM fee_structures WHERE id = $1`, [id]);
+        res.json({ success: true });
+    } catch (err) {
+        const { status, body } = toErrorResponse(err);
+        res.status(status).json(body);
+    }
+});
 export default router;

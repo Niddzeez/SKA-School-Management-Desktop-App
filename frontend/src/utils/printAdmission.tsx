@@ -1,33 +1,52 @@
 import ReactDOM from "react-dom/client";
 import AdmissionPrintView from "./admissionpdf";
 import type { Student } from "../types/Student";
+import html2pdf from "html2pdf.js";
 
-export function printAdmission(student: Student, academicYear: string) {
-    const originalTitle = document.title;
+export async function printAdmission(student: Student, academicYear: string) {
+    try {
+        const printRoot = document.createElement("div");
 
-    const printRoot = document.createElement("div");
-    document.body.appendChild(printRoot);
+        printRoot.style.position = "fixed";
+        printRoot.style.top = "0";
+        printRoot.style.left = "0";
+        printRoot.style.width = "210mm";
+        printRoot.style.zIndex = "-9999";
+        printRoot.style.background = "white";
 
-    document.title = `Admission_${student.firstName}_${student.lastName}`;
+        document.body.appendChild(printRoot);
 
-    const root = ReactDOM.createRoot(printRoot);
+        const root = ReactDOM.createRoot(printRoot);
 
-    root.render(
-        <AdmissionPrintView
-            student={student}
-            academicYear={academicYear}
-        />
-    );
+        root.render(
+            <AdmissionPrintView
+                student={student}
+                academicYear={academicYear}
+            />
+        );
 
-    // Wait until browser paints the DOM
-    requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-            window.print();
+        await new Promise((resolve) => setTimeout(resolve, 800));
 
-            document.title = originalTitle;
+        const filename = `Admission_${student.firstName}_${student.lastName}_${academicYear}.pdf`;
+        const target = (printRoot.firstElementChild as HTMLElement) || printRoot;
 
-            root.unmount();
-            document.body.removeChild(printRoot);
-        });
-    });
+    
+        await html2pdf()
+            .set({
+                margin: 10,
+                filename,
+                image: { type: "jpeg", quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+            })
+            .from(target)
+            .save();
+
+        root.unmount();
+        document.body.removeChild(printRoot);
+
+    } catch (err) {
+        console.error("printAdmission failed:", err);
+        alert("Failed to generate PDF. Check console for details.");
+    }
 }

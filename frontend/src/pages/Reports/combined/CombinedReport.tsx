@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { apiClient } from "../../../services/apiClient";
 import "../../../components/print/report-print.css";
-import { printReport } from "../Utils/PrintUtils";
+import { printReport } from "../Utils/printUtils";
 import { toBackendAcademicYear } from "../Utils/reportDateUtils";
 
 type Props = {
@@ -103,8 +103,11 @@ function CombinedReport({
         title: `Income vs Expense Report — ${periodLabel}`,
 
         meta: {
-            academicYear,
+            academicYear: academicYear || "Unknown Year",
             reportType: "COMBINED",
+            granularity: fromDate && toDate                ? "DAILY"
+                : "MONTHLY",
+            periodLabel:
             periodLabel,
         },
 

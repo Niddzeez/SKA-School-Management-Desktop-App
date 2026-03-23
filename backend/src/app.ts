@@ -85,6 +85,7 @@ app.use("/api/teachers", auth, anyRole, teacherRoutes);
 // ── Finance subsystem (PostgreSQL) ───────────────────────────────────────────
 // Academic years: read access for all roles
 app.use("/api/academic-years", auth, anyRole, academicYearRoutes);
+app.use("/api/academic-years", auth, anyRole, academicYearRoutes);
 
 // Ledgers: read + write (POST routes inside ledgers.routes.ts will be
 // accessible, but the route handlers themselves are the same for all roles.

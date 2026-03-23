@@ -1,11 +1,17 @@
 import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { useStudents } from "../../context/StudentContext";
 import { useClasses } from "../../context/ClassContext";
 import { useSections } from "../../context/SectionContext";
 import { useFeeLedger } from "../../context/FeeLedgerContext";
 import { useAcademicYear } from "../../context/AcademicYearContext";
-import { printReport } from "../Reports/Utils/PrintUtils";
+import { printReport } from "../Reports/Utils/printUtils";
 import "../../styles/FeeStatement.css";
+
+type FeeComponent = {
+    name: string;
+    amount: number;
+};
 
 function FeeStatement() {
     const { id } = useParams<{ id: string }>();
@@ -20,15 +26,65 @@ function FeeStatement() {
         adjustments,
         getReceiptNumber,
     } = useFeeLedger();
-    const { academicYear } = useAcademicYear();
+    const { activeYear } = useAcademicYear();
 
     const student = students.find((s) => s.id === id);
-    if (!student) return <p>Student not found.</p>;
 
-    const ledger = getLedgerByStudentYear(student.id, academicYear);
+    const [ledger, setLedger] = useState<any>(null);
+    const [summaryRaw, setSummaryRaw] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        if (!student) return;
+
+        const fetchData = async () => {
+            try {
+                const ledgerData = await getLedgerByStudentYear(student.id, activeYear?.id || "");
+
+                if (!ledgerData) {
+                    setLedger(null);
+                    return;
+                }
+
+                setLedger(ledgerData);
+
+                const summary = await getLedgerSummary(ledgerData.id);
+                setSummaryRaw(summary);
+            } catch (err) {
+                console.error(err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, [student]);
+
+    if (!student) return <p>Student not found.</p>;
+    if (loading) return <p>Loading...</p>;
     if (!ledger) return <p>No ledger for selected academic year.</p>;
 
-    const summary = getLedgerSummary(ledger.id);
+    // ✅ Compute values from backend summary
+    const finalFee =
+        (summaryRaw?.baseTotal || 0) +
+        (summaryRaw?.adjustmentsTotal || 0);
+
+    const paidTotal = summaryRaw?.paidTotal || 0;
+    const pending = Math.max(0, finalFee - paidTotal);
+
+    const status =
+        pending === 0
+            ? "PAID"
+            : paidTotal === 0
+            ? "UNPAID"
+            : "PARTIAL";
+
+    const summary = {
+        finalFee,
+        paidTotal,
+        pending,
+        status,
+    };
 
     const studentPayments = payments.filter(
         (p) => p.ledgerId === ledger.id
@@ -42,15 +98,17 @@ function FeeStatement() {
     const sec = sections.find((s) => s.id === student.sectionID);
 
     /* =========================
-       PRINT DATA (UNIFIED SYSTEM)
+       PRINT DATA
     ========================= */
 
     const printData = {
         title: "Fee Statement",
         meta: {
-            academicYear,
+            academicYear: activeYear?.name || "-",
             studentName: `${student.firstName} ${student.lastName}`,
-            reportType: "FEE_STATEMENT",
+            reportType: "STATEMENT" as const,
+            granularity: "YEARLY" as const, // ✅ REQUIRED
+            periodLabel: activeYear?.name || "-", // ✅ REQUIRED
         },
         sections: [
             {
@@ -72,41 +130,41 @@ function FeeStatement() {
             {
                 title: "Fee Breakdown",
                 headers: ["Fee Component", "Amount"],
-                rows: ledger.baseComponents.map((c) => ({
+                rows: ledger.baseComponents.map((c: FeeComponent) => ({
                     columns: [c.name, `₹${c.amount}`],
                 })),
             },
 
             ...(studentAdjustments.length > 0
                 ? [
-                    {
-                        title: "Adjustments",
-                        headers: ["Type", "Amount"],
-                        rows: studentAdjustments.map((a) => ({
-                            columns: [
-                                a.type,
-                                `${a.amount < 0 ? "-" : "+"}₹${Math.abs(a.amount)}`,
-                            ],
-                        })),
-                    },
-                ]
+                      {
+                          title: "Adjustments",
+                          headers: ["Type", "Amount"],
+                          rows: studentAdjustments.map((a) => ({
+                              columns: [
+                                  a.type,
+                                  `${a.amount < 0 ? "-" : "+"}₹${Math.abs(a.amount)}`,
+                              ],
+                          })),
+                      },
+                  ]
                 : []),
 
             ...(studentPayments.length > 0
                 ? [
-                    {
-                        title: "Payments",
-                        headers: ["Receipt No", "Date", "Mode", "Amount"],
-                        rows: studentPayments.map((p) => ({
-                            columns: [
-                                getReceiptNumber(p.id),
-                                new Date(p.createdAt).toLocaleDateString(),
-                                p.mode,
-                                `₹${p.amount}`,
-                            ],
-                        })),
-                    },
-                ]
+                      {
+                          title: "Payments",
+                          headers: ["Receipt No", "Date", "Mode", "Amount"],
+                          rows: studentPayments.map((p) => ({
+                              columns: [
+                                  getReceiptNumber(p.id),
+                                  new Date(p.createdAt).toLocaleDateString(),
+                                  p.mode,
+                                  `₹${p.amount}`,
+                              ],
+                          })),
+                      },
+                  ]
                 : []),
 
             {
@@ -122,17 +180,13 @@ function FeeStatement() {
         ],
     };
 
-    /* =========================
-       RENDER (SCREEN VIEW)
-    ========================= */
-
     return (
         <div className="statement-page">
             {/* Header */}
             <div className="statement-header">
                 <h1>Smart Kids Academy</h1>
                 <p>Fee Statement</p>
-                <p>Academic Year: {academicYear}</p>
+                <p>Academic Year: {activeYear?.name || "-"}</p>
             </div>
 
             {/* Student Info */}
@@ -154,7 +208,7 @@ function FeeStatement() {
                 <h3>Fee Breakdown</h3>
                 <table>
                     <tbody>
-                        {ledger.baseComponents.map((c) => (
+                        {ledger.baseComponents.map((c: FeeComponent) => (
                             <tr key={c.name}>
                                 <td>{c.name}</td>
                                 <td>₹{c.amount}</td>
@@ -214,18 +268,10 @@ function FeeStatement() {
 
             {/* Summary */}
             <div className="statement-summary">
-                <p>
-                    <strong>Total Fee:</strong> ₹{summary.finalFee}
-                </p>
-                <p>
-                    <strong>Paid:</strong> ₹{summary.paidTotal}
-                </p>
-                <p>
-                    <strong>Pending:</strong> ₹{summary.pending}
-                </p>
-                <p>
-                    <strong>Status:</strong> {summary.status}
-                </p>
+                <p><strong>Total Fee:</strong> ₹{summary.finalFee}</p>
+                <p><strong>Paid:</strong> ₹{summary.paidTotal}</p>
+                <p><strong>Pending:</strong> ₹{summary.pending}</p>
+                <p><strong>Status:</strong> {summary.status}</p>
             </div>
 
             {/* Print */}

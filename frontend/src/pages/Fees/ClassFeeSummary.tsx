@@ -1,8 +1,8 @@
+import { useState, useEffect } from "react";
 import { useFeeLedger } from "../../context/FeeLedgerContext";
 import { useClasses } from "../../context/ClassContext";
 import { useAcademicYear } from "../../context/AcademicYearContext";
 import "../../styles/classFeeSummary.css";
-import { useState, useEffect } from "react";
 import type { LedgerSummary } from "../../context/FeeLedgerContext";
 
 function ClassFeeSummary() {
@@ -12,29 +12,29 @@ function ClassFeeSummary() {
   const [ledgerSummaries, setLedgerSummaries] = useState<Record<string, LedgerSummary>>({});
 
   /* =========================
-     Build summary per class
+     Load Ledger Summaries (async)
   ========================= */
-
   useEffect(() => {
     const loadSummaries = async () => {
       const map: Record<string, LedgerSummary> = {};
-
       for (const ledger of ledgers) {
         const s = await getLedgerSummary(ledger.id);
         if (s) map[ledger.id] = s;
       }
-
       setLedgerSummaries(map);
     };
 
     loadSummaries();
   }, [ledgers]);
 
+  /* =========================
+     Build summary per class
+  ========================= */
   const summary = classes.map((cls) => {
     const classLedgers = ledgers.filter(
       (l) =>
         l.classId === cls.id &&
-        l.academicSessionId === activeYear?.id
+        l.academicSessionId === activeYear?.id   // ✅ correct backend field
     );
 
     let totalFee = 0;
@@ -43,12 +43,12 @@ function ClassFeeSummary() {
 
     classLedgers.forEach((ledger) => {
       const s = ledgerSummaries[ledger.id];
-      if (!s) return;
-
+      if (!s) return;                             // ✅ guard for async loading
       totalFee += s.finalFee;
       collected += s.paidTotal;
       pending += s.pending;
     });
+
     return {
       classId: cls.id,
       className: cls.ClassName,
@@ -70,11 +70,8 @@ function ClassFeeSummary() {
   );
 
   /* =========================
-   Load Ledger Summaries
-========================= */
-
-
-
+     Render
+  ========================= */
   return (
     <div className="page-container">
       <h1>Class-wise Fee Summary</h1>
@@ -85,9 +82,9 @@ function ClassFeeSummary() {
         <strong>Ledger-based. Read-only.</strong>
       </p>
 
-      {/* Academic Year */}
+      {/* Academic Year Selector (read-only) */}
       <div className="form-row">
-        <select value={activeYear?.id} disabled>
+        <select value={activeYear?.id} disabled>  {/* ✅ correct backend field */}
           {academicYears?.map((y) => (
             <option key={y.id} value={y.id}>
               {y.name}
@@ -96,7 +93,7 @@ function ClassFeeSummary() {
         </select>
       </div>
 
-      {/* Table */}
+      {/* Summary Table */}
       <table className="summary-table">
         <thead>
           <tr>
@@ -127,9 +124,7 @@ function ClassFeeSummary() {
             <th>—</th>
             <th>₹{grandTotal.totalFee}</th>
             <th>₹{grandTotal.collected}</th>
-            <th className="pending">
-              ₹{grandTotal.pending}
-            </th>
+            <th className="pending">₹{grandTotal.pending}</th>
           </tr>
         </tfoot>
       </table>

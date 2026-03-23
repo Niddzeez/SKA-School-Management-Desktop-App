@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { apiClient } from "../../services/apiClient";
-import { printReport } from "../Reports/Utils/PrintUtils";
+import { printReport } from "../Reports/Utils/printUtils";
 import { useAcademicYear } from "../../context/AcademicYearContext";
 
 interface ReceiptData {
@@ -62,6 +62,7 @@ function PaymentReceipt() {
         studentName: receipt.studentName,
         academicYear: activeYear?.name || "Unknown Year",
         reportType: "PAYMENT_RECEIPT",
+        granularity: "DAILY",
         periodLabel: new Date(receipt.date).toLocaleDateString(),
       },
       sections: [

@@ -28,6 +28,36 @@ router.get("/", async (_req: Request, res: Response) => {
 });
 
 // ---------------------------------------------------------------------------
+// POST /api/academic-years
+// Create a new academic session from scratch
+// ---------------------------------------------------------------------------
+router.post("/", requireRole("ADMIN"), async (req: Request, res: Response) => {
+    try {
+        const { name, startDate, endDate } = req.body;
+
+        if (!name || !startDate || !endDate) {
+            return res.status(400).json({ error: "name, startDate and endDate are required" });
+        }
+
+        const pool = getPool();
+        const { rows } = await pool.query(
+            `INSERT INTO academic_sessions
+                (id, name, start_date, end_date, is_closed, is_promotion_locked)
+             VALUES (gen_random_uuid(), $1, $2, $3, false, false)
+             RETURNING *`,
+            [name, startDate, endDate]
+        );
+
+        res.status(201).json(rows[0]);
+    } catch (err: any) {
+        if (err.code === "23505") {
+            return res.status(409).json({ error: `Academic year '${req.body.name}' already exists` });
+        }
+        res.status(500).json({ error: "Failed to create academic session" });
+    }
+});
+
+// ---------------------------------------------------------------------------
 // POST /api/academic-years/:id/lock-promotion
 // Locks the promotion for the given academic session.
 // ---------------------------------------------------------------------------

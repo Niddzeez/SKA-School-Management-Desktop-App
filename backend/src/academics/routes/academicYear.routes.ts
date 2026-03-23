@@ -1,6 +1,6 @@
 import { Router, Request, Response } from "express";
 import { getSessionStates } from "../services/academicYear.service";
-import { requireAuth } from "../../auth/middleware/requireAuth";
+import { requireAuth} from "../../auth/middleware/requireAuth";
 import { getPool } from "../../config/postgres";
 
 const router = Router();
@@ -9,6 +9,7 @@ router.get("/state", requireAuth, async (_req: Request, res: Response) => {
     const result = await getSessionStates();
     res.json(result);
 });
+
 
 router.post("/create-next", requireAuth, async (_req: Request, res: Response) => {
     const pool = getPool();

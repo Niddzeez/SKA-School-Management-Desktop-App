@@ -20,7 +20,7 @@ function BonafideCertificate() {
     const { students } = useStudents();
     const { classes } = useClasses();
     const { sections } = useSections();
-    const { academicYear } = useAcademicYear();
+    const { activeYear } = useAcademicYear();
 
     // Student can come from route param OR navigation state
     const student =
@@ -73,7 +73,7 @@ function BonafideCertificate() {
                     subtitle="Late Shankarsheth Lodha Memorial Education Society · Sonai"
                     rightSlot={
                         <div style={{ fontSize: "12px", textAlign: "right" }}>
-                            <div><strong>Academic Year:</strong> {academicYear}</div>
+                            <div><strong>Academic Year:</strong> {activeYear? activeYear.name : "N/A"}</div>
                             <div><strong>Date:</strong> {new Date().toLocaleDateString()}</div>
                         </div>
                     }
@@ -96,7 +96,7 @@ function BonafideCertificate() {
                     <p style={{ fontSize: "15px", lineHeight: "1.8", textAlign: "justify" }}>
                         He/She is currently studying in <strong>Class {cls?.ClassName}</strong>
                         {sec ? `, Section ${sec.name}` : ""} during the academic year{" "}
-                        <strong>{academicYear}</strong>.
+                        <strong>{activeYear?.name || "N/A"}</strong>.
                     </p>
 
                     <p style={{ fontSize: "15px", lineHeight: "1.8", textAlign: "justify" }}>

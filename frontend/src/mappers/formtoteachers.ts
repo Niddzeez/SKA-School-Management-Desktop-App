@@ -33,6 +33,7 @@ export function mapFormDataToTeacher(
       bloodGroup: formData.bloodGroup || undefined,
       religion: formData.religion || undefined,
       guardian: formData.guardian || undefined,
+      experienceYears: formData.yearsOfExperience ? formData.yearsOfExperience.trim() : undefined,
     },
 
     currentClass:

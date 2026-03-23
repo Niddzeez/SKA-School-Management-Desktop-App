@@ -1,5 +1,7 @@
 import { Pool, PoolClient } from "pg";
+import pg from "pg";
 
+pg.types.setTypeParser(1082, (val: string) => val);
 /**
  * Single shared connection pool for the Finance & Audit subsystem.
  *
