@@ -13,6 +13,7 @@ export interface DashboardOverviewResponse {
     totalAdjustments: number;
     totalExpenses: number;
     netBalance: number;
+    studentsWithDues: number;
 }
 
 export interface MonthlyCollectionResponse {
@@ -48,7 +49,8 @@ export function mapDashboardOverview(row: DashboardOverviewRow): DashboardOvervi
         totalPending: parseFloat(row.total_pending),
         totalAdjustments: parseFloat(row.total_adjustments),
         totalExpenses: parseFloat(row.total_expenses),
-        netBalance: parseFloat(row.net_balance)
+        netBalance: parseFloat(row.net_balance),
+        studentsWithDues: Number(row.studentsWithDues || 0)
     };
 }
 

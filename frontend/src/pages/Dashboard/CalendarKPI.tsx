@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./calendarKPI.css";
+import "./CalendarKPI.css"
 
 const API_KEY = "kIEUWyJJ2MJIkn2TnApLvXt4TeAnJLSQ";
 const COUNTRY = "IN";

@@ -12,6 +12,7 @@ interface DashboardOverview {
   totalAdjustments: number;
   totalExpenses:    number;
   netBalance:       number;
+  studentsWithDues: number;
 }
 
 interface MonthlyCollection {
@@ -66,6 +67,8 @@ function DashboardKPIs() {
   if (loading)   return <div className="kpi-loading">Loading Dashboard Data…</div>;
   if (error)     return <div className="kpi-error">Error loading dashboard: {error}</div>;
   if (!overview) return null;
+
+  console.log("API RESPONSE:", overview);
 
   /* =========================
      Render
@@ -180,7 +183,7 @@ function DashboardKPIs() {
               <div className="kpi-sec-label">Students With Dues</div>
               <div className="kpi-sec-icon">📋</div>
             </div>
-            <p className="kpi-sec-value">{overview.totalStudents}</p>
+            <p className="kpi-sec-value">{overview.studentsWithDues}</p>
             <span className="kpi-sec-badge badge-dues">● Students with pending fees</span>
           </div>
 

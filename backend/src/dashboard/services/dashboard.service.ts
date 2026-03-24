@@ -9,6 +9,7 @@ export interface DashboardOverviewRow {
     total_adjustments: string;
     total_expenses: string;
     net_balance: string;
+    studentsWithDues: number;
 }
 
 export interface RecentPaymentRow {
@@ -61,9 +62,25 @@ export async function getDashboardOverview(sessionId: string): Promise<Dashboard
 
     const ledgerQuery = `
     SELECT
-      COUNT(DISTINCT student_id) AS total_students,
-      COALESCE(SUM(base_total + adjustments_total - paid_total),0) AS total_pending,
-      COALESCE(SUM(adjustments_total),0) AS total_adjustments
+    COUNT(DISTINCT student_id) AS total_students,
+
+    -- Only positive pending
+    COALESCE(SUM(
+        CASE 
+        WHEN (base_total + adjustments_total - paid_total) > 0
+        THEN (base_total + adjustments_total - paid_total)
+        ELSE 0
+        END
+    ), 0) AS total_pending,
+
+    -- Students with dues
+    COUNT(DISTINCT CASE
+    WHEN (base_total + adjustments_total - paid_total) > 0
+    THEN student_id
+    END) AS "studentsWithDues",
+
+    COALESCE(SUM(adjustments_total),0) AS total_adjustments
+
     FROM ledger_summary
     WHERE academic_year = $1
   `;
@@ -90,13 +107,15 @@ export async function getDashboardOverview(sessionId: string): Promise<Dashboard
 
     const income = Number(paymentRes.rows[0].total_collected || 0);
     const expenses = Number(expenseRes.rows[0].total_expenses || 0);
+    console.log("LEDGER ROW:", ledger);
     return {
         total_students: ledger.total_students || "0",
         total_collected: income.toString(),
         total_pending: ledger.total_pending || "0",
         total_adjustments: ledger.total_adjustments || "0",
         total_expenses: expenses.toString(),
-        net_balance: (income - expenses).toString()
+        net_balance: (income - expenses).toString(),
+        studentsWithDues: Number(ledger.studentsWithDues || 0)
     };
 }
 
