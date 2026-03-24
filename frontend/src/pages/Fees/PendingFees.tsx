@@ -6,7 +6,7 @@ import { useClasses } from "../../context/ClassContext";
 import { useAcademicYear } from "../../context/AcademicYearContext";
 
 import { apiClient } from "../../services/apiClient";
-import { printReport } from "../Reports/Utils/printUtils";
+import { printReport } from "../Reports/Utils/PrintUtils";
 
 import "../../styles/PendingFees.css";
 

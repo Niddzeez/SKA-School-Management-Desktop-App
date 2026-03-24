@@ -141,6 +141,18 @@ router.get("/combined", async (req: Request, res: Response) => {
 
         const report = await getCombinedReport(year, fromDate, toDate);
 
+        if (report.incomes.length > 0) {
+            const studentIds = report.incomes.map(p => p.student_id);
+            const studentMap = await getStudentBasicInfoMap(studentIds);
+
+            report.incomes = report.incomes.map(p => ({
+                ...p,
+                studentName: studentMap.has(p.student_id)
+                    ? `${studentMap.get(p.student_id)!.firstName} ${studentMap.get(p.student_id)!.lastName}`
+                    : "Unknown"
+            })) as any;
+        }
+
         res.json(report);
 
     } catch (err) {

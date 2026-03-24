@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { apiClient } from "../../../services/apiClient";
 import "../../../components/print/report-print.css";
-import { printReport } from "../Utils/printUtils";
+import { printReport } from "../Utils/PrintUtils";
 import { toBackendAcademicYear } from "../Utils/reportDateUtils";
 
 type Props = {
@@ -93,7 +93,26 @@ function CombinedReport({
     if (loading) return <p>Loading combined report...</p>;
     if (error) return <p className="error">{error}</p>;
     if (!data) return null;
+    console.log("INCOME DATA:", data.incomes);
 
+    const categorySummaryMap = data.expenses.reduce((acc, e) => {
+        const amount = Number(e.amount); // 🔥 FORCE NUMBER
+
+        if (!acc[e.category]) {
+            acc[e.category] = 0;
+        }
+
+        acc[e.category] += amount;
+
+        return acc;
+    }, {} as Record<string, number>);
+
+    const categorySummary = Object.entries(categorySummaryMap)
+        .map(([category, total]) => ({
+            category,
+            total,
+        }))
+        .sort((a, b) => b.total - a.total); // optional sorting
     /* =========================
        Print Data
     ========================= */
@@ -105,10 +124,10 @@ function CombinedReport({
         meta: {
             academicYear: academicYear || "Unknown Year",
             reportType: "COMBINED",
-            granularity: fromDate && toDate                ? "DAILY"
+            granularity: fromDate && toDate ? "DAILY"
                 : "MONTHLY",
             periodLabel:
-            periodLabel,
+                periodLabel,
         },
 
         sections: [
@@ -150,7 +169,14 @@ function CombinedReport({
                         `₹${e.amount}`,
                     ],
                 })),
-            }
+            },
+            {
+                title: "Category-wise Summary",
+                headers: ["Category", "Total"],
+                rows: categorySummary.map((c) => ({
+                    columns: [c.category, `₹${c.total}`],
+                })),
+            },
 
         ]
 

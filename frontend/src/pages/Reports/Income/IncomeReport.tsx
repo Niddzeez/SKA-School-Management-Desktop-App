@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { apiClient } from "../../../services/apiClient";
 import "../../../components/print/report-print.css";
-import { printReport } from "../Utils/printUtils";
+import { printReport } from "../Utils/PrintUtils";
 import { toBackendAcademicYear } from "../Utils/reportDateUtils";
 
 type Props = {

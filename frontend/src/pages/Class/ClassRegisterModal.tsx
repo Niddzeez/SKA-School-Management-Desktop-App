@@ -4,7 +4,7 @@ import { useStudents } from "../../context/StudentContext";
 import { useTeachers } from "../../context/TeacherContext";
 import { useAcademicYear } from "../../context/AcademicYearContext";
 import { exportToCSV } from "../../utils/exportTOCSV";
-import { printReport } from "../Reports/Utils/printUtils";
+import { printReport } from "../Reports/Utils/PrintUtils";
 
 type Props = {
   onClose: () => void;

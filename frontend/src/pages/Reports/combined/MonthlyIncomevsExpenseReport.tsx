@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { useFeeLedger } from "../../../context/FeeLedgerContext";
 import { useStudents } from "../../../context/StudentContext";
 import { getAcademicYearRange } from "../Utils/reportDateUtils";
-import { printReport } from "../Utils/printUtils";
+import { printReport } from "../Utils/PrintUtils";
 import "../../../components/print/report-print.css";
 
 type Props = {

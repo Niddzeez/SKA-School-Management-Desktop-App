@@ -5,7 +5,7 @@ import { useClasses } from "../../context/ClassContext";
 import { useSections } from "../../context/SectionContext";
 import { useFeeLedger } from "../../context/FeeLedgerContext";
 import { useAcademicYear } from "../../context/AcademicYearContext";
-import { printReport } from "../Reports/Utils/printUtils";
+import { printReport } from "../Reports/Utils/PrintUtils";
 import "../../styles/FeeStatement.css";
 import { apiClient } from "../../services/apiClient";
 

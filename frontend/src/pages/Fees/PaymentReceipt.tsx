@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { apiClient } from "../../services/apiClient";
-import { printReport } from "../Reports/Utils/printUtils";
+import { printReport } from "../Reports/Utils/PrintUtils";
 import { useAcademicYear } from "../../context/AcademicYearContext";
 
 interface ReceiptData {

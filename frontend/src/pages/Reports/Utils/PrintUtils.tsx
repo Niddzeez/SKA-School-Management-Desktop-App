@@ -3,8 +3,10 @@
 import ReactDOM from "react-dom/client";
 import PrintLayout from "../../../components/print/PrintLayout";
 import PrintHeader from "../../../components/print/PrintHeader";
+import logo from "../../../assets/logo.png"
+import html2pdf from "html2pdf.js";
 
-const schoolLogoUrl = "/logo.png";
+const schoolLogoUrl = logo;
 
 type PrintRow = {
   readonly columns: readonly string[];
@@ -16,6 +18,7 @@ type PrintSection = {
   readonly rows: readonly PrintRow[];
   readonly footer?: readonly string[];
 };
+
 
 type PrintData = {
   readonly title: string;
@@ -57,6 +60,7 @@ export function printReport(data: PrintData) {
   ].filter(Boolean);
 
   document.title = parts.join(" ").replace(/\s+/g, "_");
+  
 
   // 3️⃣ Render print layout
   const root = ReactDOM.createRoot(printRoot);
@@ -133,11 +137,34 @@ export function printReport(data: PrintData) {
   );
 
   // 4️⃣ Print and cleanup
-  setTimeout(() => {
-    window.print();
+setTimeout(() => {
+  const images = printRoot.querySelectorAll("img");
 
-    document.title = originalTitle;
-    root.unmount();
-    document.body.removeChild(printRoot);
-  }, 300);
+  Promise.all(
+    Array.from(images).map(
+      (img) =>
+        img.complete
+          ? Promise.resolve()
+          : new Promise((res) => {
+              img.onload = res;
+              img.onerror = res;
+            })
+    )
+  ).then(() => {
+    html2pdf()
+      .set({
+        margin: 10,
+        filename: document.title + ".pdf",
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+      })
+      .from(printRoot)
+      .save()
+      .then(() => {
+        document.title = originalTitle;
+        root.unmount();
+        document.body.removeChild(printRoot);
+      });
+  });
+}, 500);
 }

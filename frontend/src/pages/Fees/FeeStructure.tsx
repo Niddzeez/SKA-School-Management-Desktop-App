@@ -4,7 +4,7 @@ import { useFeeStructures } from "../../context/FeeStructureContext";
 import { useAuth } from "../../context/AuthContext";
 import { useAcademicYear } from "../../context/AcademicYearContext";
 import { can } from "../../auth/permissions";
-import { printReport } from "../Reports/Utils/printUtils";
+import { printReport } from "../Reports/Utils/PrintUtils";
 import "./FeeStructure.css";
 
 type ComponentDraft = {
