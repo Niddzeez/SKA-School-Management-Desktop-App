@@ -1,5 +1,5 @@
 import "./admissionPrint.css";
-import SchoolLogo from "../assets/logo.svg?react";
+import SchoolLogo from "../assets/logo.png";
 import PrintLayout from "../components/print/PrintLayout";
 import PrintHeader from "../components/print/PrintHeader";
 import type { Student } from "../types/Student";
@@ -9,11 +9,21 @@ type Props = {
   academicYear: string;
 };
 
+const schoolLogoUrl = SchoolLogo; // Ensure the logo is correctly imported and used as a React component or image source
+
+//const logo = SchoolLogo; // Ensure the logo is correctly imported and used as a React component or image source
+
 export default function AdmissionPrintView({ student, academicYear }: Props) {
   return (
     <PrintLayout>
       <PrintHeader
-        logo={<SchoolLogo className="logo-svg" />}
+        logo={
+          <img
+            src={schoolLogoUrl}
+            className="logo-svg"
+            alt="School Logo"
+          />
+        }
         title="SMART KIDS ACADEMY"
         subtitle="Late Shankarsheth Lodha Memorial Education Society · Sonai"
         rightSlot={

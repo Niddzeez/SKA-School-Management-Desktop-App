@@ -1,282 +1,121 @@
-/* =====================================================
-   BASE PRINT PAGE
-===================================================== */
+/* ================= BASE ================= */
 
 .print-page {
   width: 210mm;
-  min-height: 297mm;
-  margin: 0 auto;
-  background: white;
-  padding: 12px 14px;
+  height: 297mm; /* 🔥 force single page */
+  padding: 10mm 12mm; /* reduced */
   font-family: Arial, sans-serif;
-  position: relative;
+  background: white;
+  box-sizing: border-box;
+  font-size: 12px; /* 🔥 smaller base */
 }
 
 
-/* =====================================================
-   HEADER
-===================================================== */
+/* ================= HEADER ================= */
 
 .print-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-bottom: 1.5px solid #000;
+  padding-bottom: 4px;
   margin-bottom: 6px;
-}
-
-.header-left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.header-right {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 4px;
-  text-align: right;
 }
 
 .school-text h1 {
+  font-size: 18px;
   margin: 0;
-  font-size: 20px;
-  line-height: 1.1;
-}
-
-.school-text p {
-  margin: 2px 0 0 0;
-  font-size: 12px;
 }
 
 .letterhead {
-  font-size: 10.5px;
-  color: #666;
+  font-size: 10px;
+  color: #555;
 }
-
-
-/* =====================================================
-   LOGO + PHOTO
-===================================================== */
 
 .logo-box {
-  width: 90px;
-  height: 70px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.logo-svg {
-  width: 100%;
-  height: 100%;
+  width: 55px;
+  height: 55px;
 }
 
 .photo-box {
-  width: 90px;
-  height: 110px;
+  width: 70px;
+  height: 90px;
   border: 1px dashed #444;
   font-size: 9px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.academic-year {
-  font-size: 12px;
-  font-weight: bold;
 }
 
 
-/* =====================================================
-   CARDS / SECTIONS
-===================================================== */
+/* ================= CARDS ================= */
 
 .card {
   border: 1px solid #ccc;
-  padding: 10px 12px;
-  margin-top: 8px;
-  page-break-inside: avoid;
-}
-
-.card.compact {
-  padding: 12px 14px;
+  padding: 6px 8px; /* 🔥 reduced */
+  margin-top: 6px;
 }
 
 .card h3 {
-  margin-bottom: 6px;
-  font-size: 15px;
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
+  font-size: 13px;
+  margin-bottom: 4px;
 }
 
 
-/* =====================================================
-   GRID LAYOUTS
-===================================================== */
+/* ================= GRIDS ================= */
 
 .form-grid {
   display: grid;
-  grid-template-columns: 180px 1fr 180px 1fr;
-  column-gap: 12px;
-  row-gap: 6px;
-  font-size: 14px;
+  grid-template-columns: 140px 1fr 140px 1fr;
+  gap: 4px 8px;
+  font-size: 12px;
 }
 
 .details-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  column-gap: 16px;
-  row-gap: 6px;
-  font-size: 13.5px;
-}
-
-.details-grid .span-2 {
-  grid-column: span 2;
-}
-
-.details-grid .span-3 {
-  grid-column: span 3;
+  gap: 4px 8px;
+  font-size: 12px;
 }
 
 .address-line {
-  font-size: 14px;
-  line-height: 1.4;
+  font-size: 12px;
+  line-height: 1.3;
 }
 
 
-/* =====================================================
-   PARENTS SECTION
-===================================================== */
+/* ================= PARENTS ================= */
 
 .parents-horizontal {
   display: flex;
-  gap: 40px;
+  gap: 20px;
 }
 
 .parent-col p {
   display: grid;
-  grid-template-columns: 140px 1fr;
-  margin: 2px 0;
+  grid-template-columns: 120px 1fr;
+  margin: 1px 0;
+  font-size: 12px;
 }
 
 
-/* =====================================================
-   SIGNATURES
-===================================================== */
+/* ================= DECLARATION ================= */
+
+.card p {
+  font-size: 12px;
+  line-height: 1.3;
+}
+
+
+/* ================= SIGNATURE ================= */
 
 .signatures {
-  margin-top: 28px;
+  margin-top: 12px; /* 🔥 reduced */
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
 }
 
 .stamp-box {
-  width: 140px;
-  height: 90px;
+  width: 110px;
+  height: 60px;
   border: 2px dashed #444;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-
-/* =====================================================
-   HORIZONTAL RULE
-===================================================== */
-
-hr {
-  margin: 6px 0 10px 0;
-}
-
-
-/* =====================================================
-   PRINT SETTINGS
-===================================================== */
-
-@page {
-  size: A4;
-  margin: 12mm;
-}
-
-
-/* =====================================================
-   PRINT MODE
-===================================================== */
-
-@media print {
-
-  /* remove dashboard UI */
-  .sidebar,
-  .navbar,
-  .print-controls {
-    display: none !important;
-  }
-
-  /* keep layout container alive */
-  .app-layout {
-    display: block !important;
-  }
-
-  body {
-    margin: 0;
-    background: white;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
-
-}
-
-@media print {
-
-  body * {
-    visibility: hidden;
-  }
-
-  .print-page,
-  .print-page * {
-    visibility: visible;
-  }
-
-  .print-page {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-  }
-
-}
-
-
-@media print {
-
-  /* Hide the dashboard UI */
-  .sidebar,
-  .navbar,
-  .print-controls {
-    display: none !important;
-  }
-
-  /* Ensure the main layout stays visible */
-  .app-layout,
-  .content,
-  main {
-    display: block !important;
-  }
-
-  /* Ensure print page is rendered */
-  .print-page {
-    display: block !important;
-    width: 210mm;
-    min-height: 297mm;
-    margin: 0 auto;
-    background: white;
-  }
-
-  body {
-    margin: 0;
-    background: white;
-  }
-
+  font-size: 10px;
 }
