@@ -121,7 +121,8 @@ function StudentDetails() {
       return;
     }
 
-    const activeFeeStructure = getActiveFeeStructure(student.classID, academicYear);
+
+    const activeFeeStructure = getActiveFeeStructure(student.classID, academicYearID);
     if (!activeFeeStructure) {
       console.warn(
         `[FeeSetup] No ACTIVE fee structure for classID="${student.classID}" year="${academicYear}".`
@@ -148,7 +149,7 @@ function StudentDetails() {
     feeStructures,                                                 // ✅ added from frontend
     getActiveFeeStructure,
     upsertLedgerFromFeeStructure,
-    loadAllSections,
+    //loadAllSections,
   ]);
 
   /* ── Status handlers ── */
@@ -466,7 +467,7 @@ function StudentDetails() {
           )}
 
           {/* Diagnostic: no active fee structure */}
-          {student.classID && !getActiveFeeStructure(student.classID, academicYear) && (
+          {student.classID && !getActiveFeeStructure(student.classID, academicYearID) && (
             <div
               className="sd-readonly-banner"
               style={{ borderColor: "#fde68a", background: "#fffbeb", color: "#92400e" }}
@@ -477,7 +478,7 @@ function StudentDetails() {
           )}
 
           {/* Fee structure exists but ledger not created yet */}
-          {student.classID && getActiveFeeStructure(student.classID, academicYear) && !ledger && (
+          {student.classID && getActiveFeeStructure(student.classID, academicYearID) && !ledger && (
             <p style={{ color: "#8e9ab5", fontSize: 13, fontStyle: "italic" }}>
               Setting up fee ledger…
             </p>

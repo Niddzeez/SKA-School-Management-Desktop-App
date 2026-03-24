@@ -7,6 +7,7 @@ import { useFeeLedger } from "../../context/FeeLedgerContext";
 import { useAcademicYear } from "../../context/AcademicYearContext";
 import { printReport } from "../Reports/Utils/printUtils";
 import "../../styles/FeeStatement.css";
+import { apiClient } from "../../services/apiClient";
 
 type FeeComponent = {
     name: string;
@@ -45,8 +46,8 @@ function FeeStatement() {
                     setLedger(null);
                     return;
                 }
-
-                setLedger(ledgerData);
+                const fullLedger = await apiClient.get<any>(`/api/ledgers/${ledgerData.id}`);
+                setLedger(fullLedger);
 
                 const summary = await getLedgerSummary(ledgerData.id);
                 setSummaryRaw(summary);
@@ -179,6 +180,9 @@ function FeeStatement() {
             },
         ],
     };
+
+if (!ledger) return <p>No ledger for selected academic year.</p>;
+if (!ledger.baseComponents) return <p>Loading fee details...</p>;  // ✅ add this
 
     return (
         <div className="statement-page">

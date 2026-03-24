@@ -69,24 +69,27 @@ export async function getDashboardOverview(sessionId: string): Promise<Dashboard
   `;
 
     const financeQuery = `
-    SELECT
-      COALESCE(SUM(income_total),0) AS total_collected,
-      COALESCE(SUM(expense_total),0) AS total_expenses
-    FROM finance_monthly_summary
-    WHERE academic_year = $1
-  `;
+    SELECT COALESCE(SUM(p.amount), 0) AS total_collected
+    FROM payments p
+    JOIN student_fee_ledgers l ON p.ledger_id = l.id
+    WHERE l.academic_session_id = $1
+    `;
 
-    const [ledgerRes, financeRes] = await Promise.all([
-        getPool().query(ledgerQuery, [year]),
-        getPool().query(financeQuery, [year])
+    const expenseQuery = `
+    SELECT COALESCE(SUM(amount), 0) AS total_expenses
+    FROM expenses
+    `;
+
+    const [ledgerRes, paymentRes, expenseRes] = await Promise.all([
+    getPool().query(ledgerQuery, [year]),       // uses academic_year (TEXT)
+    getPool().query(financeQuery, [sessionId]), // uses UUID
+    getPool().query(expenseQuery)
     ]);
 
     const ledger = ledgerRes.rows[0];
-    const finance = financeRes.rows[0];
 
-    const income = Number(finance.total_collected || 0);
-    const expenses = Number(finance.total_expenses || 0);
-
+    const income = Number(paymentRes.rows[0].total_collected || 0);
+    const expenses = Number(expenseRes.rows[0].total_expenses || 0);
     return {
         total_students: ledger.total_students || "0",
         total_collected: income.toString(),

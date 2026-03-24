@@ -28,8 +28,8 @@ type FormData = {
   state?: string;
   pinCode?: string;
 
-  grade?: string;
-  section?: string;
+  classID?: string;
+  sectionID?: string;
   admissionDate?: string;
   feeDiscount?: string;
   previousSchool?: string;
@@ -143,8 +143,8 @@ export function mapFormDataToStudent(
     guardianName: formData.guardianName || undefined,
     transportationNeeds: formData.transport || undefined,
 
-    classID: formData.grade || undefined,
-    sectionID: formData.section || undefined,
+    classID: formData.classID || undefined,
+    sectionID: formData.sectionID || undefined,
 
     address,
     father,
