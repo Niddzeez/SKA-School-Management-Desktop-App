@@ -6,10 +6,11 @@ import { useStudents } from "../../context/StudentContext";
 import "./dashboard.css";
 
 function TeacherDashboard() {
-  const { role } = useAuth();
+  const { role, userId } = useAuth();
   const { sections }        = useSections();
   const { orderedClasses }  = useClasses();   // ← fixed: was `classes`
   const { students }        = useStudents();
+  const teacherId = userId || null;
 
   /* ── Role guard ── */
   if (role !== "TEACHER") {
@@ -18,7 +19,7 @@ function TeacherDashboard() {
 
   /* =========================
      Derive Teacher's Class
-  ========================= */
+  ========================= */ 
 
   const mySection = teacherId
     ? sections.find((sec) => sec.classTeacherID === teacherId)
