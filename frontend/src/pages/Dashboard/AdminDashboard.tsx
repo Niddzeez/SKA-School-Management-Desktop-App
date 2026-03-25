@@ -5,6 +5,7 @@ import "./dashboard.css";
 import { can } from "../../auth/permissions";
 import { Navigate } from "react-router-dom";
 
+
 function AdminDashboard(): React.ReactElement {
   const { role } = useAuth();
 
@@ -25,6 +26,10 @@ function AdminDashboard(): React.ReactElement {
 
       {/* ── KPI Section ── */}
       <DashboardKPIs />
+
+  
+      
+
 
     </div>
   );

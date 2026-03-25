@@ -34,10 +34,11 @@ function DashboardKPIs() {
   ========================= */
 
   useEffect(() => {
+    let interval;
     async function fetchDashboard() {
       if (!activeYear?.id) return;
       try {
-        setLoading(true);
+        
         setError(null);
 
         const [overviewRes, collectionsRes] = await Promise.all([
@@ -58,6 +59,9 @@ function DashboardKPIs() {
       }
     }
     fetchDashboard();
+    interval = setInterval(fetchDashboard, 5000);
+
+  return () => clearInterval(interval);
   }, [activeYear?.id]);
 
   /* =========================
