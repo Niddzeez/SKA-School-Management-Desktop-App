@@ -62,10 +62,25 @@ function AdmissionForm() {
   };
 
   const [formData, setFormData] = useState(initialFormData);
-
+function capitalizeName(name: string) {
+  return name
+    .toLowerCase()
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+}
   /* ── Handlers ── */
   const handleChange = (name: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [name]: value }));
+     const nameFields = [
+    "firstName",
+    "lastName",
+    "fatherName",
+    "motherName",
+    "guardianName",
+  ];
+
+  const formattedValue = nameFields.includes(name)
+    ? capitalizeName(value)
+    : value;
+    setFormData((prev) => ({ ...prev, [name]: formattedValue }));
   };
 
   function validateForm() {
