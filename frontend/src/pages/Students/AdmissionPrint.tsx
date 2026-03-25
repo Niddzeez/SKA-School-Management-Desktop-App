@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import AdmissionPrintView from "../../utils/admissionpdf";
+import AdmissionPrintView from "../../utils/AdmissionPrintView";
 import { useAcademicYear } from "../../context/AcademicYearContext";
 
 export default function AdmissionPrint() {

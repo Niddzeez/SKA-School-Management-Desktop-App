@@ -11,6 +11,7 @@ import { useFeeStructures } from "../../context/FeeStructureContext";
 import { useAcademicYear } from "../../context/AcademicYearContext";
 import { useAuth } from "../../context/AuthContext";
 import { can } from "../../auth/permissions";
+import { printAdmission } from "../../utils/printAdmission"; // adjust path
 
 /* ── UI helper ── */
 function getInitials(first: string, last: string): string {
@@ -19,12 +20,12 @@ function getInitials(first: string, last: string): string {
 
 function StudentDetails() {
   const navigate = useNavigate();
-  const { id }   = useParams<{ id: string }>();
+  const { id } = useParams<{ id: string }>();
 
   const { students, UpdateStudentStatus, assignStudenttoSection } = useStudents();
-  const { orderedClasses }        = useClasses();                  // ✅ correct field
+  const { orderedClasses } = useClasses();                  // ✅ correct field
   const { sections, loadAllSections } = useSections();             // ✅ loadAllSections kept
-  const { role, name }            = useAuth();                     // ✅ name kept
+  const { role, name } = useAuth();                     // ✅ name kept
 
   const {
     getLedgerByStudentYear,
@@ -44,10 +45,10 @@ function StudentDetails() {
   } = useAcademicYear();                                           // ✅ correct fields
 
   // ✅ Local derived helpers — same as main
-  const academicYearID   = activeYear?.id   || "";
-  const academicYear     = activeYear?.name || "";
-  const availableYears   = academicYears.map((y) => y.name);
-  const setAcademicYear  = (n: string) => {
+  const academicYearID = activeYear?.id || "";
+  const academicYear = activeYear?.name || "";
+  const availableYears = academicYears.map((y) => y.name);
+  const setAcademicYear = (n: string) => {
     const yearId = academicYears.find((y) => y.name === n)?.id;
     if (yearId) setActiveYear(yearId);
   };
@@ -58,16 +59,16 @@ function StudentDetails() {
   if (!student) return <div className="student-detail-page">Student not found</div>;
 
   /* ── Local UI state ── */
-  const [tempClassID,   setTempClassID]   = useState("");
+  const [tempClassID, setTempClassID] = useState("");
   const [tempSectionID, setTempSectionID] = useState("");
   const [paymentAmount, setPaymentAmount] = useState("");
-  const [paymentMode,   setPaymentMode]   =
-    useState<"CASH"|"UPI"|"BANK"|"CARD"|"CHEQUE">("CASH");
-  const [reference,     setReference]     = useState("");
-  const [adjType,       setAdjType]       =
-    useState<"DISCOUNT"|"CONCESSION"|"WAIVER"|"EXTRA"|"LATE_FEE">("DISCOUNT");
-  const [adjAmount,     setAdjAmount]     = useState("");
-  const [adjReason,     setAdjReason]     = useState("");
+  const [paymentMode, setPaymentMode] =
+    useState<"CASH" | "UPI" | "BANK" | "CARD" | "CHEQUE">("CASH");
+  const [reference, setReference] = useState("");
+  const [adjType, setAdjType] =
+    useState<"DISCOUNT" | "CONCESSION" | "WAIVER" | "EXTRA" | "LATE_FEE">("DISCOUNT");
+  const [adjAmount, setAdjAmount] = useState("");
+  const [adjReason, setAdjReason] = useState("");
 
   /* ── Ledger & derived data (async) ── */
   const getNextAcademicYear = (year: string) => {
@@ -75,7 +76,7 @@ function StudentDetails() {
     return `${start + 1}-${end + 1}`;
   };
 
-  const [ledger,  setLedger]  = useState<StudentFeeLedger | null>(null);
+  const [ledger, setLedger] = useState<StudentFeeLedger | null>(null);
   const [summary, setSummary] = useState<any>(null);
 
   useEffect(() => {
@@ -101,20 +102,20 @@ function StudentDetails() {
     return () => { isActive = false; };
   }, [student?.id, activeYear?.id, getLedgerByStudentYear, getLedgerSummary]);
 
-  const studentPayments    = ledger ? payments.filter((p) => p.ledgerId === ledger.id)    : [];
+  const studentPayments = ledger ? payments.filter((p) => p.ledgerId === ledger.id) : [];
   const studentAdjustments = ledger ? adjustments.filter((a) => a.ledgerId === ledger.id) : [];
-  const pendingAmount      = summary?.pending ?? 0;
+  const pendingAmount = summary?.pending ?? 0;
 
   // ✅ Correct isReadOnly from main
-  const isReadOnly      = academicYear !== activeYear?.name || isYearClosed(academicYear);
+  const isReadOnly = academicYear !== activeYear?.name || isYearClosed(academicYear);
   const isClassEditable = student.status === "Active";
 
-  const assignedClass   = orderedClasses.find((c) => c.id === student.classID);
+  const assignedClass = orderedClasses.find((c) => c.id === student.classID);
   const assignedSection = sections.find((s) => s.id === student.sectionID);
 
   /* ── Ledger upsert ── */
   useEffect(() => {
-    if (!student)                    return;
+    if (!student) return;
     if (student.status !== "Active") return;
     if (!student.classID) {
       console.warn("[FeeSetup] student.classID is empty — assign a class first");
@@ -135,7 +136,7 @@ function StudentDetails() {
       student.classID,
       academicYearID,                                              // ✅ UUID, not string
       activeFeeStructure.components.map((c) => ({
-        name:   c.name,
+        name: c.name,
         amount: c.amount,
       }))
     );
@@ -207,11 +208,11 @@ function StudentDetails() {
   };
 
   /* ── UI helpers ── */
-  const initials     = getInitials(student.firstName, student.lastName);
-  const statusClass  =
-    student.status === "Active"    ? "sd-status-active"    :
-    student.status === "Withdrawn" ? "sd-status-withdrawn" :
-    "sd-status-inactive";
+  const initials = getInitials(student.firstName, student.lastName);
+  const statusClass =
+    student.status === "Active" ? "sd-status-active" :
+      student.status === "Withdrawn" ? "sd-status-withdrawn" :
+        "sd-status-inactive";
 
   /* ── Render ── */
   return (
@@ -255,7 +256,7 @@ function StudentDetails() {
           )}
           <button
             className="sd-secondary-btn"
-            onClick={() => navigate("/admission/print", { state: { student } })}
+            onClick={() => printAdmission(student, academicYear)}
           >
             Re-print Admission Form
           </button>
@@ -369,8 +370,8 @@ function StudentDetails() {
             Currently:{" "}
             {assignedClass
               ? `Class ${assignedClass.ClassName}${assignedSection
-                  ? ` · Section ${assignedSection.name}`
-                  : " · Section not assigned"}`
+                ? ` · Section ${assignedSection.name}`
+                : " · Section not assigned"}`
               : "Not Assigned"}
           </div>
 
@@ -578,10 +579,10 @@ function StudentDetails() {
                       ? Math.abs(raw)
                       : -Math.abs(raw);
                   addAdjustment({
-                    ledgerId:   ledger.id,
-                    type:       adjType as any,
-                    amount:     signed,
-                    reason:     adjReason,
+                    ledgerId: ledger.id,
+                    type: adjType as any,
+                    amount: signed,
+                    reason: adjReason,
                     approvedBy: name || "Admin",            // ✅ name from useAuth
                   });
                   setAdjAmount("");
@@ -681,11 +682,11 @@ function StudentDetails() {
                 }
                 onClick={() => {
                   addPayment({
-                    ledgerId:    ledger.id,
-                    studentId:   student.id,
-                    amount:      Number(paymentAmount),
-                    mode:        paymentMode as any,
-                    reference:   reference || undefined,
+                    ledgerId: ledger.id,
+                    studentId: student.id,
+                    amount: Number(paymentAmount),
+                    mode: paymentMode as any,
+                    reference: reference || undefined,
                     collectedBy: "Admin",
                   });
                   setPaymentAmount("");
