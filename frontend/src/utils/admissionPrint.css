@@ -1,121 +1,314 @@
-/* ================= BASE ================= */
+/* ================================================
+   SMART KIDS ACADEMY — ADMISSION FORM
+   Single-page A4, compact professional layout
+   ================================================ */
+
+@page {
+  size: A4;
+  margin: 5mm;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 .print-page {
   width: 210mm;
-  height: 297mm; /* 🔥 force single page */
-  padding: 10mm 12mm; /* reduced */
-  font-family: Arial, sans-serif;
+  height: 290mm;
+  padding: 7mm 9mm 6mm 9mm;
+  font-family: Arial, Helvetica, sans-serif;
   background: white;
-  box-sizing: border-box;
-  font-size: 12px; /* 🔥 smaller base */
+  font-size: 9.5px;
+  color: #111;
+  line-height: 1.35;
+  overflow: hidden;
 }
 
-
-/* ================= HEADER ================= */
+/* ================================================
+   HEADER
+   ================================================ */
 
 .print-header {
   display: flex;
+  align-items: stretch;
   justify-content: space-between;
+  border: 1.5px solid #1a3a6e;
+  border-radius: 4px;
+  background: #f0f4fb;
+  padding: 0;
+  margin-bottom: 5px;
+  overflow: hidden;
+}
+
+.header-left {
+  display: flex;
   align-items: center;
-  border-bottom: 1.5px solid #000;
-  padding-bottom: 4px;
-  margin-bottom: 6px;
+  gap: 12px;
+  padding: 8px 12px;
+  flex: 1;
 }
 
-.school-text h1 {
-  font-size: 18px;
-  margin: 0;
-}
-
-.letterhead {
-  font-size: 10px;
-  color: #555;
+.header-right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 4px 8px;
+  border-left: 1.5px solid #1a3a6e;
+  background: white;
+  min-width: 85px;
 }
 
 .logo-box {
-  width: 55px;
-  height: 55px;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  margin: 1px;
+}
+
+.logo-svg {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+}
+
+.school-text h1 {
+  font-size: 30px;
+  font-weight: 900;
+  color: #1a3a6e;
+  letter-spacing: 0.5px;
+  line-height: 1;
+  margin-bottom: 2px;
+}
+
+.letterhead {
+  font-size: 20px;
+  color: #555;
+  margin-bottom: 2px;
+}
+
+.contact-line {
+  font-size: 20px;
+  color: #333;
 }
 
 .photo-box {
-  width: 70px;
-  height: 90px;
-  border: 1px dashed #444;
-  font-size: 9px;
-}
-
-
-/* ================= CARDS ================= */
-
-.card {
-  border: 1px solid #ccc;
-  padding: 6px 8px; /* 🔥 reduced */
-  margin-top: 6px;
-}
-
-.card h3 {
-  font-size: 13px;
-  margin-bottom: 4px;
-}
-
-
-/* ================= GRIDS ================= */
-
-.form-grid {
-  display: grid;
-  grid-template-columns: 140px 1fr 140px 1fr;
-  gap: 4px 8px;
-  font-size: 12px;
-}
-
-.details-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 4px 8px;
-  font-size: 12px;
-}
-
-.address-line {
-  font-size: 12px;
-  line-height: 1.3;
-}
-
-
-/* ================= PARENTS ================= */
-
-.parents-horizontal {
+  width: 100px;
+  height: 120px;
+  border: 1px dashed #999;
   display: flex;
-  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  color: #999;
+  text-align: center;
+  background: #fafafa;
 }
 
-.parent-col p {
+.academic-year {
+  font-size: 11px;
+  font-weight: 700;
+  color: #1a3a6e;
+}
+
+/* ================================================
+   FORM TITLE BANNER
+   ================================================ */
+
+.form-title-bar {
+  background: #1a3a6e;
+  color: white;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 700;
+  padding: 3px 0;
+  letter-spacing: 2px;
+  margin-bottom: 4px;
+  border-radius: 2px;
+}
+
+/* ================================================
+   SECTIONS
+   ================================================ */
+
+.af-section {
+  border: 1px solid #c0c8d8;
+  border-radius: 3px;
+  margin-bottom: 7px;
+  overflow: hidden;
+}
+
+.af-section-title {
+  background: #1a3a6e;
+  color: white;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 2px 7px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.af-section-body {
+  padding: 5px 7px;
+}
+
+/* ================================================
+   DATA GRID (label: value pairs)
+   ================================================ */
+
+.data-grid {
   display: grid;
-  grid-template-columns: 120px 1fr;
-  margin: 1px 0;
-  font-size: 12px;
+  gap: 1px 0;
 }
 
+.data-grid-2 { grid-template-columns: repeat(2, 1fr); }
+.data-grid-3 { grid-template-columns: repeat(3, 1fr); }
 
-/* ================= DECLARATION ================= */
 
-.card p {
-  font-size: 12px;
-  line-height: 1.3;
+.data-cell {
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+  padding: 2px 4px;
+  border-bottom: 0.5px dotted #ddd;
+  min-height: 16px;
 }
 
+.data-cell:last-child { border-bottom: none; }
 
-/* ================= SIGNATURE ================= */
+.data-label {
+  font-weight: 700;
+  color: #555;
+  font-size: 12px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: 70px;
+}
 
-.signatures {
-  margin-top: 12px; /* 🔥 reduced */
+.data-value {
+  font-size: 12px;
+  color: #111;
+  border-bottom: 0.5px solid #aaa;
+  flex: 1;
+  min-width: 40px;
+  padding-bottom: 0;
+}
+
+/* Span across columns */
+.span-2 { grid-column: span 2; }
+.span-3 { grid-column: span 3; }
+.span-4 { grid-column: span 4; }
+
+/* ================================================
+   PARENTS — SIDE BY SIDE TABLE
+   ================================================ */
+
+.parents-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+
+.parents-table th {
+  background: #e8edf7;
+  font-weight: 700;
+  font-size: 15px;
+  padding: 2px 5px;
+  border: 0.5px solid #c0c8d8;
+  text-align: left;
+  color: #1a3a6e;
+}
+
+.parents-table td {
+  padding: 2px 5px;
+  border: 0.5px solid #dde;
+  vertical-align: middle;
+  min-height: 16px;
+}
+
+.parents-table td.field-label {
+  background: #f6f8fc;
+  font-weight: 700;
+  font-size: 12px;
+  color: #555;
+  width: 80px;
+}
+
+.parents-table td.field-value {
+  border-bottom-color: #999;
+}
+
+/* ================================================
+   DECLARATION
+   ================================================ */
+
+.declaration-text {
+  font-size: 12px;
+  color: #333;
+  padding: 3px 6px;
+  line-height: 1.4;
+}
+
+/* ================================================
+   SIGNATURES
+   ================================================ */
+
+.signatures-row {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-end;
+  margin-top: 30px;
+  padding: 0 4px;
+}
+
+.sig-block {
+  text-align: center;
+  font-size: 10px;
+  color: #444;
+}
+
+.sig-line {
+  border-top: 1px solid #555;
+  width: 120px;
+  margin: 0 auto 2px;
 }
 
 .stamp-box {
-  width: 110px;
-  height: 60px;
-  border: 2px dashed #444;
-  font-size: 10px;
+  width: 90px;
+  height: 55px;
+  border: 1.5px dashed #777;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  color: #aaa;
+  border-radius: 3px;
+}
+
+/* ================================================
+   ADDRESS INLINE
+   ================================================ */
+
+.address-inline {
+  font-size: 9.5px;
+  padding: 3px 6px 4px;
+  color: #111;
+}
+
+/* ================================================
+   PRINT MEDIA
+   ================================================ */
+
+@media print {
+  body * { visibility: hidden; }
+  .print-page, .print-page * { visibility: visible; }
+  .print-page {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 210mm;
+  }
 }
