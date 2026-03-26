@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { apiClient } from "../../../services/apiClient";
 import "../../../components/print/report-print.css";
 import { printReport } from "../Utils/PrintUtils";
-import { toBackendAcademicYear } from "../Utils/reportDateUtils";
+import { toShortAcademicYear } from "../Utils/reportDateUtils";
 
 type Props = {
     academicYear: string;
@@ -44,7 +44,7 @@ function ExpenseReport({
                 setLoading(true);
                 setError(null);
 
-                const params = new URLSearchParams({ year: toBackendAcademicYear(academicYear) });
+                const params = new URLSearchParams({ year: toShortAcademicYear(academicYear) });
 
                 if (fromDate) params.append("fromDate", fromDate);
                 if (toDate) params.append("toDate", toDate);

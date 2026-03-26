@@ -19,7 +19,7 @@ function AcademicYearSelector({ academicYear, onChange }: Props) {
         onChange={(e) => onChange(e.target.value)}
       >
         {academicYears?.map((y) => (
-          <option key={y.id} value={y.id}>
+          <option key={y.id} value={y.name}>
             {y.name}
           </option>
         ))}

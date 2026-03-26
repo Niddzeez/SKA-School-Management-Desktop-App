@@ -1,7 +1,6 @@
-import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { createContext, useCallback, useContext, useState } from "react";
 import type { FeeStructure, FeeComponent } from "../types/ClassFeeStructure";
 import { apiClient } from "../services/apiClient";
-import { useAcademicYear } from "./AcademicYearContext";
 
 type FeeStructureContextType = {
   feeStructures: FeeStructure[];
@@ -14,6 +13,7 @@ type FeeStructureContextType = {
   removeFeeComponent: (feeStructureID: string, componentID: string) => Promise<void>;
   deleteFeeStructure: (feeStructureID: string) => Promise<void>;  // ✅ added
   getActiveFeeStructure: (classId: string, academicSessionId: string) => FeeStructure | undefined;
+  loadFeeStructures: (sessionId: string) => Promise<void>;  // ✅ added for manual refresh after actions
 };
 
 const FeeStructureContext = createContext<FeeStructureContextType | null>(null);
@@ -22,27 +22,25 @@ export function FeeStructureProvider({ children }: { children: React.ReactNode }
   const [feeStructures, setFeeStructures] = useState<FeeStructure[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const { activeYear } = useAcademicYear();
 
-  const loadFeeStructures = async () => {
-    if (!activeYear?.id) return;
-    try {
-      if (feeStructures.length === 0) setLoading(true);
-      setError(null);
-      const data = await apiClient.get<FeeStructure[]>(
-        `/api/fee-structures?sessionId=${activeYear.id}`
-      );
-      setFeeStructures(data);
-    } catch (err: any) {
-      setError(err.message || "Failed to load fee structures");
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  useEffect(() => {
-    loadFeeStructures();
-  }, [activeYear?.id]);
+  const loadFeeStructures = async (sessionId: string) => {
+  try {
+    setLoading(true);
+    setError(null);
+
+    const data = await apiClient.get<FeeStructure[]>(
+      `/api/fee-structures?sessionId=${sessionId}`
+    );
+
+    setFeeStructures(data);
+  } catch (err: any) {
+    setError(err.message || "Failed to load fee structures");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const createFeeStructure = async (classId: string, academicSessionId: string): Promise<FeeStructure> => {
     try {
@@ -61,25 +59,35 @@ export function FeeStructureProvider({ children }: { children: React.ReactNode }
 
   const activateFeeStructure = async (feeStructureID: string): Promise<void> => {
     try {
+      const target = feeStructures.find(fs => fs.id ===feeStructureID);
       await apiClient.post(`/api/fee-structures/${feeStructureID}/activate`);
-      await loadFeeStructures();
+      if(!target) throw new Error("Fee structure not found");
+      await loadFeeStructures(target.academicSessionId);
     } catch (err: any) {
       setError(err.message || "Failed to activate fee structure");
       throw err;
     }
   };
 
-  const getActiveFeeStructure = useCallback(
-    (classId: string, academicSessionId: string) => {
-      return feeStructures.find(
-        fs =>
-          fs.classId === classId &&
-          fs.academicSessionId === academicSessionId &&
-          fs.status === "ACTIVE"
-      );
-    },
-    [feeStructures]
-  );
+  const getFeeStructureForYear = useCallback(
+  (classId: string, academicSessionId: string) => {
+    const structures = feeStructures.filter(
+      fs =>
+        fs.classId === classId &&
+        fs.academicSessionId === academicSessionId
+    );
+
+    if (structures.length === 0) return undefined;
+
+    // Prefer ACTIVE
+    const active = structures.find(fs => fs.status === "ACTIVE");
+    if (active) return active;
+
+    // Fallback → latest (or first)
+    return structures[0];
+  },
+  [feeStructures]
+);
 
   const addFeeComponent = async (
     feeStructureID: string,
@@ -113,7 +121,7 @@ export function FeeStructureProvider({ children }: { children: React.ReactNode }
 
     try {
       await apiClient.delete(`/api/fee-structures/${feeStructureID}/components/${componentID}`);
-      await loadFeeStructures();
+      await loadFeeStructures(target.academicSessionId);
       setFeeStructures((prev) =>
         prev.map((fs) =>
           fs.id === feeStructureID
@@ -153,7 +161,8 @@ export function FeeStructureProvider({ children }: { children: React.ReactNode }
         activateFeeStructure,
         removeFeeComponent,
         deleteFeeStructure,  // ✅ added
-        getActiveFeeStructure,
+        getActiveFeeStructure: getFeeStructureForYear,
+        loadFeeStructures,  // ✅ added for manual refresh after actions
       }}
     >
       {children}

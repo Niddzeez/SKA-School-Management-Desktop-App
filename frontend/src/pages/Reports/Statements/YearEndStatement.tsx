@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { apiClient } from "../../../services/apiClient";
 import { printReport } from "../Utils/PrintUtils";
-import { toBackendAcademicYear } from "../Utils/reportDateUtils";
 import "./statements.css";
 
 type YearEndStatementProps = {

@@ -1,24 +1,23 @@
-// Academic year: March → next March
 export function getAcademicYearRange(ay: string) {
-  if (!ay || !ay.includes("-")) {
-    return {
-      start: new Date(),
-      end: new Date()
-    };
+  if (!ay || ay.split("-").length !== 2) {
+    throw new Error("Invalid academic year format");
   }
 
   const [startYear, endYear] = ay.split("-").map(Number);
 
-  const start = new Date(startYear, 3, 1); // April 1
-  const end = new Date(endYear, 2, 31);    // March 31
+  if (isNaN(startYear) || isNaN(endYear)) {
+    throw new Error("Invalid academic year numbers");
+  }
+
+  const start = new Date(startYear, 3, 1);
+  const end = new Date(endYear, 2, 31);
 
   return { start, end };
 }
 
-export function toBackendAcademicYear(year: string): string {
-  if (!year || !year.includes("-")) return year;
 
-  const [start, end] = year.split("-");
-  return `${start}-${end.slice(-2)}`;
+export function toShortAcademicYear(ay: string): string {
+  const parts = ay.split("-");
+  if (parts.length !== 2) return ay;
+  return `${parts[0]}-${parts[1].slice(2)}`; // "2025-2026" → "2025-26"
 }
-

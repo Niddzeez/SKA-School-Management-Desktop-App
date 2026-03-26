@@ -51,7 +51,8 @@ function ReportsPage() {
      Compute Date Boundaries    ✅ kept from main
   ========================= */
   const computeDateBoundaries = () => {
-    if (!academicYear) return null;
+    if (!academicYear || !/^\d{4}-\d{4}$/.test(academicYear)) return null;
+
 
     const { start, end } = getAcademicYearRange(academicYear);
 
@@ -136,7 +137,7 @@ function ReportsPage() {
           />
           <AcademicYearSelector
             academicYear={academicYear}
-            onChange={setAcademicYear}
+            onChange={(selected) => setAcademicYear(selected)}
           />
           <TimeRangeSelector
             granularity={granularity}

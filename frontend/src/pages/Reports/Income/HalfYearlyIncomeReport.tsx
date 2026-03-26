@@ -121,7 +121,7 @@ function HalfYearlyIncomeReport({ academicYear, half }: Props) {
     <div className="report-card">
       <h3>Half-Yearly Income Report — {periodLabel}</h3>
 
-      <table className="report-table">
+      <table className="reports-table">
         <thead>
           <tr>
             <th>Date</th>

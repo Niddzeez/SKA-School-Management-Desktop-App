@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useClasses } from "../../context/ClassContext";
 import { useFeeStructures } from "../../context/FeeStructureContext";
 import { useAuth } from "../../context/AuthContext";
@@ -37,6 +37,7 @@ function FeeStructures() {
     removeFeeComponent,
     activateFeeStructure,
     deleteFeeStructure,   // ✅ added
+    loadFeeStructures,   // ✅ added for refreshing after actions
   } = useFeeStructures();
   const { role } = useAuth();
 
@@ -70,6 +71,12 @@ function FeeStructures() {
       [fsId]: { name: "", amount: "", mandatory: true },
     }));
   };
+
+  const filteredStructures = feeStructures.filter(
+  fs =>
+    fs.classId === selectedClass &&
+    fs.academicSessionId === selectedAcademicSessionId
+);
 
   /* ── Activate with permission guard ── */
   const handleActivate = (feeStructureId: string) => {
@@ -139,6 +146,16 @@ function FeeStructures() {
       ],
     });
   };
+
+  useEffect(() => {
+    if(selectedAcademicSessionId){
+      loadFeeStructures(selectedAcademicSessionId);
+    }
+
+    if(classes.length > 0 && !selectedClass){
+      setSelectedClass(classes[0].id);
+    }
+  }, [selectedAcademicSessionId, classes]);
 
   return (
     <div className="fs-page">
@@ -239,6 +256,7 @@ function FeeStructures() {
 
             try {
               await createFeeStructure(selectedClass, selectedAcademicSessionId);
+              await loadFeeStructures(selectedAcademicSessionId);  // Refresh list after creation
               setExpandedId(null);
             } catch (err) {
               console.error("Error creating fee structure:", err);
@@ -253,13 +271,13 @@ function FeeStructures() {
       </div>
 
       {/* ── Fee structure accordion cards ── */}
-      {feeStructures.length === 0 ? (
+      {filteredStructures.length === 0 ? (
         <div className="fs-empty">
           No fee structures yet. Select a class and academic year above to
           create one.
         </div>
       ) : (
-        feeStructures.map((fs, idx) => {
+        filteredStructures.map((fs, idx) => {
           const cls = classes.find((c) => c.id === fs.classId);
           const clsName = cls ? `Class ${cls.ClassName}` : "Unknown Class";
           const abbr = cls ? classAbbr(cls.ClassName) : "?";
