@@ -47,7 +47,7 @@ function IncomeReport({
                 setError(null);
 
                 const params = new URLSearchParams();
-                params.append("year", academicYear);
+                params.append("year", toShortAcademicYear(academicYear));
 
                 if (fromDate) params.append("fromDate", fromDate);
                 if (toDate) params.append("toDate", toDate);
