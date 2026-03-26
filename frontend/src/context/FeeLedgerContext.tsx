@@ -36,6 +36,8 @@ type FeeLedgerContextType = {
     baseComponents: { name: string; amount: number }[]
   ) => Promise<void>;
 
+  
+
   upsertLedgerFromFeeStructure: (
     studentId: string,
     classId: string,
@@ -69,6 +71,8 @@ type FeeLedgerContextType = {
   ) => Promise<StudentFeeLedger | undefined>;
 
   getReceiptNumber: (paymentId: string) => string;
+
+  getLedgerSummariesByYear: (yearId: string) => Promise<StudentFeeLedger[]>;
 };
 
 /* =========================
@@ -102,6 +106,12 @@ export function FeeLedgerProvider({
   /* -------------------------
      Boot Check
   ------------------------- */
+  const getLedgerSummariesByYear = async (yearId: string) => {
+  return await apiClient.get<StudentFeeLedger[]>(
+    `/api/ledgers?year=${yearId}`
+  );
+};
+
   const loadInitialData = async () => {
     if (!activeYear?.id) {
       setLoading(false);
@@ -414,6 +424,7 @@ export function FeeLedgerProvider({
         getLedgerSummary,
         getLedgerByStudentYear,
         getReceiptNumber,
+        getLedgerSummariesByYear,
       }}
     >
       {children}

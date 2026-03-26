@@ -6,25 +6,26 @@ import { useAcademicYear } from "../../context/AcademicYearContext";
 import "../../styles/Students.css";
 
 function Students() {
-  const { students }                      = useStudents();
-  const { ledgers, getLedgerSummary }     = useFeeLedger();
-  const { activeYear }                    = useAcademicYear();   // ✅ correct field
+  const { students, page, limit, total, fetchStudents } = useStudents();
+  const { getLedgerSummariesByYear } = useFeeLedger();
+  const { activeYear } = useAcademicYear();   // ✅ correct field
 
-  const [search, setSearch]               = useState("");
-  const [statusFilter, setStatusFilter]   = useState
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState
     <"ACTIVE" | "WITHDRAWN" | "ALUMNI" | "ALL"
-  >("ACTIVE");
+    >("ACTIVE");
 
   const [feePendingCount, setFeePendingCount] = useState(0);     // ✅ async state
+  const [summaries, setSummaries] = useState<any[]>([]);
 
   /* ── Visible students by status ── */
   const visibleStudents = students.filter((s) => {
     switch (statusFilter) {
-      case "ACTIVE":    return s.status === "Active";
+      case "ACTIVE": return s.status === "Active";
       case "WITHDRAWN": return s.status === "Withdrawn";
-      case "ALUMNI":    return s.status === "Alumni";
-      case "ALL":       return true;
-      default:          return false;
+      case "ALUMNI": return s.status === "Alumni";
+      case "ALL": return true;
+      default: return false;
     }
   });
 
@@ -48,36 +49,50 @@ function Students() {
     );
   });
 
+
   useEffect(() => { setSearch(""); }, [statusFilter]);
+
 
   /* ── KPI: fee pending count (async) ── */
   useEffect(() => {
-    if (!activeYear?.id) return;          // ✅ uses activeYear.id (UUID)
+    if (!activeYear?.id) return;
 
-    const activeStudents = students.filter((s) => s.status === "Active");
+    const yearId = activeYear.id;
 
-    async function computePending() {
-      let count = 0;
-      for (const s of activeStudents) {
-        const ledger = ledgers.find(
-          (l) =>
-            l.studentId === s.id &&
-            l.academicSessionId === activeYear!.id  // ✅ correct field
-        );
-        if (!ledger) continue;
-        const summary = await getLedgerSummary(ledger.id);  // ✅ awaited
-        if (summary && summary.pending > 0) count++;
-      }
-      setFeePendingCount(count);
+    async function load() {
+      const data = await getLedgerSummariesByYear(yearId);
+
+      const mapped = data.map((s: any) => ({
+        studentId: s.studentId,
+        pending: s.pending,
+      }));
+
+      setSummaries(mapped);
     }
 
-    computePending();
-  }, [students, ledgers, activeYear?.id, getLedgerSummary]);
+    load();
+  }, [activeYear?.id, getLedgerSummariesByYear]);
+
+  useEffect(() => {
+    const pendingStudentIds = new Set(
+      summaries
+        .filter((s: any) => s.pending > 0)
+        .map((s: any) => s.studentId)
+    );
+
+    const count = students.filter(
+      (s) =>
+        s.status === "Active" &&
+        pendingStudentIds.has(s.id)
+    ).length;
+
+    setFeePendingCount(count);
+  }, [students, summaries]);
 
   /* ── KPI counts ── */
   const activeStudents = students.filter((s) => s.status === "Active");
-  const maleCount      = activeStudents.filter((s) => s.gender === "Male").length;
-  const femaleCount    = activeStudents.filter((s) => s.gender === "Female").length;
+  const maleCount = activeStudents.filter((s) => s.gender === "Male").length;
+  const femaleCount = activeStudents.filter((s) => s.gender === "Female").length;
 
   /* ── Render ── */
   return (
@@ -143,6 +158,26 @@ function Students() {
 
       {/* ── Table ── */}
       <StudentTable students={filteredStudents} />
+
+      <div className="pagination">
+        <button
+          disabled={page === 1}
+          onClick={() => fetchStudents(page - 1)}
+        >
+          Prev
+        </button>
+
+        <span>
+          Page {page} of {Math.ceil(total / limit) || 1}
+        </span>
+
+        <button
+          disabled={page >= Math.ceil(total / limit)}
+          onClick={() => fetchStudents(page + 1)}
+        >
+          Next
+        </button>
+      </div>
 
       {/* ── No results ── */}
       {filteredStudents.length === 0 && search && (

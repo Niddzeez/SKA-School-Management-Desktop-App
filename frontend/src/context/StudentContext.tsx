@@ -13,6 +13,10 @@ type StudentContextType = {
   students: Student[];
   loading: boolean;
   error: string | null;
+  total: number;
+  page: number;
+  limit: number;
+  fetchStudents: (pageNumber: number) => Promise<void>;
 
   addStudent: (student: Omit<Student, "id">) => Promise<Student>;
   UpdateStudentStatus: (
@@ -44,29 +48,44 @@ export function StudentProvider({
   const [students, setStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1);
+  const [limit] = useState(50);
 
   /* 🔹 INITIAL LOAD */
-  useEffect(() => {
-    const loadStudents = async () => {
-      try {
-        const data = await apiClient.get<Student[]>("/api/students");
-        setStudents(data);
-      } catch (err: any) {
-        setError(err.message || "Unable to load students");
-      } finally {
-        setLoading(false);
-      }
-    };
 
-    loadStudents();
-  }, []);
+  const fetchStudents = async (pageNumber: number) => {
+  try {
+    setLoading(true);
+
+    const res = await apiClient.get<{
+      data: Student[];
+      total: number;
+      page: number;
+      limit: number;
+    }>(`/api/students?page=${pageNumber}&limit=${limit}`);
+
+    setStudents(res.data);
+    setTotal(res.total);
+    setPage(res.page);
+
+  } catch (err: any) {
+    setError(err.message || "Unable to load students");
+  } finally {
+    setLoading(false);
+  }
+};
+
+useEffect(() => {
+  fetchStudents(1);
+}, []);
 
   const addStudent = async (
     student: Omit<Student, "id">
   ): Promise<Student> => {
     try {
       const created = await apiClient.post<Student>("/api/students", student);
-      setStudents((prev) => [...prev, created]);
+      fetchStudents(1); 
       return created;
     } catch (err: any) {
       throw new Error(err.message || "Failed to create student");
@@ -139,6 +158,10 @@ export function StudentProvider({
         students,
         loading,
         error,
+        total,
+        page,
+        limit,
+        fetchStudents,
         addStudent,
         UpdateStudentStatus,
         assignStudenttoSection,

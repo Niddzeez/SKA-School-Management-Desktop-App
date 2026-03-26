@@ -134,7 +134,6 @@ router.get(
     }
 );
 
-export default router;
 
 // ---------------------------------------------------------------------------
 // POST /api/auth/logout
@@ -158,3 +157,7 @@ router.post("/logout", requireAuth, async (req: Request, res: Response) => {
         res.status(401).json({ error: "Invalid token" });
     }
 });
+
+
+export default router;
+

@@ -11,10 +11,31 @@ const router = Router();
 // GET /api/students
 // List all students
 // ---------------------------------------------------------------------------
-router.get("/", async (_req: Request, res: Response) => {
+router.get("/", async (req: Request, res: Response) => {
   try {
-    const students = await Student.find().lean();
-    res.json(students.map(mapStudent));
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 50;
+    const skip = (page - 1) * limit;
+
+    const status = req.query.status as string | undefined;
+
+    const filter: any = {};
+    if (status) filter.status = status;
+
+    const [students, total] = await Promise.all([
+      Student.find(filter)
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+      Student.countDocuments(filter),
+    ]);
+
+    res.json({
+      data: students.map(mapStudent),
+      total,
+      page,
+      limit,
+    });
   } catch (err) {
     const { status, body } = toErrorResponse(err);
     res.status(status).json(body);
