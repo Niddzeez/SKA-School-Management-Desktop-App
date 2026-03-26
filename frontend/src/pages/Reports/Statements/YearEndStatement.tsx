@@ -165,7 +165,7 @@ function YearEndStatement({ academicYear }: YearEndStatementProps) {
       </div>
 
       {/* ── Monthly Table ── */}
-      <table className="report-table">
+      <table className="reports-table">
         <thead>
           <tr>
             <th>Month</th>

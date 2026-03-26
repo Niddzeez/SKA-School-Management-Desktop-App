@@ -151,7 +151,7 @@ function ExpenseReport({
                 {data.expenses.length === 0 ? (
                     <p>No expenses recorded.</p>
                 ) : (
-                    <table className="report-table">
+                    <table className="reports-table">
                         <thead>
                             <tr>
                                 <th>Date</th>

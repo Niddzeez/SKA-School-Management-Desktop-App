@@ -133,7 +133,7 @@ function IncomeReport({
                 {data.payments.length === 0 ? (
                     <p>No income recorded.</p>
                 ) : (
-                    <table className="report-table">
+                    <table className="reports-table">
                         <thead>
                             <tr>
                                 <th>Date</th>

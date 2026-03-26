@@ -198,7 +198,7 @@ function CombinedReport({
 
                 <h4>Summary</h4>
 
-                <table className="report-table">
+                <table className="reports-table">
 
                     <thead>
                         <tr>
@@ -250,7 +250,7 @@ function CombinedReport({
 
                 <h4>Income Details</h4>
 
-                <table className="report-table">
+                <table className="reports-table">
 
                     <thead>
                         <tr>
@@ -300,7 +300,7 @@ function CombinedReport({
 
                 <h4>Expense Details</h4>
 
-                <table className="report-table">
+                <table className="reports-table">
 
                     <thead>
                         <tr>

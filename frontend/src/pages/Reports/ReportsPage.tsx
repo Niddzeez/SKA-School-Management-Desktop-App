@@ -189,13 +189,20 @@ function ReportsPage() {
               )}
             </>
           ) : (
-            <p>Please select the required time parameter to view the report.</p>
+            <p className="reports-empty-text">
+              Please select the required time parameter to view the report.
+            </p>
+          )}
+            {/* Year End Statement */}
+          {role && can(role, "VIEW_REPORTS") && academicYear && (
+            <div className="reports-table-wrapper">
+              <div className="reports-table-card">
+                <YearEndStatement academicYear={academicYear} />
+              </div>
+            </div>
           )}
 
-          {/* ✅ academicYear prop preserved from main */}
-          {role && can(role, "VIEW_REPORTS") && academicYear && (
-            <YearEndStatement academicYear={academicYear} />
-          )}
+
         </div>
 
       </div>

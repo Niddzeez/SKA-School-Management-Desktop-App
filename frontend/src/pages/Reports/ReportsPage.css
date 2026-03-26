@@ -30,15 +30,13 @@
 
 /* ================================
    OUTER CARD SHELL
-   All sections sit inside one
-   connected card (header → filters
-   → badges → kpis → table)
 ================================ */
 
 .reports-card {
   border-radius: 20px;
   overflow: hidden;
   box-shadow: 0 8px 32px rgba(15, 28, 46, 0.1);
+  background: #ffffff;
 }
 
 /* ── Gradient header ── */
@@ -61,7 +59,6 @@
   height: 130px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.1);
-  pointer-events: none;
 }
 
 .reports-card-header::after {
@@ -73,7 +70,6 @@
   height: 100px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.07);
-  pointer-events: none;
 }
 
 .reports-header-title {
@@ -141,11 +137,100 @@
 .reports-meta-badge.granularity { background: #eff6ff; color: #1d4ed8; }
 .reports-meta-badge.year { background: #e8fdf5; color: #00845a; }
 
-/* ── Output area (report components render here) ── */
+/* ================================
+   OUTPUT AREA
+================================ */
+
 .reports-output {
   background: white;
   border-left: 1.5px solid #e8edf5;
   border-right: 1.5px solid #e8edf5;
   border-bottom: 1.5px solid #e8edf5;
   border-radius: 0 0 20px 20px;
+}
+
+/* ── Empty state text ── */
+.reports-empty-text {
+  padding: 18px 28px 8px 28px;
+  font-size: 14px;
+  color: #6b7a99;
+}
+
+/* ── Table wrapper spacing ── */
+.reports-table-wrapper {
+  margin-top: 24px;
+  padding: 0 20px 24px 20px;
+}
+
+/* ── Table container card ── */
+.reports-table-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 4px 14px rgba(15, 28, 46, 0.05);
+}
+
+/* ================================
+   MODERN TABLE DESIGN
+================================ */
+
+.reports-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 14px;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 6px 18px rgba(15, 28, 46, 0.06);
+}
+
+/* Header */
+.reports-table thead {
+  background: #f8fafc;
+}
+
+.reports-table th {
+  text-align: left;
+  padding: 14px 18px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #6b7a99;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid #e8edf5;
+}
+
+/* Rows */
+.reports-table td {
+  padding: 14px 18px;
+  border-bottom: 1px solid #f1f5f9;
+  color: #1f2d3d;
+}
+
+/* Hover effect */
+.reports-table tbody tr {
+  transition: all 0.2s ease;
+}
+
+.reports-table tbody tr:hover {
+  background: #f9fbff;
+}
+
+/* Last row fix */
+.reports-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Rounded corners */
+.reports-table thead tr th:first-child {
+  border-top-left-radius: 14px;
+}
+
+.reports-table thead tr th:last-child {
+  border-top-right-radius: 14px;
+}
+
+/* Optional zebra rows */
+.reports-table tbody tr:nth-child(even) {
+  background: #fcfdff;
 }
