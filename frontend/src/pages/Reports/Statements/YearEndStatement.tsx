@@ -176,7 +176,7 @@ function YearEndStatement({ academicYear }: YearEndStatementProps) {
 
         <tbody>
           {data.monthlySnapshot.map((m, index) => (
-            <tr key={`${m.month}-${index}`}>   {/* ✅ index-safe key from main */}
+            <tr key={`${m.month}-${index}`}>  
               <td>{m.month}</td>
               <td>₹{m.income.toLocaleString("en-IN")}</td>
               <td>₹{m.expense.toLocaleString("en-IN")}</td>
