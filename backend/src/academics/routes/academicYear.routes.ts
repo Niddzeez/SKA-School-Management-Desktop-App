@@ -11,6 +11,26 @@ router.get("/state", requireAuth, async (_req: Request, res: Response) => {
 });
 
 
+//a route that gives the current active academic year
+router.get("/current", requireAuth, async (_req: Request, res: Response) => {
+    const pool = getPool();
+
+    const { rows } = await pool.query(`
+    SELECT *
+    FROM academic_sessions
+    WHERE is_closed = false
+    ORDER BY start_date DESC
+    LIMIT 1
+  `);
+
+    if (rows.length === 0) {
+        return res.status(404).json({ error: "No active academic year found" });
+    }
+
+    res.json(rows[0]);
+});
+
+
 router.post("/create-next", requireAuth, async (_req: Request, res: Response) => {
     const pool = getPool();
 

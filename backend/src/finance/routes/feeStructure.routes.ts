@@ -111,4 +111,81 @@ router.delete("/:id", requireAuth, requireRole("ADMIN"), async (req: Request, re
         res.status(status).json(body);
     }
 });
+
+
+
+// POST /api/fee-structures/clone
+router.post(
+  "/clone",
+  requireAuth,
+  requireRole("ADMIN"),
+  async (req: Request, res: Response) => {
+    try {
+      const { fromSessionId, toSessionId } = req.body;
+
+      if (!fromSessionId || !toSessionId) {
+        throw new ValidationError("Missing fromSessionId or toSessionId");
+      }
+
+      const pool = getPool();
+
+      // 1. Fetch source fee structures
+      const sourceStructures = await feeStructureService.getAll(fromSessionId);
+
+      if (sourceStructures.length === 0) {
+        throw new ValidationError("No fee structures found to clone");
+      }
+
+      // 2. Check existing structures in target
+      const existingStructures = await feeStructureService.getAll(toSessionId);
+      const existingClassIds = new Set(
+        existingStructures.map((fs) => fs.classId)
+      );
+
+      const client = await pool.connect();
+
+      try {
+        await client.query("BEGIN");
+
+        const created: any[] = [];
+
+        for (const fs of sourceStructures) {
+          // Skip if already exists
+          if (existingClassIds.has(fs.classId)) continue;
+
+          const { rows } = await client.query(
+            `
+            INSERT INTO fee_structures 
+            (class_id, academic_session_id, status, components)
+            VALUES ($1, $2, 'DRAFT', $3::jsonb)
+            RETURNING id, class_id as "classId", academic_session_id as "academicSessionId", status, components
+            `,
+            [fs.classId, toSessionId, JSON.stringify(fs.components)]
+          );
+
+          created.push(rows[0]);
+        }
+
+        await client.query("COMMIT");
+
+        res.json({
+          success: true,
+          createdCount: created.length,
+          message: `Cloned ${created.length} fee structures`,
+        });
+
+      } catch (err) {
+        await client.query("ROLLBACK");
+        throw err;
+      } finally {
+        client.release();
+      }
+
+    } catch (err) {
+      const { status, body } = toErrorResponse(err);
+      res.status(status).json(body);
+    }
+  }
+);
+
 export default router;

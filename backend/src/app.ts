@@ -13,6 +13,9 @@ import { requestLoggerMiddleware } from "./shared/observability/request-logger";
 // Reconciliation routes used for testing the reconciliation of the two databases
 import reconciliationRoutes from "./system/routes/reconciliation.routes";
 
+//
+import academicYearSystemRoutes from "./academics/routes/academicYear.routes"
+
 // Identity subsystem routes (MongoDB)
 import studentRoutes from "./identity/routes/students.routes";
 import classRoutes from "./identity/routes/classes.routes";
@@ -24,6 +27,7 @@ import academicYearRoutes from "./finance/routes/academic-years.routes";
 import ledgerRoutes from "./finance/routes/ledgers.routes";
 import expenseRoutes from "./finance/routes/expenses.routes";
 import receiptRoutes from "./finance/routes/receipts.routes";
+
 
 
 // Finance reporting & receipt detail (Phase 6 & 7)
@@ -82,10 +86,15 @@ app.use("/api/classes", auth, anyRole, classRoutes);
 app.use("/api/sections", auth, anyRole, sectionRoutes);
 app.use("/api/teachers", auth, anyRole, teacherRoutes);
 
+// -Academic year management (Phase 9)
+app.use("/api/academic-year-system", auth, anyRole, academicYearSystemRoutes);
+
 // ── Finance subsystem (PostgreSQL) ───────────────────────────────────────────
 // Academic years: read access for all roles
 app.use("/api/academic-years", auth, anyRole, academicYearRoutes);
 app.use("/api/academic-years", auth, anyRole, academicYearRoutes);
+app.use("/api/academic-years", auth, anyRole, academicYearRoutes);
+
 
 // Ledgers: read + write (POST routes inside ledgers.routes.ts will be
 // accessible, but the route handlers themselves are the same for all roles.

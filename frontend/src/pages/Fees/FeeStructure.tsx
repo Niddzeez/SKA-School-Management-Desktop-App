@@ -6,6 +6,7 @@ import { useAcademicYear } from "../../context/AcademicYearContext";
 import { can } from "../../auth/permissions";
 import { printReport } from "../Reports/Utils/PrintUtils";
 import "./FeeStructure.css";
+import { apiClient } from "../../services/apiClient";
 
 type ComponentDraft = {
   name: string;
@@ -51,7 +52,7 @@ function FeeStructures() {
   /* ── Per-structure component drafts ── */
   const [componentDrafts, setComponentDrafts] = useState
     <Record<string, ComponentDraft>
-  >({});
+    >({});
 
   const getDraft = (fsId: string): ComponentDraft =>
     componentDrafts[fsId] ?? { name: "", amount: "", mandatory: true };
@@ -149,6 +150,50 @@ function FeeStructures() {
           <p className="fs-page-sub">Create and manage class fee structures</p>
         </div>
       </div>
+      <button
+        className="fs-create-btn"
+        onClick={async () => {
+          const confirmed = window.confirm(
+            "This will clone fee structures from current year to next year.\n\nContinue?"
+          );
+          if (!confirmed) return;
+
+          try {
+
+            const currentYear = academicYears.find(
+              (y) => typeof y !== "string" && !y.isClosed
+            );
+
+            const nextYear = academicYears.find(
+              (y) =>
+                typeof y !== "string" &&
+                currentYear &&
+                new Date(y.startDate) > new Date(currentYear.startDate)
+            );
+            if (!currentYear || !nextYear) {
+              alert("Current or next academic year not found");
+              return;
+            }
+
+            if (!nextYear) {
+              alert("Next academic year not found");
+              return;
+            }
+
+            await apiClient.post("/api/fee-structures/clone", {
+              fromSessionId: currentYear?.id,
+              toSessionId: nextYear.id,
+            });
+
+            alert("Fee structures cloned successfully");
+
+          } catch (err: any) {
+            alert(err.message || "Cloning failed");
+          }
+        }}
+      >
+        Clone to Next Year
+      </button>
 
       {/* ── Create bar ── */}
       <div className="fs-create-bar">
@@ -215,12 +260,12 @@ function FeeStructures() {
         </div>
       ) : (
         feeStructures.map((fs, idx) => {
-          const cls     = classes.find((c) => c.id === fs.classId);
+          const cls = classes.find((c) => c.id === fs.classId);
           const clsName = cls ? `Class ${cls.ClassName}` : "Unknown Class";
-          const abbr    = cls ? classAbbr(cls.ClassName) : "?";
-          const total   = fs.components.reduce((s, c) => s + c.amount, 0);
-          const draft   = getDraft(fs.id);
-          const isOpen  = expandedId === fs.id;
+          const abbr = cls ? classAbbr(cls.ClassName) : "?";
+          const total = fs.components.reduce((s, c) => s + c.amount, 0);
+          const draft = getDraft(fs.id);
+          const isOpen = expandedId === fs.id;
           const iconCls = ICON_CLASSES[idx % ICON_CLASSES.length];
           const yearName =
             academicYears.find((y) => y.id === fs.academicSessionId)?.name ?? "-";
@@ -324,8 +369,8 @@ function FeeStructures() {
                         disabled={!draft.name || !draft.amount}
                         onClick={() => {
                           addFeeComponent(fs.id, {
-                            name:      draft.name,
-                            amount:    Number(draft.amount),
+                            name: draft.name,
+                            amount: Number(draft.amount),
                             mandatory: draft.mandatory,
                           });
                           resetDraft(fs.id);

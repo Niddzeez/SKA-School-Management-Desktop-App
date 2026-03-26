@@ -633,3 +633,42 @@ export async function getAdjustmentsByLedgerId(
 
   return rows;
 }
+
+
+// Idempotent ledger creation used during student enrollment and academic year rollover.
+
+
+export async function createLedgerIfEligible({
+  studentId,
+  classId,
+  academicSessionId,
+  baseComponents,
+}: {
+  studentId: string;
+  classId: string;
+  academicSessionId: string;
+  baseComponents: any[];
+}) {
+  const pool = getPool();
+
+  // Check if ledger already exists (idempotency)
+  const existing = await pool.query(
+    `
+    SELECT id FROM student_fee_ledgers
+    WHERE student_id = $1 AND academic_session_id = $2
+    `,
+    [studentId, academicSessionId]
+  );
+
+  if (existing?.rowCount ?? 0 > 0) return;
+
+  // Create ledger
+  await pool.query(
+    `
+    INSERT INTO student_fee_ledgers
+    (student_id, class_id, academic_session_id, base_components)
+    VALUES ($1, $2, $3, $4)
+    `,
+    [studentId, classId, academicSessionId, JSON.stringify(baseComponents)]
+  );
+}

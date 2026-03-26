@@ -47,12 +47,34 @@ async function request<T>(
         throw new Error('Unauthorized');
     }
 
+    // Handle non-OK responses
     if (!response.ok) {
-        const data = (await response.json()) as ApiErrorResponse;
-        throw new Error(data.error || 'An unexpected error occurred');
+        let errorMessage = 'An unexpected error occurred';
+
+        try {
+            const data = (await response.json()) as ApiErrorResponse;
+            errorMessage = data.error || errorMessage;
+        } catch {
+            // ignore JSON parse error (empty response)
+        }
+
+        throw new Error(errorMessage);
     }
 
-    return (await response.json()) as T;
+    // ✅ Handle empty responses safely
+    if (response.status === 204 || response.status === 304) {
+        return null as T;
+    }
+
+    // ✅ Only parse JSON if it exists
+    const contentType = response.headers.get('content-type');
+
+    if (contentType && contentType.includes('application/json')) {
+        return (await response.json()) as T;
+    }
+
+    // fallback (rare cases)
+    return null as T;
 }
 
 /**
