@@ -350,3 +350,34 @@ LEFT JOIN income i ON m.academic_year = i.academic_year AND m.month = i.month
 LEFT JOIN expense e ON m.academic_year = e.academic_year AND m.month = e.month
 ORDER BY m.academic_year, m.month
 WITH NO DATA;
+
+
+CREATE TABLE carry_forward_entries (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+  from_ledger_id UUID NOT NULL
+    REFERENCES student_fee_ledgers(id) ON DELETE RESTRICT,
+
+  to_ledger_id UUID
+    REFERENCES student_fee_ledgers(id) ON DELETE SET NULL,
+
+  student_id TEXT NOT NULL,
+
+  from_academic_session_id UUID NOT NULL
+    REFERENCES academic_sessions(id) ON DELETE RESTRICT,
+
+  to_academic_session_id UUID NOT NULL
+    REFERENCES academic_sessions(id) ON DELETE RESTRICT,
+
+  amount NUMERIC(10,2) NOT NULL CHECK (amount > 0),
+
+  breakdown JSONB NOT NULL,
+
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+
+  CONSTRAINT uq_carry_forward UNIQUE (
+    student_id,
+    from_academic_session_id,
+    to_academic_session_id
+  )
+);

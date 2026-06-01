@@ -40,6 +40,28 @@ export interface LedgerSummaryRow {
     paid_total: string;
 }
 
+// ---------------------------------------------------------------------------
+// Derived / Computed Types (Backend → API layer)
+// ---------------------------------------------------------------------------
+
+export interface LedgerComputedSummary extends LedgerSummaryRow {
+    carry_forward_total: number;
+
+    current_total: number;
+
+    paid_to_carry_forward: number;
+    paid_to_current: number;
+
+    pending_carry_forward: number;
+    pending_current: number;
+
+    total_pending: number;
+}
+
+export interface LedgerSummaryWithSessionRow extends LedgerSummaryRow {
+    academic_session_id: string;
+}
+
 export interface AdjustmentRow {
     id: string;
     ledger_id: string;

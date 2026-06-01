@@ -6,6 +6,8 @@ import type {
     LedgerSummaryRow,
     AdjustmentRow,
     PaymentRow,
+    LedgerComputedSummary,
+    LedgerSummaryWithSessionRow,
 } from "../types";
 import {
     ConflictError,
@@ -135,17 +137,46 @@ export async function getLedgerById(
  * Returns null if not found.
  */
 export async function getLedgerSummaryById(
-    ledgerId: string
-): Promise<LedgerSummaryRow | null> {
-    const { rows } = await getPool().query<LedgerSummaryRow>(
-        `SELECT ledger_id, student_id, class_id,
-            academic_year, is_closed,
-            base_total, adjustments_total, paid_total
-     FROM   ledger_summary
-     WHERE  ledger_id = $1`,
-        [ledgerId]
-    );
-    return rows[0] ?? null;
+  ledgerId: string
+): Promise<LedgerComputedSummary | null> {
+
+  const { rows } = await getPool().query<LedgerSummaryWithSessionRow>(
+    `SELECT 
+        ls.ledger_id, ls.student_id, ls.class_id,
+        ls.academic_year, ls.is_closed,
+        ls.base_total, ls.adjustments_total, ls.paid_total,
+        sfl.academic_session_id
+     FROM ledger_summary ls
+     JOIN student_fee_ledgers sfl ON sfl.id = ls.ledger_id
+     WHERE ls.ledger_id = $1`,
+    [ledgerId]
+  );
+
+  const row = rows[0];
+  if (!row) return null;
+
+  // ✅ Carry forward using correct session ID
+  const carryForwardTotal = await getCarryForwardTotal(
+    row.student_id,
+    row.academic_session_id
+  );
+
+  // ✅ Allocation logic
+  const allocation = computeAllocation({
+    baseTotal: Number(row.base_total),
+    adjustmentsTotal: Number(row.adjustments_total),
+    carryForwardTotal,
+    paidTotal: Number(row.paid_total),
+  });
+
+  // ✅ Remove internal-only field before returning
+  const { academic_session_id, ...cleanRow } = row;
+
+  return {
+    ...cleanRow,
+    carry_forward_total: carryForwardTotal,
+    ...allocation,
+  };
 }
 
 /**
@@ -185,7 +216,7 @@ export async function getPaymentsByLedger(
  * Returns a complete ledger detail containing the summary, base components,
  * adjustments, and payments in a single database roundtrip.
  */
-export interface FullLedgerRow extends LedgerSummaryRow {
+export interface FullLedgerRow extends LedgerComputedSummary {
     base_components: FeeComponentSnapshotRow[];
     created_at: Date;
     adjustments: AdjustmentRow[];
@@ -193,47 +224,95 @@ export interface FullLedgerRow extends LedgerSummaryRow {
 }
 
 export async function getFullLedgerById(
-    ledgerId: string
+  ledgerId: string
 ): Promise<FullLedgerRow | null> {
-    const { rows } = await getPool().query(`
-        SELECT 
-            ls.ledger_id, ls.student_id, ls.class_id,
-            ls.academic_year, ls.is_closed,
-            ls.base_total, ls.adjustments_total, ls.paid_total,
-            sfl.base_components, sfl.created_at,
-            COALESCE(
-                (SELECT json_agg(json_build_object(
-                    'id', la.id,
-                    'ledger_id', la.ledger_id,
-                    'type', la.type,
-                    'amount', la.amount,
-                    'reason', la.reason,
-                    'approved_by', la.approved_by,
-                    'created_at', la.created_at
-                ) ORDER BY la.created_at ASC)
-                FROM ledger_adjustments la WHERE la.ledger_id = sfl.id),
-                '[]'::json
-            ) AS adjustments,
-            COALESCE(
-                (SELECT json_agg(json_build_object(
-                    'id', p.id,
-                    'ledger_id', p.ledger_id,
-                    'student_id', p.student_id,
-                    'amount', p.amount,
-                    'mode', p.mode,
-                    'reference', p.reference,
-                    'collected_by', p.collected_by,
-                    'created_at', p.created_at
-                ) ORDER BY p.created_at ASC)
-                FROM payments p WHERE p.ledger_id = sfl.id),
-                '[]'::json
-            ) AS payments
-        FROM student_fee_ledgers sfl
-        JOIN ledger_summary ls ON ls.ledger_id = sfl.id
-        WHERE sfl.id = $1
-    `, [ledgerId]);
 
-    return rows[0] ?? null;
+  const { rows } = await getPool().query<{
+    ledger_id: string;
+    student_id: string;
+    class_id: string;
+    academic_year: string;
+    is_closed: boolean;
+    base_total: string;
+    adjustments_total: string;
+    paid_total: string;
+
+    academic_session_id: string; // ✅ added
+
+    base_components: FeeComponentSnapshotRow[];
+    created_at: Date;
+    adjustments: AdjustmentRow[];
+    payments: PaymentRow[];
+  }>(
+    `SELECT 
+        ls.ledger_id, ls.student_id, ls.class_id,
+        ls.academic_year, ls.is_closed,
+        ls.base_total, ls.adjustments_total, ls.paid_total,
+
+        sfl.academic_session_id,  -- ✅ REQUIRED
+
+        sfl.base_components, sfl.created_at,
+
+        COALESCE(
+            (SELECT json_agg(json_build_object(
+                'id', la.id,
+                'ledger_id', la.ledger_id,
+                'type', la.type,
+                'amount', la.amount,
+                'reason', la.reason,
+                'approved_by', la.approved_by,
+                'created_at', la.created_at
+            ) ORDER BY la.created_at ASC)
+            FROM ledger_adjustments la WHERE la.ledger_id = sfl.id),
+            '[]'::json
+        ) AS adjustments,
+
+        COALESCE(
+            (SELECT json_agg(json_build_object(
+                'id', p.id,
+                'ledger_id', p.ledger_id,
+                'student_id', p.student_id,
+                'amount', p.amount,
+                'mode', p.mode,
+                'reference', p.reference,
+                'collected_by', p.collected_by,
+                'created_at', p.created_at
+            ) ORDER BY p.created_at ASC)
+            FROM payments p WHERE p.ledger_id = sfl.id),
+            '[]'::json
+        ) AS payments
+
+     FROM student_fee_ledgers sfl
+     JOIN ledger_summary ls ON ls.ledger_id = sfl.id
+     WHERE sfl.id = $1`,
+    [ledgerId]
+  );
+
+  const row = rows[0];
+  if (!row) return null;
+
+  // ✅ Carry forward
+  const carryForwardTotal = await getCarryForwardTotal(
+    row.student_id,
+    row.academic_session_id
+  );
+
+  // ✅ Allocation
+  const allocation = computeAllocation({
+    baseTotal: Number(row.base_total),
+    adjustmentsTotal: Number(row.adjustments_total),
+    carryForwardTotal,
+    paidTotal: Number(row.paid_total),
+  });
+
+  // ✅ Remove internal-only field
+  const { academic_session_id, ...cleanRow } = row;
+
+  return {
+    ...cleanRow,
+    carry_forward_total: carryForwardTotal,
+    ...allocation,
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -363,12 +442,12 @@ export async function addPayment(
 ): Promise<PaymentRow> {
 
     const result = await withTransaction(async (client) => {
-        // Lock the ledger row and read student_id
+
         const { rows: ledgers } = await client.query<LedgerRow>(
             `SELECT id, student_id
-             FROM   student_fee_ledgers
-             WHERE  id = $1
-             FOR UPDATE`,
+       FROM student_fee_ledgers
+       WHERE id = $1
+       FOR UPDATE`,
             [ledgerId]
         );
 
@@ -378,15 +457,14 @@ export async function addPayment(
 
         const studentId = ledgers[0].student_id;
 
-        // Query ledger_summary for final_fee and paid_total
         const { rows: summaryRows } = await client.query<{
             base_total: string | number;
             adjustments_total: string | number;
             paid_total: string | number;
         }>(
             `SELECT base_total, adjustments_total, paid_total
-             FROM   ledger_summary
-             WHERE  ledger_id = $1`,
+       FROM ledger_summary
+       WHERE ledger_id = $1`,
             [ledgerId]
         );
 
@@ -394,14 +472,39 @@ export async function addPayment(
             throw new NotFoundError("Ledger summary", ledgerId);
         }
 
-        // Compute final_fee and remaining
-        const baseTotal = typeof summaryRows[0].base_total === 'string' ? parseFloat(summaryRows[0].base_total) : summaryRows[0].base_total;
-        const adjustmentsTotal = typeof summaryRows[0].adjustments_total === 'string' ? parseFloat(summaryRows[0].adjustments_total) : summaryRows[0].adjustments_total;
-        const paidTotal = typeof summaryRows[0].paid_total === 'string' ? parseFloat(summaryRows[0].paid_total) : summaryRows[0].paid_total;
-        const finalFee = baseTotal + adjustmentsTotal;
-        const remaining = Math.max(0, finalFee - paidTotal);
+        // ✅ SINGLE SOURCE OF TRUTH
+        const baseTotal =
+            typeof summaryRows[0].base_total === "string"
+                ? parseFloat(summaryRows[0].base_total)
+                : summaryRows[0].base_total;
 
-        // Overpayment guard
+        const adjustmentsTotal =
+            typeof summaryRows[0].adjustments_total === "string"
+                ? parseFloat(summaryRows[0].adjustments_total)
+                : summaryRows[0].adjustments_total;
+
+        const paidTotal =
+            typeof summaryRows[0].paid_total === "string"
+                ? parseFloat(summaryRows[0].paid_total)
+                : summaryRows[0].paid_total;
+
+        const { rows: ledgerRows } = await client.query(
+            `SELECT academic_session_id FROM student_fee_ledgers WHERE id = $1`,
+            [ledgerId]
+        );
+
+        const sessionId = ledgerRows[0].academic_session_id;
+
+        const carryForwardTotal = await getCarryForwardTotal(
+            studentId,
+            sessionId,
+            client
+        );
+
+        const currentTotal = baseTotal + adjustmentsTotal;
+        const totalDue = currentTotal + carryForwardTotal;
+        const remaining = Math.max(0, totalDue - paidTotal);
+
         if (amount > remaining) {
             throw new UnprocessableError(
                 `Payment of ${amount} exceeds remaining balance of ${remaining}`
@@ -412,15 +515,16 @@ export async function addPayment(
             throw new UnprocessableError("Payment amount must be positive");
         }
 
-        // Proceed with payment insert
+        // ✅ ACTUAL INSERT (THIS WAS MISSING)
         const { rows } = await client.query<PaymentRow>(
             `INSERT INTO payments
-                 (ledger_id, student_id, amount, mode, collected_by, reference)
-             VALUES ($1, $2, $3, $4, $5, $6)
-             RETURNING id, ledger_id, student_id, amount, mode,
-                       reference, collected_by, created_at`,
+         (ledger_id, student_id, amount, mode, collected_by, reference)
+       VALUES ($1, $2, $3, $4, $5, $6)
+       RETURNING id, ledger_id, student_id, amount, mode,
+                 reference, collected_by, created_at`,
             [ledgerId, studentId, amount, mode, collectedBy, reference ?? null]
         );
+
         return rows[0];
     });
 
@@ -584,12 +688,12 @@ export async function updateLedgerBaseComponents(
 }
 
 export async function getPaymentsByLedgerId(
-  ledgerId: string
+    ledgerId: string
 ): Promise<PaymentRow[]> {
-  const pool = getPool();
+    const pool = getPool();
 
-  const { rows } = await pool.query<PaymentRow>(
-    `
+    const { rows } = await pool.query<PaymentRow>(
+        `
     SELECT
       id,
       ledger_id,
@@ -603,19 +707,19 @@ export async function getPaymentsByLedgerId(
     WHERE ledger_id = $1
     ORDER BY created_at ASC
     `,
-    [ledgerId]
-  );
+        [ledgerId]
+    );
 
-  return rows;
+    return rows;
 }
 
 export async function getAdjustmentsByLedgerId(
-  ledgerId: string
+    ledgerId: string
 ): Promise<AdjustmentRow[]> {
-  const pool = getPool();
+    const pool = getPool();
 
-  const { rows } = await pool.query<AdjustmentRow>(
-    `
+    const { rows } = await pool.query<AdjustmentRow>(
+        `
     SELECT
       id,
       ledger_id,
@@ -628,10 +732,10 @@ export async function getAdjustmentsByLedgerId(
     WHERE ledger_id = $1
     ORDER BY created_at ASC
     `,
-    [ledgerId]
-  );
+        [ledgerId]
+    );
 
-  return rows;
+    return rows;
 }
 
 
@@ -639,36 +743,97 @@ export async function getAdjustmentsByLedgerId(
 
 
 export async function createLedgerIfEligible({
-  studentId,
-  classId,
-  academicSessionId,
-  baseComponents,
+    studentId,
+    classId,
+    academicSessionId,
+    baseComponents,
 }: {
-  studentId: string;
-  classId: string;
-  academicSessionId: string;
-  baseComponents: any[];
+    studentId: string;
+    classId: string;
+    academicSessionId: string;
+    baseComponents: any[];
 }) {
-  const pool = getPool();
+    const pool = getPool();
 
-  // Check if ledger already exists (idempotency)
-  const existing = await pool.query(
-    `
+    // Check if ledger already exists (idempotency)
+    const existing = await pool.query(
+        `
     SELECT id FROM student_fee_ledgers
     WHERE student_id = $1 AND academic_session_id = $2
     `,
-    [studentId, academicSessionId]
-  );
+        [studentId, academicSessionId]
+    );
 
-  if (existing?.rowCount ?? 0 > 0) return;
+    if (existing?.rowCount ?? 0 > 0) return;
 
-  // Create ledger
-  await pool.query(
-    `
+    // Create ledger
+    await pool.query(
+        `
     INSERT INTO student_fee_ledgers
     (student_id, class_id, academic_session_id, base_components)
     VALUES ($1, $2, $3, $4)
     `,
-    [studentId, classId, academicSessionId, JSON.stringify(baseComponents)]
-  );
+        [studentId, classId, academicSessionId, JSON.stringify(baseComponents)]
+    );
+}
+
+// Utility function to calculate carry forward total for a student in a given academic session.
+
+export async function getCarryForwardTotal(
+    studentId: string,
+    academicSessionId: string,
+    client?: any
+): Promise<number> {
+    const executor = client || getPool();
+
+    const { rows } = await executor.query(
+        `
+    SELECT COALESCE(SUM(amount), 0) AS total
+    FROM carry_forward_entries
+    WHERE student_id = $1
+      AND to_academic_session_id = $2
+    `,
+        [studentId, academicSessionId]
+    );
+
+    return parseFloat(rows[0].total);
+}
+
+
+// Utility function to compute allocation of payments towards carry forward and current fees.
+export function computeAllocation({
+    baseTotal,
+    adjustmentsTotal,
+    carryForwardTotal,
+    paidTotal,
+}: {
+    baseTotal: number;
+    adjustmentsTotal: number;
+    carryForwardTotal: number;
+    paidTotal: number;
+}) {
+    const currentTotal = baseTotal + adjustmentsTotal;
+
+    let remaining = paidTotal;
+
+    const paidToCF = Math.min(remaining, carryForwardTotal);
+    remaining -= paidToCF;
+
+    const paidToCurrent = Math.min(remaining, currentTotal);
+    remaining -= paidToCurrent;
+
+    const pendingCF = carryForwardTotal - paidToCF;
+    const pendingCurrent = currentTotal - paidToCurrent;
+
+    return {
+        current_total: currentTotal,
+
+        paid_to_carry_forward: paidToCF,
+        paid_to_current: paidToCurrent,
+
+        pending_carry_forward: pendingCF,
+        pending_current: pendingCurrent,
+
+        total_pending: pendingCF + pendingCurrent,
+    };
 }

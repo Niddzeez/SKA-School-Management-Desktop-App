@@ -46,6 +46,7 @@ function CalendarKPI(): React.ReactElement {
   });
 
   // Freeze background scroll when modal open
+  
   useEffect(() => {
     if (showModal) {
       document.body.style.overflow = "hidden";
